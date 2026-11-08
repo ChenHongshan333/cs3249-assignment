@@ -4,10 +4,10 @@ import {
   useEffect, useRef, useState,
 } from 'react';
 import { Search } from 'lucide-react';
-import { api, type Paper, type Session, type TurnResult, type Verdict } from '../api';
+import { api, download, type Paper, type Session, type TurnResult, type Verdict } from '../api';
 import {
-  Composer, GoalPicker, Header, HistoryDrawer, LanguagePanel, OTHER_GOAL, PromptPicker, QuestionNavigator,
-  RESEARCH_USE_GOAL, ResearchContextForm, Welcome,
+  Composer, GoalPicker, Header, HistoryDrawer, LanguagePanel, type MenuPosition, menuPositionFor, OTHER_GOAL, PopoverMenu,
+  PromptPicker, QuestionNavigator, RESEARCH_USE_GOAL, ResearchContextForm, Welcome,
 } from './Chrome';
 import { Conversation, JudgmentStep, type PendingTurn } from './Conversation';
 import { IndexingStatus, LandingUpload, PaperViewer, type SourceFocus } from './PaperPane';
@@ -15,6 +15,21 @@ import { SessionNotes } from './SessionNotes';
 
 type Screen = 'landing' | 'indexing' | 'goals' | 'context' | 'prompts' | 'conversation' | 'notes';
 const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
+
+// Text size of the conversation pane. Remembered per browser; storage can be unavailable, so it is optional.
+const TEXT_SIZES = [
+  { key: 'standard', label: 'Standard', scale: 1 },
+  { key: 'large', label: 'Large', scale: 1.12 },
+  { key: 'larger', label: 'Larger', scale: 1.25 },
+] as const;
+type TextSize = (typeof TEXT_SIZES)[number]['key'];
+const TEXT_SIZE_KEY = 'paperlens.textSize';
+function readTextSize(): TextSize {
+  try {
+    const saved = window.localStorage.getItem(TEXT_SIZE_KEY);
+    return TEXT_SIZES.some((s) => s.key === saved) ? (saved as TextSize) : 'standard';
+  } catch { return 'standard'; }
+}
 
 export function PaperLensWorkspace() {
   const [screen, setScreen] = useState<Screen>('landing');
@@ -35,7 +50,9 @@ export function PaperLensWorkspace() {
   const [language, setLanguage] = useState('English');
   const [viewerWidth, setViewerWidth] = useState(460);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [languagePanelPosition, setLanguagePanelPosition] = useState<{ top: number; left: number } | null>(null);
+  const [languagePanelPosition, setLanguagePanelPosition] = useState<MenuPosition | null>(null);
+  const [menu, setMenu] = useState<{ kind: 'textSize' | 'export'; position: MenuPosition } | null>(null);
+  const [textSize, setTextSize] = useState<TextSize>(readTextSize);
   const contentRef = useRef<HTMLDivElement>(null);
   const messageRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -142,11 +159,12 @@ export function PaperLensWorkspace() {
     } catch (error) { setNotesError(errorText(error)); } finally { setNotesBusy(false); }
   };
   const saveNote = async (fields: Record<string, unknown>) => {
-    if (!session) return;
+    if (!session) return false;
     setNotesBusy(true); setNotesError('');
-    try { setSession({ ...session, note: await api.saveNote(session.session_id, fields) }); }
-    catch (error) { setNotesError(errorText(error)); } finally { setNotesBusy(false); }
+    try { setSession({ ...session, note: await api.saveNote(session.session_id, fields) }); return true; }
+    catch (error) { setNotesError(errorText(error)); return false; } finally { setNotesBusy(false); }
   };
+  const downloadNote = () => { if (session) download(api.noteMarkdownUrl(session.session_id), `paperlens-note-${session.session_id}.md`); };
 
   // ---------------------------------------------------------------- header actions
   const newConversation = () => {
@@ -164,22 +182,21 @@ export function PaperLensWorkspace() {
       setScreen(loaded.messages.length ? 'conversation' : 'prompts');
     } catch (error) { setActionError(errorText(error)); }
   };
-  const openLanguage = (event: ReactMouseEvent<HTMLButtonElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const panelWidth = Math.min(375, window.innerWidth - 24);
-    setLanguagePanelPosition({ top: rect.bottom + 10, left: Math.max(12, Math.min(rect.right - panelWidth, window.innerWidth - panelWidth - 12)) });
+  const sessionDeleted = (sessionId: string) => {
+    if (sessionId === session?.session_id) newConversation();
+  };
+  const openLanguage = (event: ReactMouseEvent<HTMLButtonElement>) => setLanguagePanelPosition(menuPositionFor(event));
+  const openMenu = (kind: 'textSize' | 'export') => (event: ReactMouseEvent<HTMLButtonElement>) =>
+    setMenu({ kind, position: menuPositionFor(event, 300) });
+  const chooseTextSize = (next: TextSize) => {
+    setTextSize(next);
+    try { window.localStorage.setItem(TEXT_SIZE_KEY, next); } catch { /* not remembered; still applied */ }
   };
   const chooseLanguage = (next: string) => {
     setLanguage(next); setLanguagePanelPosition(null);
     if (session) api.updateSession(session.session_id, { language: next }).then(setSession).catch((e) => setActionError(errorText(e)));
   };
-  const exportLog = () => {
-    if (!session) return;
-    const link = document.createElement('a');
-    link.href = api.exportUrl(session.session_id);
-    link.download = `paperlens-${session.session_id}.json`;
-    link.click();
-  };
+  const exportLog = () => { if (session) download(api.exportUrl(session.session_id), `paperlens-${session.session_id}.json`); };
   const startResize = (event: ReactPointerEvent<HTMLButtonElement>) => {
     event.currentTarget.setPointerCapture(event.pointerId);
     const startX = event.clientX;
@@ -209,7 +226,10 @@ export function PaperLensWorkspace() {
       : null;
 
   return (
-    <main className="paperlens-workspace" style={{ '--viewer-width': `${viewerWidth}px` } as CSSProperties}>
+    <main className="paperlens-workspace" style={{
+      '--viewer-width': `${viewerWidth}px`,
+      '--text-scale': TEXT_SIZES.find((s) => s.key === textSize)?.scale ?? 1,
+    } as CSSProperties}>
       <section className="paper-pane" aria-label="Paper viewer">
         {paper
           ? <PaperViewer pdfUrl={api.pdfUrl(paper.paper_id)} focus={focus} onCloseFocus={() => setFocus(null)} />
@@ -223,7 +243,8 @@ export function PaperLensWorkspace() {
       <section className="reading-pane">
         <Header paperTitle={paper?.title ?? null} canExport={!!session}
           onHistory={() => setHistoryOpen(true)} onNew={newConversation}
-          onLanguage={openLanguage} onNotes={() => session && setScreen('notes')} onExport={exportLog} />
+          onLanguage={openLanguage} onTextSize={openMenu('textSize')} onNotes={() => session && setScreen('notes')}
+          onExport={openMenu('export')} />
         <div className="reading-body" ref={contentRef}>
           {session?.reading_goal && screen !== 'notes' && <div className="goal-chip">Goal: {session.reading_goal}</div>}
           {actionError && <p className="inline-error banner" role="alert">{actionError}</p>}
@@ -237,7 +258,7 @@ export function PaperLensWorkspace() {
           {screen === 'conversation' && <Conversation messages={messages} pending={pending} refs={messageRefs} busy={busy}
             onSource={setFocus} onFollowUp={ask} judgmentStep={judgmentStep} />}
           {screen === 'notes' && <SessionNotes session={session} busy={notesBusy} error={notesError}
-            onGenerate={generateNote} onSave={saveNote} onSource={setFocus}
+            onGenerate={generateNote} onSave={saveNote} onDownload={downloadNote} onSource={setFocus}
             onBack={() => setScreen(messages.length ? 'conversation' : session ? 'prompts' : 'landing')} />}
         </div>
         {screen !== 'notes' && <Composer draft={draft} setDraft={setDraft} onSubmit={submit} disabled={!composerEnabled}
@@ -252,7 +273,15 @@ export function PaperLensWorkspace() {
           <QuestionNavigator count={questionCount} onSelect={(index) => messageRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' })} />
         )}
       </section>
-      {historyOpen && <HistoryDrawer currentId={session?.session_id ?? null} onClose={() => setHistoryOpen(false)} onSelect={openSession} />}
+      {historyOpen && <HistoryDrawer currentId={session?.session_id ?? null} onClose={() => setHistoryOpen(false)}
+        onSelect={openSession} onDeleted={sessionDeleted} />}
+      {menu?.kind === 'textSize' && <PopoverMenu label="TEXT SIZE · CONVERSATION PANE" position={menu.position} onClose={() => setMenu(null)}
+        items={TEXT_SIZES.map((size) => ({ label: size.label, active: size.key === textSize, onSelect: () => chooseTextSize(size.key) }))} />}
+      {menu?.kind === 'export' && <PopoverMenu label="DOWNLOAD" position={menu.position} onClose={() => setMenu(null)} items={[
+        { label: 'Research-use note (.md)', description: session?.note ? 'Your note as a Markdown document' : 'Draft the note on the note page first',
+          disabled: !session?.note, onSelect: downloadNote },
+        { label: 'Session log (.json)', description: 'Full conversation, sources and run log, for evaluation', disabled: !session, onSelect: exportLog },
+      ]} />}
       {languagePanelPosition && <LanguagePanel selected={language} position={languagePanelPosition}
         onSelect={chooseLanguage} onClose={() => setLanguagePanelPosition(null)} />}
     </main>

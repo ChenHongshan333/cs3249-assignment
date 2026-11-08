@@ -17,7 +17,10 @@ if (!existsSync(join(backendDir, '.env'))) {
   console.warn('Warning: backend/.env is missing. Copy backend/.env.example to backend/.env and add your OpenRouter key.');
 }
 
-const child = spawn(python, ['-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '8000'], {
+// --reload watches only backend/app (code and prompt files), not backend/data, so uploads do not restart it.
+// Changes to backend/.env still need a manual restart.
+const child = spawn(python, ['-m', 'uvicorn', 'app.main:app', '--host', '127.0.0.1', '--port', '8000',
+  '--reload', '--reload-dir', 'app', '--reload-include', '*.md'], {
   cwd: backendDir, stdio: 'inherit',
 });
 child.on('exit', (code) => process.exit(code ?? 0));

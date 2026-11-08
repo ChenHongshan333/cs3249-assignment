@@ -1,13 +1,14 @@
 // Research-use note: generated from the real session, editable by the learner.
 // The learner's verdict/rationale come verbatim from what they typed; PaperLens's suggestion is shown separately.
 import { useEffect, useState } from 'react';
-import { ChevronLeft, LoaderCircle, NotebookPen } from 'lucide-react';
+import { ChevronLeft, Download, LoaderCircle, NotebookPen } from 'lucide-react';
 import { pageText, type Note, type Session } from '../api';
 import type { SourceFocus } from './PaperPane';
 
-export function SessionNotes({ session, busy, error, onGenerate, onSave, onBack, onSource }: {
+export function SessionNotes({ session, busy, error, onGenerate, onSave, onDownload, onBack, onSource }: {
   session: Session | null; busy: boolean; error: string;
-  onGenerate: () => void; onSave: (fields: Record<string, unknown>) => void; onBack: () => void; onSource: (s: SourceFocus) => void;
+  onGenerate: () => void; onSave: (fields: Record<string, unknown>) => Promise<boolean>; onDownload: () => void;
+  onBack: () => void; onSource: (s: SourceFocus) => void;
 }) {
   const note = session?.note ?? null;
   const [draft, setDraft] = useState<Note | null>(note);
@@ -38,6 +39,17 @@ export function SessionNotes({ session, busy, error, onGenerate, onSave, onBack,
 
   const set = (patch: Partial<Note>) => setDraft({ ...draft, ...patch });
   const judgment = draft.learner_judgment;
+  const unsaved = JSON.stringify(draft) !== JSON.stringify(note);
+  const fields = () => ({
+    selected_idea: draft.selected_idea,
+    research_use: draft.research_use,
+    adaptations_and_uncertainties: draft.adaptations_and_uncertainties,
+    next_actions: draft.next_actions,
+    evidence_points: draft.evidence.map((e) => e.point),
+    rationale: draft.learner_judgment?.rationale,
+  });
+  // The .md file is built by the backend from the saved note, so unsaved edits are saved first.
+  const download = async () => { if (!unsaved || await onSave(fields())) onDownload(); };
   return <div className="notes-page">{header}
     <h2>Selected idea</h2>
     <textarea className="note-edit selected-idea" value={draft.selected_idea} onChange={(e) => set({ selected_idea: e.target.value })} rows={2} />
@@ -74,16 +86,11 @@ export function SessionNotes({ session, busy, error, onGenerate, onSave, onBack,
     </div>
     {error && <p className="inline-error" role="alert">{error}</p>}
     <div className="form-actions note-actions">
-      <span className="muted-text">{draft.edited_by_learner ? 'Edited by you' : 'Drafted by PaperLens from this session'}</span>
+      <span className="muted-text">{unsaved ? 'Unsaved changes' : draft.edited_by_learner ? 'Edited by you · saved' : 'Drafted by PaperLens from this session'}</span>
       <button className="text-button" onClick={onGenerate} disabled={busy}>Re-draft from session</button>
-      <button className="primary-button" disabled={busy} onClick={() => onSave({
-        selected_idea: draft.selected_idea,
-        research_use: draft.research_use,
-        adaptations_and_uncertainties: draft.adaptations_and_uncertainties,
-        next_actions: draft.next_actions,
-        evidence_points: draft.evidence.map((e) => e.point),
-        rationale: draft.learner_judgment?.rationale,
-      })}>Save note</button>
+      <button className="secondary-button" disabled={busy} onClick={() => void download()}>
+        <Download aria-hidden="true" /> {unsaved ? 'Save & download .md' : 'Download .md'}</button>
+      <button className="primary-button" disabled={busy || !unsaved} onClick={() => void onSave(fields())}>Save note</button>
     </div>
   </div>;
 }

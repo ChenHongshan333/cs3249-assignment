@@ -92,3 +92,48 @@ def test_safe_text_handles_surrogates_and_ligatures():
     joined.encode("utf-8")  # must not raise
     assert "x = x and lone  half" == joined
     assert safe_text("\ufb01nd the \ufb02ow") == "find the flow"
+
+
+@pytest.fixture
+def temp_store(tmp_path, monkeypatch):
+    from dataclasses import replace
+
+    from app import config, storage
+    monkeypatch.setattr(storage, "settings", replace(config.settings, data_dir=tmp_path))
+    storage.save_paper_meta("p1", {"paper_id": "p1", "title": "Test paper", "status": "ready"})
+    return storage
+
+
+def test_soft_delete_hides_session_but_keeps_file_and_log(temp_store):
+    from app import core
+    session = core.create_session("p1", "Get a general overview of this paper")
+    sid = session["session_id"]
+    assert [s["session_id"] for s in core.list_visible_sessions()] == [sid]
+    core.delete_session(sid)
+    assert core.list_visible_sessions() == []
+    assert temp_store.load_session(sid)["deleted_at"]          # file kept
+    events = [e["event"] for e in temp_store.read_log(sid)]
+    assert events == ["session_created", "session_deleted"]   # log kept, deletion recorded
+    with pytest.raises(core.UserInputError):
+        core.delete_session(sid)
+
+
+def test_note_markdown_keeps_learner_decision_separate_from_suggestion(temp_store):
+    from app import core
+    session = core.create_session("p1", "Explore potential use in my research", "my study")
+    session["note"] = {
+        "selected_idea": "Idea X", "research_use": "Use", "adaptations_and_uncertainties": "Unsure",
+        "next_actions": ["Pilot it", " "],
+        "evidence": [{"point": "Claim", "sources": [{"kind": "paper", "page": 3, "page_label": "12"},
+                                                     {"kind": "overview", "page": 1, "pages": [1, 2, 3]}]}],
+        "learner_judgment": {"verdict": "Do not use", "rationale": "My own reason here"},
+        "system_suggestion": {"verdict": "Use with adaptations", "reason": "Model reason"},
+        "generated_at": "t", "edited_by_learner": True,
+    }
+    temp_store.save_session(session)
+    md = core.note_markdown(session["session_id"])
+    mine, theirs = md.split("## PaperLens suggestion (not my decision)")
+    assert "**Do not use**" in mine and "My own reason here" in mine and "Model reason" not in mine
+    assert "Use with adaptations: Model reason" in theirs
+    assert "[PDF p. 3 (printed p. 12); PDF pp. 1-3, PaperLens summary (not the authors' words)]" in md
+    assert "- Pilot it\n" in md and "edited by the learner" in md

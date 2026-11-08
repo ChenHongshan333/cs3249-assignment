@@ -44,7 +44,7 @@ def _base_event(event: str, session: dict) -> dict:
 
 def _get_session(session_id: str) -> dict:
     session = storage.load_session(session_id)
-    if session is None:
+    if session is None or session.get("deleted_at"):
         raise UserInputError(f"Session {session_id} does not exist.")
     return session
 
@@ -89,6 +89,23 @@ def update_session(session_id: str, reading_goal: str | None = None, research_co
         storage.save_session(session)
         storage.append_log(session_id, {**_base_event("session_updated", session), "changes": changes})
     return session
+
+
+def delete_session(session_id: str) -> dict:
+    """Soft delete: hide the session from the learner but keep its file and its full run log.
+
+    The JSONL log is evidence for evaluation (ai_logs / llm_judge), so nothing is erased; a
+    session_deleted event is appended instead.
+    """
+    session = _get_session(session_id)
+    session["deleted_at"] = storage.now_iso()
+    storage.save_session(session)
+    storage.append_log(session_id, {**_base_event("session_deleted", session), "deleted_at": session["deleted_at"]})
+    return {"ok": True, "session_id": session_id, "deleted_at": session["deleted_at"]}
+
+
+def list_visible_sessions() -> list[dict]:
+    return [s for s in storage.list_sessions() if not s.get("deleted_at")]
 
 
 # ------------------------------------------------------------------ turns
@@ -235,6 +252,68 @@ def save_note(session_id: str, fields: dict) -> dict:
 
 
 # ------------------------------------------------------------------ export
+
+def _source_label(src: dict) -> str:
+    pages = src.get("pages") or []
+    if src.get("kind") == "overview":
+        span = f"PDF pp. {pages[0]}-{pages[-1]}" if len(pages) > 1 else f"PDF p. {src.get('page')}"
+        return f"{span}, PaperLens summary (not the authors' words)"
+    label = f"PDF p. {src.get('page')}"
+    if src.get("page_label") and str(src.get("page_label")) != str(src.get("page")):
+        label += f" (printed p. {src['page_label']})"
+    return label
+
+
+def note_markdown(session_id: str) -> str:
+    """The research-use note as a Markdown document for the learner.
+
+    The learner's decision and PaperLens's suggestion are kept in separate sections.
+    """
+    session = _get_session(session_id)
+    note = session.get("note")
+    if not note:
+        raise UserInputError("There is no research-use note in this session yet. Draft one on the note page first.")
+    judgment = note.get("learner_judgment")
+    suggestion = note.get("system_suggestion")
+    lines = [
+        "# Research-use note",
+        "",
+        f"**Paper:** {session.get('paper_title') or 'Untitled paper'}  ",
+        f"**Reading goal:** {session.get('reading_goal') or 'Not set'}  ",
+        f"**My research:** {session.get('research_context') or 'Not provided'}",
+        "",
+        "## Selected idea",
+        "",
+        note.get("selected_idea") or "-",
+        "",
+        "## My decision",
+        "",
+    ]
+    if judgment:
+        lines += [f"**{judgment['verdict']}**", "", f"My reason: {judgment['rationale']}"]
+    else:
+        lines += ["Not decided yet."]
+    lines += ["", "## PaperLens suggestion (not my decision)", ""]
+    lines += [f"{suggestion['verdict']}: {suggestion['reason']}" if suggestion else "No critical review in this session."]
+    lines += ["", "## Evidence from the paper", ""]
+    if note.get("evidence"):
+        for item in note["evidence"]:
+            # Several cited passages can sit on the same page; list each page once.
+            refs = "; ".join(dict.fromkeys(_source_label(s) for s in item.get("sources", [])))
+            lines.append(f"- {item['point']}" + (f" [{refs}]" if refs else ""))
+    else:
+        lines.append("No cited evidence in this session.")
+    lines += ["", "## Possible use in my research", "", note.get("research_use") or "-",
+              "", "## Required adaptations and uncertainties", "", note.get("adaptations_and_uncertainties") or "-",
+              "", "## Next actions", ""]
+    lines += [f"- {a}" for a in note.get("next_actions", []) if a.strip()] or ["-"]
+    edited = "edited by the learner" if note.get("edited_by_learner") else "not edited by the learner"
+    lines += ["", "---", "",
+              f"Drafted by PaperLens from session {session_id} on {note.get('generated_at', '')}; {edited}. "
+              "Page numbers are PDF page indexes."]
+    storage.append_log(session_id, {**_base_event("note_exported", session), "format": "markdown"})
+    return "\n".join(lines) + "\n"
+
 
 def export_session(session_id: str) -> dict:
     session = _get_session(session_id)

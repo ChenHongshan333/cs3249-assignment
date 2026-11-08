@@ -1,6 +1,6 @@
 // Layout pieces carried over from the A1 prototype (header, composer, pickers, drawers), now wired to real data.
 import { type FormEvent, type MouseEvent as ReactMouseEvent, type ReactNode, useEffect, useState } from 'react';
-import { ChevronLeft, Download, Globe2, MessageSquarePlus, NotebookPen, Search, Send } from 'lucide-react';
+import { ALargeSmall, ChevronLeft, Download, Globe2, MessageSquarePlus, NotebookPen, Search, Send, Trash2 } from 'lucide-react';
 import { api, type SessionSummary } from '../api';
 
 export const RESEARCH_USE_GOAL = 'Explore potential use in my research';
@@ -13,15 +13,25 @@ const STARTER_QUESTIONS: Record<string, string[]> = {
   [RESEARCH_USE_GOAL]: ["Summarise the paper's main argument.", 'Which ideas in this paper could be relevant to my research?', "What are the limitations of the paper's approach?"],
 };
 
+export type MenuPosition = { top: number; left: number };
+type HeaderMenuHandler = (event: ReactMouseEvent<HTMLButtonElement>) => void;
+
+/** Place a popover under the clicked header button, kept inside the window. */
+export function menuPositionFor(event: ReactMouseEvent<HTMLButtonElement>, width = 375): MenuPosition {
+  const rect = event.currentTarget.getBoundingClientRect();
+  const panelWidth = Math.min(width, window.innerWidth - 24);
+  return { top: rect.bottom + 10, left: Math.max(12, Math.min(rect.right - panelWidth, window.innerWidth - panelWidth - 12)) };
+}
+
 export function IconButton({ label, onClick, children, disabled }: {
   label: string; onClick: (event: ReactMouseEvent<HTMLButtonElement>) => void; children: ReactNode; disabled?: boolean;
 }) {
   return <button className="icon-button" onClick={onClick} aria-label={label} data-tooltip={label} disabled={disabled}>{children}</button>;
 }
 
-export function Header({ paperTitle, canExport, onHistory, onNew, onLanguage, onNotes, onExport }: {
+export function Header({ paperTitle, canExport, onHistory, onNew, onLanguage, onTextSize, onNotes, onExport }: {
   paperTitle: string | null; canExport: boolean; onHistory: () => void; onNew: () => void;
-  onLanguage: (event: ReactMouseEvent<HTMLButtonElement>) => void; onNotes: () => void; onExport: () => void;
+  onLanguage: HeaderMenuHandler; onTextSize: HeaderMenuHandler; onNotes: () => void; onExport: HeaderMenuHandler;
 }) {
   return <header className="workspace-header">
     <div className="title-line">
@@ -31,8 +41,9 @@ export function Header({ paperTitle, canExport, onHistory, onNew, onLanguage, on
     <div className="header-actions">
       <IconButton label="Start a new conversation" onClick={onNew}><MessageSquarePlus /></IconButton>
       <IconButton label="Language settings" onClick={onLanguage}><Globe2 /></IconButton>
+      <IconButton label="Text size" onClick={onTextSize}><ALargeSmall /></IconButton>
       <IconButton label="Research-use note" onClick={onNotes}><NotebookPen /></IconButton>
-      <IconButton label="Export session log (JSON)" onClick={onExport} disabled={!canExport}><Download /></IconButton>
+      <IconButton label="Download note or session log" onClick={onExport} disabled={!canExport}><Download /></IconButton>
     </div>
   </header>;
 }
@@ -98,30 +109,77 @@ export function QuestionNavigator({ count, onSelect }: { count: number; onSelect
   </nav>;
 }
 
-export function HistoryDrawer({ currentId, onClose, onSelect }: {
-  currentId: string | null; onClose: () => void; onSelect: (sessionId: string) => void;
+export function HistoryDrawer({ currentId, onClose, onSelect, onDeleted }: {
+  currentId: string | null; onClose: () => void; onSelect: (sessionId: string) => void; onDeleted: (sessionId: string) => void;
 }) {
   const [items, setItems] = useState<SessionSummary[] | null>(null);
   const [error, setError] = useState('');
+  const [confirming, setConfirming] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
   useEffect(() => { api.sessions().then(setItems).catch((e: Error) => setError(e.message)); }, []);
-  return <aside className="history-drawer" aria-label="Chat history">
+  const remove = async (sessionId: string) => {
+    setDeleting(true); setError('');
+    try {
+      await api.deleteSession(sessionId);
+      setItems((current) => current?.filter((item) => item.session_id !== sessionId) ?? null);
+      setConfirming(null);
+      onDeleted(sessionId);
+    } catch (e) { setError(e instanceof Error ? e.message : String(e)); } finally { setDeleting(false); }
+  };
+  return <aside className="history-drawer" aria-label="Chat history"
+    onKeyDown={(event) => { if (event.key === 'Escape') { if (confirming) setConfirming(null); else onClose(); } }}>
     <div className="drawer-heading"><h2>Chat history</h2><button onClick={onClose} aria-label="Close history"><ChevronLeft /></button></div>
-    <small>THIS DEVICE</small>
+    <small>THIS DEVICE · right-click or use the bin icon to delete</small>
+    {error && <p className="inline-error" role="alert">{error}</p>}
     <div className="history-list">
-      {error && <p className="inline-error">{error}</p>}
       {items && !items.length && <p className="muted-text">No saved sessions yet.</p>}
-      {items?.map((item) => <button key={item.session_id} onClick={() => onSelect(item.session_id)}
-        className={item.session_id === currentId ? 'active' : ''}>
-        <small>{item.session_id === currentId ? 'CURRENT SESSION' : new Date(item.updated_at).toLocaleString()}</small>
-        <span>{item.paper_title || 'Untitled paper'}</span>
-        <small>{item.first_question || item.reading_goal}</small>
-      </button>)}
+      {items?.map((item) => {
+        const current = item.session_id === currentId;
+        if (confirming === item.session_id) {
+          return <div key={item.session_id} className="history-item confirming" role="group" aria-label="Confirm delete">
+            <p>Delete this session?<small>It disappears from your history. Its run log is kept for evaluation.</small></p>
+            <div className="form-actions">
+              <button className="text-button" onClick={() => setConfirming(null)} autoFocus>Cancel</button>
+              <button className="primary-button danger" disabled={deleting} onClick={() => void remove(item.session_id)}>Delete</button>
+            </div>
+          </div>;
+        }
+        return <div key={item.session_id} className={`history-item ${current ? 'active' : ''}`}
+          onContextMenu={(event) => { event.preventDefault(); setConfirming(item.session_id); }}>
+          <button className="history-entry" onClick={() => onSelect(item.session_id)}>
+            <small>{current ? 'CURRENT SESSION' : new Date(item.updated_at).toLocaleString()}</small>
+            <span>{item.paper_title || 'Untitled paper'}</span>
+            <small>{item.first_question || item.reading_goal}</small>
+          </button>
+          <button className="history-delete" onClick={() => setConfirming(item.session_id)}
+            aria-label={`Delete session: ${item.paper_title || 'Untitled paper'}`} title="Delete session"><Trash2 /></button>
+        </div>;
+      })}
     </div>
   </aside>;
 }
 
+export type MenuItem = { label: string; description?: string; active?: boolean; disabled?: boolean; onSelect: () => void };
+
+/** Small popover menu used by the text-size and download header buttons. */
+export function PopoverMenu({ label, position, items, onClose }: {
+  label: string; position: MenuPosition; items: MenuItem[]; onClose: () => void;
+}) {
+  return <div className="modal-scrim" onMouseDown={onClose}>
+    <section className="menu-panel" role="menu" aria-label={label} style={{ top: position.top, left: position.left }}
+      onMouseDown={(event) => event.stopPropagation()}
+      onKeyDown={(event) => { if (event.key === 'Escape') onClose(); }}>
+      <small>{label}</small>
+      {items.map((item) => <button key={item.label} role="menuitem" className={item.active ? 'active' : ''}
+        disabled={item.disabled} onClick={() => { item.onSelect(); onClose(); }}>
+        <span>{item.label}</span>{item.description && <small>{item.description}</small>}
+      </button>)}
+    </section>
+  </div>;
+}
+
 export function LanguagePanel({ selected, position, onSelect, onClose }: {
-  selected: string; position: { top: number; left: number }; onSelect: (value: string) => void; onClose: () => void;
+  selected: string; position: MenuPosition; onSelect: (value: string) => void; onClose: () => void;
 }) {
   const languages = ['English', '中文（简体）', '中文（繁體）', '日本語'];
   return <div className="modal-scrim" onMouseDown={onClose}><section className="language-panel" aria-label="Language settings"

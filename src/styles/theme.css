@@ -3,10 +3,14 @@
   --paper: #f7f4ed;
   --sage: #c7d3c0;
   --sage-dark: #8fa28a;
-  --sage-ink: #5f7d5a;
-  --gold: #c8a96b;
+  --sage-ink: #46663f;      /* text/icons: 5.9:1 on paper */
+  --gold: #c8a96b;          /* decoration only (borders, brand) */
+  --gold-ink: #7f6128;      /* gold text: 5.3:1 on paper */
   --ink: #1f211c;
-  --muted: #8f9389;
+  --muted: #61665d;         /* secondary text: 5.4:1 on paper */
+  --text-2: #454a42;        /* body text in cards: 8.3:1 */
+  --danger: #8a3b35;
+  --warn-ink: #6b5521;
   --divider: #d6ded1;
   --viewer-width: 430px;
   font-family: Cambo, Georgia, 'Times New Roman', serif;

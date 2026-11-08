@@ -60,7 +60,7 @@ function AssistantBubble({ message, latest, busy, onSource, onFollowUp }: {
     {message.system_suggestion && <SuggestionBox suggestion={message.system_suggestion} />}
     {message.sections.length > 0 && <div className="answer-layers" aria-label="Expandable answer layers">
       {message.sections.map((section, index) => <details key={`${section.title}-${index}`}>
-        <summary><span className="layer-title">{section.title}<em className={`kind-tag ${section.kind}`}>{KIND_LABEL[section.kind]}</em></span><span aria-hidden="true">+</span></summary>
+        <summary><span className="layer-title">{section.title}<em className={`kind-tag ${section.kind}`}>{KIND_LABEL[section.kind]}</em></span><span className="layer-toggle" aria-hidden="true">+</span></summary>
         <p>{section.text}<RefChips refs={section.refs} sources={message.sources} onSource={onSource} /></p>
       </details>)}
     </div>}
@@ -115,7 +115,10 @@ export function Conversation({ messages, pending, refs, busy, onSource, onFollow
           <p><AlertTriangle aria-hidden="true" />PaperLens could not answer: {pending.error}</p>
           <button className="primary-button" onClick={pending.retry}><RotateCcw aria-hidden="true" /> Retry</button>
         </div>
-        : <div className="message assistant thinking"><span /><span /><span /></div>}
+        : <div className="message assistant thinking" role="status">
+          <span className="thinking-dots" aria-hidden="true"><i /><i /><i /></span>
+          <span className="thinking-label">PaperLens is reading the paper…</span>
+        </div>}
     </>}
     {!busy && judgmentStep}
   </div>;

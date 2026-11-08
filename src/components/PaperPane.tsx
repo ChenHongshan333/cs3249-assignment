@@ -1,6 +1,6 @@
 // Left pane (upload + PDF viewer) and the indexing status shown while a paper is processed.
 import { useRef, useState } from 'react';
-import { AlertTriangle, Check, FilePlus2, LoaderCircle, X } from 'lucide-react';
+import { AlertTriangle, FilePlus2, LoaderCircle, X } from 'lucide-react';
 import { pageText, type Paper, type Source } from '../api';
 
 export type SourceFocus = Source & { label: string };
@@ -60,34 +60,29 @@ export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; f
   </div>;
 }
 
-const STEPS: { key: Paper['status']; label: string }[] = [
-  { key: 'parsing', label: 'Extracting text from each page' },
-  { key: 'indexing', label: 'Splitting into passages and building the search index' },
-  { key: 'summarizing', label: 'Writing a sourced overview of the whole paper' },
-  { key: 'ready', label: 'Ready' },
-];
+// Shown only when preparation fails, so the learner knows which part went wrong.
+const FAILED_STAGE: Record<string, string> = {
+  parsing: 'Failed while reading the text of the PDF.',
+  indexing: 'Failed while building the search index.',
+  summarizing: 'Failed while writing the overview of the paper.',
+};
 
 export function IndexingStatus({ paper, onRetry, onUploadAnother }: { paper: Paper; onRetry: () => void; onUploadAnother: () => void }) {
-  const failedIndex = paper.status === 'failed' ? STEPS.findIndex((s) => s.key === paper.failed_stage) : -1;
-  const current = paper.status === 'failed' ? failedIndex : STEPS.findIndex((s) => s.key === paper.status);
+  if (paper.status !== 'failed') {
+    return <div className="choice-screen indexing-status" aria-live="polite" aria-busy="true">
+      <h1><LoaderCircle className="spin" aria-hidden="true" /> Preparing your paper…</h1>
+      <p className="muted-text">Long papers can take a minute.</p>
+    </div>;
+  }
   return <div className="choice-screen indexing-status" aria-live="polite">
-    <h1>{paper.status === 'failed' ? 'This paper could not be prepared' : 'Preparing your paper…'}</h1>
-    <ol className="status-steps">
-      {STEPS.map((step, index) => {
-        const state = paper.status === 'failed' && index === failedIndex ? 'failed'
-          : index < current || paper.status === 'ready' ? 'done' : index === current ? 'active' : 'pending';
-        return <li key={step.key} className={state}>
-          {state === 'done' ? <Check /> : state === 'failed' ? <AlertTriangle /> : state === 'active' ? <LoaderCircle className="spin" /> : <span className="dot" />}
-          {step.label}
-        </li>;
-      })}
-    </ol>
-    {paper.status === 'failed' && <div className="status-error" role="alert">
+    <h1><AlertTriangle aria-hidden="true" /> This paper could not be prepared</h1>
+    <div className="status-error" role="alert">
+      {paper.failed_stage && FAILED_STAGE[paper.failed_stage] && <p><strong>{FAILED_STAGE[paper.failed_stage]}</strong></p>}
       <p>{paper.error}</p>
       <div className="form-actions">
         <button className="text-button" onClick={onUploadAnother}>Upload a different PDF</button>
         <button className="primary-button" onClick={onRetry}>Retry</button>
       </div>
-    </div>}
+    </div>
   </div>;
 }

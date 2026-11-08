@@ -30,7 +30,7 @@ cd ..
 Start both processes in two terminals:
 
 ```bash
-npm run backend    # FastAPI on http://127.0.0.1:8000  (scripts/backend.mjs -> uvicorn app.main:app)
+npm run backend    # FastAPI on http://127.0.0.1:8000  (scripts/backend.mjs -> uvicorn app.main:app --reload; restart after editing .env)
 npm start          # Vite dev server on http://127.0.0.1:5173, proxies /api to the backend
 ```
 
@@ -181,8 +181,14 @@ keeps the question and shows **Retry**.
   message, reply, retrieval query, retrieved chunk IDs + pages + text + similarity, raw model output, invalid
   citations, chat/embedding model, prompt version, pipeline version, config, timestamps, latency and errors.
   Internal reasoning is not logged.
-* **Export**: the download icon in the header (or `GET /api/sessions/{id}/export`) returns paper metadata,
-  session and all events as JSON.
+* **Downloads** (download icon in the header):
+  * *Research-use note (.md)*: the learner-facing note as Markdown (`GET /api/sessions/{id}/note.md`). The
+    learner's decision and PaperLens's suggestion are separate sections. Also on the note page; unsaved edits
+    are saved first.
+  * *Session log (.json)*: paper metadata, session and all events, for evaluation (`GET /api/sessions/{id}/export`).
+* **Deleting a session** (bin icon or right-click in Chat history, then confirm) is a soft delete: the session
+  is hidden from the learner, but its file and JSONL log are kept and a `session_deleted` event is appended,
+  so evaluation records are never lost (`DELETE /api/sessions/{id}`).
 * **Scripted runs**: `backend/scripts/run_conversation.py` (see `llm_judge/README.md`).
 * **`PIPELINE_VERSION=v0`** runs the same code with three safeguards off: no history-aware query rewriting, no
   overview routing, and no citation validation / suggestion guardrail. It is an *ablated baseline* for

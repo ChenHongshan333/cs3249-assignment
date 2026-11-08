@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from pydantic import BaseModel
 
 from . import core, storage
@@ -111,7 +111,7 @@ def sessions():
     return [{"session_id": s["session_id"], "paper_id": s["paper_id"], "paper_title": s.get("paper_title", ""),
              "reading_goal": s.get("reading_goal", ""), "updated_at": s.get("updated_at"),
              "first_question": next((m["text"] for m in s.get("messages", []) if m["role"] == "user"), "")}
-            for s in storage.list_sessions()]
+            for s in core.list_visible_sessions()]
 
 
 @app.post("/api/sessions")
@@ -122,9 +122,14 @@ def create_session(body: SessionCreate):
 @app.get("/api/sessions/{session_id}")
 def get_session(session_id: str):
     session = storage.load_session(session_id)
-    if not session:
+    if not session or session.get("deleted_at"):
         raise HTTPException(404, "Unknown session")
     return session
+
+
+@app.delete("/api/sessions/{session_id}")
+def delete_session(session_id: str):
+    return core.delete_session(session_id)
 
 
 @app.patch("/api/sessions/{session_id}")
@@ -161,3 +166,10 @@ def edit_note(session_id: str, body: dict):
 def export(session_id: str):
     data = core.export_session(session_id)
     return JSONResponse(data, headers={"Content-Disposition": f'attachment; filename="paperlens-{session_id}.json"'})
+
+
+@app.get("/api/sessions/{session_id}/note.md")
+def note_markdown(session_id: str):
+    text = core.note_markdown(session_id)
+    return Response(text, media_type="text/markdown; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="paperlens-note-{session_id}.md"'})

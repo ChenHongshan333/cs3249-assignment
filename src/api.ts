@@ -128,8 +128,18 @@ export const api = {
   generateNote: (sessionId: string) =>
     request<{ ok: true; note: Note } | { ok: false; error: string }>(`/sessions/${sessionId}/note`, { method: 'POST' }),
   saveNote: (sessionId: string, fields: Record<string, unknown>) => request<Note>(`/sessions/${sessionId}/note`, json('PUT', fields)),
+  deleteSession: (sessionId: string) => request<{ ok: true }>(`/sessions/${sessionId}`, { method: 'DELETE' }),
   exportUrl: (sessionId: string) => `/api/sessions/${sessionId}/export`,
+  noteMarkdownUrl: (sessionId: string) => `/api/sessions/${sessionId}/note.md`,
 };
+
+/** Start a browser download of a backend URL (the server sets Content-Disposition). */
+export function download(url: string, filename: string) {
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+}
 
 export function pageText(source: Pick<Source, 'page' | 'page_label' | 'pages'>) {
   if (source.pages && source.pages.length > 1) return `PDF pp. ${source.pages[0]}–${source.pages[source.pages.length - 1]}`;
