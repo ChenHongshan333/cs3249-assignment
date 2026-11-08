@@ -70,6 +70,9 @@ Exact versions: `backend/requirements.txt` (direct) and `backend/requirements.lo
 
 ## 3. Architecture
 
+Report figures (system overview and one learner turn) are drawn in `docs/architecture.html`; open it in a browser
+and use "Download PNG". The diagram below is the detailed, file-level version.
+
 ```mermaid
 flowchart LR
   subgraph Browser["Browser - React + TypeScript (src/)"]
