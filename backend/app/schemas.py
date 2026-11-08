@@ -29,6 +29,13 @@ class AnswerSection(BaseModel):
                                                                    "Only IDs listed in the provided passages. Empty for pure examples.")
 
 
+class EvidenceQuote(BaseModel):
+    chunk_id: str = Field(description="ID of the provided original passage the quote is copied from (a passage ID, never an overview ID).")
+    quote: str = Field(description="One or two consecutive sentences copied word for word from that passage, that best support "
+                                   "what you said (about 8-40 words). Copy exactly, including the authors' spelling; do not "
+                                   "paraphrase, translate, shorten in the middle or join separate sentences.")
+
+
 class SystemSuggestion(BaseModel):
     verdict: Verdict = Field(description="PaperLens's own suggestion; the learner makes the final decision.")
     reason: str = Field(description="One or two sentences explaining the suggestion, grounded in the passages.")
@@ -39,6 +46,8 @@ class AnswerPayload(BaseModel):
     short_answer_chunk_ids: list[str] = Field(default_factory=list, description="IDs of the provided passages that support the short answer.")
     sections: list[AnswerSection] = Field(default_factory=list, description="0-4 optional expandable sections relevant to THIS question. "
                                                                             "Do not add sections just to fill a template.")
+    evidence_quotes: list[EvidenceQuote] = Field(default_factory=list, description="For EACH original passage ID you cited "
+                                                 "anywhere in this answer, one verbatim quote from that passage. Not for overview IDs.")
     evidence_status: Literal["sufficient", "partial", "insufficient"] = Field(
         description="Whether the provided passages are enough to support the answer.")
     clarifying_question: str = Field(default="", description="A brief clarifying question for the learner, only if essential information is missing.")

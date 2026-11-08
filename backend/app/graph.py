@@ -18,6 +18,7 @@ from . import storage
 from .config import settings
 from .llm import structured_call
 from .prompts import load_prompt
+from .quotes import match_quote
 from .retrieval import search
 from .schemas import AnswerPayload, QueryRewrite
 
@@ -50,6 +51,7 @@ class TurnState(TypedDict, total=False):
     raw_answer: dict
     assistant_message: dict
     invalid_citations: list[str]
+    quote_checks: list[dict]
     timings_ms: dict
 
 
@@ -217,8 +219,30 @@ def validate_citations(state: TurnState) -> dict:
     short_refs = keep(raw.get("short_answer_chunk_ids", []))
     sections = [{"title": s["title"], "kind": s["kind"], "text": s["text"], "refs": keep(s.get("chunk_ids", []))}
                 for s in raw.get("sections", [])[:MAX_SECTIONS]]
-    sources = [lookup.get(ref, {"ref_id": ref, "kind": "unknown", "page": None, "page_label": None,
-                                "text": None, "verified": False}) for ref in order]
+    sources = [dict(lookup.get(ref, {"ref_id": ref, "kind": "unknown", "page": None, "page_label": None,
+                                     "text": None, "verified": False})) for ref in order]
+
+    # Sentence-level evidence (v1): keep a quote only if it really occurs in the cited passage, and attach the
+    # matched span (copied from the stored passage) so the frontend can highlight it on the PDF page.
+    quote_log: list[dict] = []
+    if validate:
+        by_ref = {s["ref_id"]: s for s in sources}
+        for item in raw.get("evidence_quotes", []) or []:
+            ref, quote = (item.get("chunk_id") or "").strip(), (item.get("quote") or "").strip()
+            source = by_ref.get(ref)
+            if source is None or source["kind"] != "paper":
+                if ref not in lookup:
+                    reason = "unknown_id"
+                elif lookup[ref]["kind"] != "paper":
+                    reason = "overview_id"
+                else:
+                    reason = "passage_not_cited_in_answer"
+                quote_log.append({"chunk_id": ref, "quote": quote, "ok": False, "text": None, "score": 0.0, "reason": reason})
+                continue
+            result = match_quote(quote, source["text"] or "")
+            quote_log.append({"chunk_id": ref, "quote": quote, **result})
+            if result["ok"] and result["text"] not in source.setdefault("quotes", []):
+                source["quotes"].append(result["text"])
     has_paper_support = any(s["kind"] == "paper" and s["verified"] for s in sources)
     suggestion = raw.get("system_suggestion") if state["mode"] == "critical_review" or not validate else None
 
@@ -239,7 +263,7 @@ def validate_citations(state: TurnState) -> dict:
         "retrieval_query": state["retrieval_query"],
         "pipeline_version": state["pipeline_version"],
     }
-    return {"assistant_message": message, "invalid_citations": invalid,
+    return {"assistant_message": message, "invalid_citations": invalid, "quote_checks": quote_log,
             "current_concept": raw.get("current_concept") or state.get("current_concept", "")}
 
 
@@ -290,6 +314,8 @@ def log_view(state: dict[str, Any]) -> dict:
         "raw_model_output": state.get("raw_answer"),
         "assistant_message": state.get("assistant_message"),
         "invalid_citations": state.get("invalid_citations", []),
+        # one entry per evidence quote: did it occur in the cited passage? (ok / reason / similarity score)
+        "quote_checks": state.get("quote_checks", []),
         "current_concept": state.get("current_concept"),
         "timings_ms": state.get("timings_ms", {}),
     }

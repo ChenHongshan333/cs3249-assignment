@@ -24,6 +24,8 @@ export type Source = {
   pages?: number[];
   text: string | null;
   verified: boolean;
+  /** Verified sentences copied from this passage (prompt p3+); highlighted on the PDF page. */
+  quotes?: string[];
 };
 export type SectionKind = 'paper' | 'explanation' | 'example' | 'inference' | 'research_use' | 'limitation';
 export type AnswerSection = { title: string; kind: SectionKind; text: string; refs: string[] };

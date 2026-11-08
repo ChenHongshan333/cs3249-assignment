@@ -13,12 +13,13 @@
     "start": "node scripts/start.mjs",
     "doctor": "node scripts/doctor.mjs",
     "build": "tsc --noEmit && vite build",
-    "test": "tsx --test scripts/tests/local-scripts.test.mjs scripts/tests/locator-paths.test.mjs",
+    "test": "tsx --test scripts/tests/local-scripts.test.mjs scripts/tests/locator-paths.test.mjs src/highlight.test.ts",
     "test:backend": "node scripts/backend-tests.mjs",
     "backend": "node scripts/backend.mjs"
   },
   "dependencies": {
     "lucide-react": "1.45.0",
+    "pdfjs-dist": "4.10.38",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

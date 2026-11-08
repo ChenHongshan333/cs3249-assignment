@@ -74,7 +74,7 @@ Exact versions: `backend/requirements.txt` (direct) and `backend/requirements.lo
 flowchart LR
   subgraph Browser["Browser - React + TypeScript (src/)"]
     UI["PaperLensWorkspace.tsx<br/>state + actions"]
-    PV["PaperPane.tsx<br/>upload, indexing status,<br/>PDF viewer #page=N"]
+    PV["PaperPane.tsx + PdfViewer.tsx<br/>upload, indexing status,<br/>PDF.js viewer + quote highlight"]
     CV["Conversation.tsx<br/>layered answers, sources,<br/>judgment step"]
     NT["SessionNotes.tsx<br/>editable note"]
     API["api.ts<br/>typed fetch client"]
@@ -146,10 +146,10 @@ Example: the learner asked "What are the limitations of the Transformer?" and no
 | 6 | Branch | `graph.route_by_scope` -> `retrieve` (or `load_overview` first for whole-paper questions) |
 | 7 | Retrieve | `graph.retrieve` -> `backend/app/retrieval.py` `search` (`llm.embed_query`, then Chroma `query(where={"paper_id": ...})`, top 6). It also carries over the passages cited in the previous answer |
 | 8 | Generate | `graph.generate_answer`: system prompt `prompts/answer.md` + `prompts/shared_rules.md`; user prompt = context + history + `<passage id=...>` blocks -> `llm.structured_call(..., AnswerPayload)` |
-| 9 | Verify citations | `graph.validate_citations`: keeps only IDs provided this turn, attaches page/label/text from stored metadata, records invalid IDs, drops `system_suggestion` outside critical review, caps sections at 4 |
+| 9 | Verify citations | `graph.validate_citations`: keeps only IDs provided this turn, attaches page/label/text from stored metadata, records invalid IDs, drops `system_suggestion` outside critical review, caps sections at 4. Each `evidence_quotes` entry is checked with `quotes.match_quote` against its cited passage; matches are attached to the source as `quotes`, failures are logged in `quote_checks` |
 | 10 | Save | `graph.save_session` appends the user and assistant messages, updates the current concept (`storage.save_session`) |
 | 11 | Log | `core.run_turn` writes one JSONL event (`graph.log_view` + model, prompt, pipeline version, config, latency, error) to `data/logs/<session>.jsonl` |
-| 12 | Render | `runTurn` reloads the session (`api.session`) -> `src/components/Conversation.tsx` `AssistantBubble` (short answer, `RefChips`, `EvidenceNotice`, sections with kind labels, source list). Clicking a source -> `src/components/PaperPane.tsx` `PaperViewer` opens the PDF at that page and shows the cited text |
+| 12 | Render | `runTurn` reloads the session (`api.session`) -> `src/components/Conversation.tsx` `AssistantBubble` (short answer, `RefChips`, `EvidenceNotice`, sections with kind labels, source list). Clicking a source -> `src/components/PaperPane.tsx` `PaperViewer` -> `PdfViewer.tsx` scrolls to the page, renders it with its text layer, and `highlight.locateOnPage` finds the verified quote; the matched words are highlighted on the page and the panel shows the quote |
 
 If a model call fails, `run_turn` returns `{ok: false, error}` and logs it without changing the session. The UI
 keeps the question and shows **Retry**.
@@ -159,7 +159,9 @@ keeps the question and shows **Retry**.
 | Path | Role |
 |---|---|
 | `src/components/PaperLensWorkspace.tsx` | Screen flow and all actions (upload, polling, session, turns, review, judgment, notes, export) |
-| `src/components/PaperPane.tsx` | Upload card, indexing status with retry, PDF viewer + cited-passage panel |
+| `src/components/PaperPane.tsx` | Upload card, indexing status with retry, cited-passage panel (quote, highlight status, summary page links) |
+| `src/components/PdfViewer.tsx` | PDF.js viewer: lazy page rendering, text layer, zoom/fit, page navigation, highlight boxes |
+| `src/highlight.ts` | Finds a cited quote in a page's text-layer items (exact, then anchored; never guesses); unit-tested in `highlight.test.ts` |
 | `src/components/Conversation.tsx` | Layered answers, evidence notices, numbered sources, judgment step (verdict + own rationale) |
 | `src/components/SessionNotes.tsx` | Research-use note: generated, editable, saved; learner judgment vs PaperLens suggestion shown separately |
 | `src/components/Chrome.tsx` | Header (incl. log export), goal picker, research-context form, starter questions, composer, history, language |
@@ -168,6 +170,7 @@ keeps the question and shows **Retry**.
 | `backend/app/main.py` | REST API |
 | `backend/app/core.py` | Single service layer used by the UI **and** test scripts |
 | `backend/app/graph.py` | LangGraph turn workflow and citation validation |
+| `backend/app/quotes.py` | Checks that each evidence quote occurs in its cited passage (word-level, small fuzziness) |
 | `backend/app/ingest.py` | PDF -> pages -> chunks -> Chroma -> overview |
 | `backend/app/retrieval.py`, `llm.py`, `storage.py`, `config.py`, `schemas.py` | Vector store, model clients, persistence, settings, output schemas |
 | `backend/app/prompts/` | All prompts (versioned by `PROMPT_VERSION` in `config.py`) |
@@ -179,8 +182,8 @@ keeps the question and shows **Retry**.
 
 * Every action writes a JSONL event to `backend/data/logs/<session_id>.jsonl`: session/paper IDs, user
   message, reply, retrieval query, retrieved chunk IDs + pages + text + similarity, raw model output, invalid
-  citations, chat/embedding model, prompt version, pipeline version, config, timestamps, latency and errors.
-  Internal reasoning is not logged.
+  citations, quote checks (each evidence quote: matched or not, reason, similarity), chat/embedding model,
+  prompt version, pipeline version, config, timestamps, latency and errors. Internal reasoning is not logged.
 * **Downloads** (download icon in the header):
   * *Research-use note (.md)*: the learner-facing note as Markdown (`GET /api/sessions/{id}/note.md`). The
     learner's decision and PaperLens's suggestion are separate sections. Also on the note page; unsaved edits
@@ -203,9 +206,15 @@ keeps the question and shows **Retry**.
   not repeat identically on most pages (e.g. author name plus page number) is not removed. Lone UTF-16
   surrogates (math italic letters) are rejoined or dropped by `ingest.safe_text`.
 * Chunks never cross page boundaries, so a sentence split across two pages lands in two chunks.
-* Page jump is page-level: the viewer opens the cited PDF page and shows the cited text, but does not highlight
-  its position on the page. Page numbers are PDF page indexes ("PDF p. 3"); printed labels are shown only when
-  the PDF defines them.
+* Highlighting needs a quote that passed the backend check and the same words in PDF.js's text layer. When the
+  PDF.js text differs (dropped ligatures, odd spacing) the highlight is anchored on the quote's first/last words
+  and labelled as approximate; answers from before prompt p3 have no quotes, so the start of the cited passage
+  is highlighted instead; if nothing matches, the panel says the position was not found. The viewer renders
+  pages lazily, so the browser's Ctrl+F only finds text on pages already rendered; the toolbar button opens the
+  browser's own viewer for full search and printing. Page numbers are PDF page indexes ("PDF p. 3"); printed
+  labels are shown only when the PDF defines them.
+* A quote that passed the check only proves the words are in the cited passage, not that they support the
+  answer's claim.
 * Retrieval is single-shot (top 6 + up to 4 carried-over passages). If the relevant text is not retrieved,
   PaperLens says the passages found are insufficient; it does not search again.
 * The overview is generated by the model. It is labelled as such in the UI, but it can contain summarisation

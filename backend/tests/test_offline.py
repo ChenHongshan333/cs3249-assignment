@@ -137,3 +137,45 @@ def test_note_markdown_keeps_learner_decision_separate_from_suggestion(temp_stor
     assert "Use with adaptations: Model reason" in theirs
     assert "[PDF p. 3 (printed p. 12); PDF pp. 1-3, PaperLens summary (not the authors' words)]" in md
     assert "- Pilot it\n" in md and "edited by the learner" in md
+
+
+PASSAGE = ("Our participant pool, skewed towards professionals and graduate students in STEM-related felds, "
+           "is not representative of the population at large. Future work should recruit more broadly.")
+
+
+def test_quote_match_exact_and_tolerant():
+    from app.quotes import match_quote
+    exact = match_quote("is not representative of the population at large.", PASSAGE)
+    assert exact["ok"] and exact["score"] == 1.0 and exact["text"] == "is not representative of the population at large."
+    # case, punctuation and the hyphen differ; the model "fixed" the dropped ligature (felds -> fields)
+    tolerant = match_quote("Our participant pool skewed towards professionals and graduate students in STEM related fields",
+                           PASSAGE)
+    assert tolerant["ok"] and tolerant["text"].startswith("Our participant pool,") and tolerant["text"].endswith("felds")
+
+
+def test_quote_match_rejects_paraphrase_and_fragments():
+    from app.quotes import match_quote
+    assert not match_quote("The sample was mostly engineers and was not representative of everyone.", PASSAGE)["ok"]
+    assert match_quote("population at large", PASSAGE)["reason"] == "too_short"
+
+
+def test_validation_attaches_only_verified_quotes():
+    state = _state("v1", ["p1-c0"])
+    state["retrieved"][0]["text"] = PASSAGE
+    state["raw_answer"]["evidence_quotes"] = [
+        {"chunk_id": "p1-c0", "quote": "Future work should recruit more broadly."},
+        {"chunk_id": "p1-c0", "quote": "The authors recruited only undergraduates from one class."},   # invented
+        {"chunk_id": "ov-1", "quote": "generated summary text that is not a passage"},
+        {"chunk_id": "made-up", "quote": "some quote from a passage that was never provided"},
+    ]
+    out = validate_citations(state)
+    source = next(s for s in out["assistant_message"]["sources"] if s["ref_id"] == "p1-c0")
+    assert source["quotes"] == ["Future work should recruit more broadly."]
+    assert [c["reason"] for c in out["quote_checks"]] == [None, "not_found", "overview_id", "unknown_id"]
+
+
+def test_v0_baseline_has_no_quote_highlighting():
+    state = _state("v0", ["p1-c0"])
+    state["raw_answer"]["evidence_quotes"] = [{"chunk_id": "p1-c0", "quote": "real text"}]
+    out = validate_citations(state)
+    assert all("quotes" not in s for s in out["assistant_message"]["sources"]) and out["quote_checks"] == []

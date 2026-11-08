@@ -50,6 +50,30 @@ function SuggestionBox({ suggestion }: { suggestion: SystemSuggestion }) {
   </div>;
 }
 
+/** Original passages and PaperLens summaries are listed separately; numbers match the chips in the answer. */
+function SourceList({ sources, onSource }: { sources: Source[]; onSource: (s: SourceFocus) => void }) {
+  if (!sources.length) return null;
+  const numbered = sources.map((source, index) => ({ source, number: index + 1 }));
+  const groups = [
+    { title: 'FROM THE PAPER', items: numbered.filter((s) => s.source.kind !== 'overview') },
+    { title: 'PAPERLENS SUMMARIES · NOT THE AUTHORS’ WORDS', items: numbered.filter((s) => s.source.kind === 'overview') },
+  ].filter((group) => group.items.length);
+  return <div className="source-list">
+    {groups.map((group) => <div key={group.title} className="source-group">
+      <small>{group.title}</small>
+      {group.items.map(({ source, number }) => {
+        const preview = source.quotes?.[0] ? `“${source.quotes[0]}”` : `${(source.text ?? '').slice(0, 110)}…`;
+        return <button key={source.ref_id} className={`source-link ${source.verified ? '' : 'unverified'}`}
+          disabled={!source.verified} onClick={() => onSource({ ...source, label: `Source ${number}` })}>
+          <span>[{number}] {source.verified ? pageText(source).toUpperCase() : 'UNVERIFIED ID'}</span>
+          <strong>{source.verified ? preview : source.ref_id}</strong>
+          <span aria-hidden="true">→</span>
+        </button>;
+      })}
+    </div>)}
+  </div>;
+}
+
 function AssistantBubble({ message, latest, busy, onSource, onFollowUp }: {
   message: AssistantMessage; latest: boolean; busy: boolean; onSource: (s: SourceFocus) => void; onFollowUp: (q: string) => void;
 }) {
@@ -64,15 +88,7 @@ function AssistantBubble({ message, latest, busy, onSource, onFollowUp }: {
         <p>{section.text}<RefChips refs={section.refs} sources={message.sources} onSource={onSource} /></p>
       </details>)}
     </div>}
-    {message.sources.length > 0 && <div className="source-list">
-      <small>SOURCES</small>
-      {message.sources.map((source, index) => <button key={source.ref_id} className={`source-link ${source.verified ? '' : 'unverified'}`}
-        disabled={!source.verified} onClick={() => onSource({ ...source, label: `Source ${index + 1}` })}>
-        <span>[{index + 1}] {source.kind === 'overview' ? 'GENERATED OVERVIEW · ' : ''}{source.verified ? pageText(source).toUpperCase() : 'UNVERIFIED ID'}</span>
-        <strong>{source.verified ? (source.text ?? '').slice(0, 90) + '…' : source.ref_id}</strong>
-        <span aria-hidden="true">→</span>
-      </button>)}
-    </div>}
+    <SourceList sources={message.sources} onSource={onSource} />
     {latest && !busy && message.follow_up_suggestions.length > 0 && <div className="follow-up-suggestions">
       <small>FOLLOW UP</small>
       <div>{message.follow_up_suggestions.map((q) => <button key={q} onClick={() => onFollowUp(q)}>{q}</button>)}</div>
