@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
 from . import core, storage
-from .config import settings
+from .config import API_KEY_SOURCE, settings
 from .ingest import IngestError, fetch_pdf_from_url, register_upload, run_ingestion
 
 app = FastAPI(title="PaperLens API", version="2.0")
@@ -50,7 +50,8 @@ class JudgmentIn(BaseModel):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "api_key_configured": bool(settings.api_key), "config": settings.public()}
+    return {"ok": True, "api_key_configured": bool(settings.api_key), "api_key_source": API_KEY_SOURCE,
+            "config": settings.public()}
 
 
 # ------------------------------------------------------------------ papers

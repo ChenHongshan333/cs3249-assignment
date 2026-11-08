@@ -10,9 +10,18 @@ from dotenv import dotenv_values
 BACKEND_DIR = Path(__file__).resolve().parent.parent
 # Non-empty values in backend/.env win over system environment variables of the same name;
 # empty ones (e.g. an unfilled OPENROUTER_API_KEY=) fall back to the system value.
-for _key, _value in dotenv_values(BACKEND_DIR / ".env").items():
+_DOTENV = dotenv_values(BACKEND_DIR / ".env")
+for _key, _value in _DOTENV.items():
     if _value:
         os.environ[_key] = _value
+
+# Where the API key came from, so /api/health can show it without revealing the key.
+if (_DOTENV.get("OPENROUTER_API_KEY") or "").strip():
+    API_KEY_SOURCE = "backend/.env"
+elif os.getenv("OPENROUTER_API_KEY", "").strip():
+    API_KEY_SOURCE = "system environment variable"
+else:
+    API_KEY_SOURCE = "missing"
 
 # Bump this whenever any file in app/prompts/ changes, so logs show which prompts produced a reply.
 PROMPT_VERSION = "p2"  # p1 -> p2: rule about passages carried over from the previous answer
