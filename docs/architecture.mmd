@@ -1,0 +1,40 @@
+flowchart LR
+  subgraph FE["Browser · React + TypeScript (src/)"]
+    direction TB
+    WS["PaperLensWorkspace.tsx<br/>screen flow · state · language"]
+    CONV["Conversation.tsx<br/>layered answer · sources · judgment"]
+    PDF["PaperPane.tsx + PdfViewer.tsx<br/>PDF.js pages · quote highlight (highlight.ts)"]
+    NOTE["SessionNotes.tsx<br/>editable note · .md export"]
+    API["api.ts · REST client"]
+    WS --- CONV & PDF & NOTE
+    WS --> API
+  end
+
+  subgraph BE["FastAPI back end · Python (backend/app/)"]
+    direction TB
+    MAIN["main.py · HTTP routes"]
+    CORE["core.py · service layer<br/>run_turn · critical review · judgment · note · export"]
+    ING["ingest.py · ingestion<br/>extract → clean → chunk → embed → overview"]
+    subgraph LG["graph.py · LangGraph turn workflow"]
+      direction LR
+      A[load_session] --> B[rewrite_query]
+      B -- whole paper --> C[load_overview] --> D[retrieve]
+      B -- local --> D
+      D --> E[generate_answer] --> F["validate_citations<br/>+ quotes.py"] --> G[save_session]
+    end
+    MAIN --> CORE --> LG
+    MAIN --> ING
+  end
+
+  OR[("OpenRouter<br/>Claude Haiku 5.5<br/>text-embedding-3-small")]
+  CH[("Chroma<br/>passage vectors")]
+  FS[("Local files<br/>papers · sessions · JSONL logs")]
+  SCR["scripts/run_conversation.py<br/>(scripted test runs)"]
+
+  API -- "REST /api" --> MAIN
+  B & E -- "llm.py + prompts/" --> OR
+  D -- "retrieval.py, filtered by paper_id" --> CH
+  ING --> CH
+  ING -- "embeddings · overview" --> OR
+  CORE -- "storage.py" --> FS
+  SCR --> CORE
