@@ -40,7 +40,8 @@ class TurnState(TypedDict, total=False):
     reading_goal: str
     research_context: str
     language: str              # effective answer language (setting, or an explicit request in the chat)
-    language_override: str     # explicit in-chat language request kept for this session ('' = use the setting)
+    language_override: str     # in-chat request for a language the UI does not support ('' = use the setting)
+    language_setting: str      # in-chat request for a supported language: becomes the session's language setting
     current_concept: str
     history: list[dict]
     # produced by the nodes
@@ -120,6 +121,9 @@ def load_session(state: TurnState) -> dict:
         "research_context": session.get("research_context", ""),
         "language": session.get("language_override") or session.get("language", "English"),
         "language_override": session.get("language_override", ""),
+        # Sessions from before this rule stored a supported language as an override; turn it into the setting.
+        **({"language_setting": supported, "language_override": ""}
+           if (supported := canonical_language(session.get("language_override") or "")) else {}),
         "current_concept": session.get("current_concept", ""),
         "history": session.get("messages", []),
         "pipeline_version": settings.pipeline_version,
@@ -143,14 +147,42 @@ def rewrite_query(state: TurnState) -> dict:
         "current_concept": result.current_concept or state.get("current_concept", ""),
         "timings_ms": _timed(state, "rewrite_query", start),
     }
-    # An explicit "please answer in X" in the chat changes the answer language for the rest of the session
-    # (stored on the session, so it is not forgotten once the request scrolls out of the history window).
+    # An explicit "please answer in X" in the chat. For a language the interface supports, it changes the
+    # language setting itself (answers AND interface switch, as if chosen in the settings). For any other
+    # language only the answers switch (language_override), for the rest of the session. Both are stored on the
+    # session, so they are not forgotten once the request scrolls out of the history window.
     request = (result.language_request or "").strip()
     if request:
-        override = "" if request.lower() == "default" else request
-        update["language_override"] = override
-        update["language"] = override or state["session"].get("language", "English")
+        setting = state["session"].get("language", "English")
+        supported = canonical_language(request)
+        if request.lower() == "default":
+            update.update(language_override="", language=setting)
+        elif supported:
+            update.update(language_setting=supported, language_override="", language=supported)
+        else:
+            update.update(language_override=request, language=request)
     return update
+
+
+# Languages the interface supports (same names as src/i18n.ts LANGUAGES), with ways a learner may name them.
+_LANGUAGE_NAMES = {
+    "English": ("english", "英文", "英语", "英語", "英文で", "えいご"),
+    "中文（简体）": ("中文（简体）", "简体", "简体中文", "chinese", "simplified chinese", "mandarin", "中文", "汉语", "普通话"),
+    "中文（繁體）": ("中文（繁體）", "繁體", "繁体", "繁體中文", "繁体中文", "traditional chinese"),
+    "日本語": ("日本語", "日语", "日文", "japanese", "にほんご"),
+}
+
+
+def canonical_language(name: str) -> str | None:
+    """Map a requested language name to a supported interface language, or None if it is not supported."""
+    value = name.strip().lower()
+    if value in {k.lower() for k in _LANGUAGE_NAMES}:
+        return next(k for k in _LANGUAGE_NAMES if k.lower() == value)
+    # traditional Chinese first, so "traditional chinese" is not caught by "chinese"
+    for language in ("中文（繁體）", "English", "日本語", "中文（简体）"):
+        if any(alias in value for alias in _LANGUAGE_NAMES[language]):
+            return language
+    return None
 
 
 def route_by_scope(state: TurnState) -> str:
@@ -284,6 +316,8 @@ def save_session(state: TurnState) -> dict:
     session.setdefault("messages", []).extend([user_entry, state["assistant_message"]])
     session["current_concept"] = state.get("current_concept", "")
     session["language_override"] = state.get("language_override", "")
+    if state.get("language_setting"):
+        session["language"] = state["language_setting"]   # in-chat switch to a supported language
     if state["mode"] == "critical_review" and state["assistant_message"].get("system_suggestion"):
         session["system_suggestion"] = state["assistant_message"]["system_suggestion"]
     storage.save_session(session)
@@ -330,5 +364,6 @@ def log_view(state: dict[str, Any]) -> dict:
         "current_concept": state.get("current_concept"),
         "answer_language": state.get("language"),
         "language_override": state.get("language_override", ""),
+        "language_setting_changed_to": state.get("language_setting"),
         "timings_ms": state.get("timings_ms", {}),
     }

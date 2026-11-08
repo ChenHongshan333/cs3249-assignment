@@ -184,9 +184,11 @@ keeps the question and shows **Retry**.
 * The **language setting** (globe icon, remembered in the browser, default English) sets both the interface
   language and the language PaperLens answers in. "PaperLens" and paper titles are not translated; quotes from
   the paper stay in the paper's language so they can be highlighted.
-* An **explicit request in the chat** ("please answer in English from now on") changes only the answer language,
-  for the rest of the session: the query-rewrite step returns `language_request`, stored as
-  `session.language_override` (prompt p4). Choosing a language in the settings clears it. Writing a message in
+* An **explicit request in the chat** ("please answer in English from now on") is detected by the query-rewrite
+  step (`language_request`, prompt p4; mapped by `graph.canonical_language`). For one of the four supported
+  languages it changes the language setting itself, so the answers **and** the interface switch, and the
+  frontend follows after the reply. For any other language only the answers switch, for the rest of the
+  session (`session.language_override`); choosing a language in the settings clears it. Writing a message in
   another language is not treated as a request.
 * Stored and logged values stay in English (verdicts, reading goals, the critical-review and judgment request
   texts); only their display is translated, so evaluation data is comparable across languages. Logs record

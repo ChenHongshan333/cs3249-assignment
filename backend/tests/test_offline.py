@@ -192,10 +192,17 @@ def _rewrite_with(monkeypatch, language_request, session_language="中文（简�
     return graph.rewrite_query(state)
 
 
-def test_in_chat_language_request_overrides_setting(monkeypatch):
+def test_in_chat_request_for_supported_language_switches_setting(monkeypatch):
     out = _rewrite_with(monkeypatch, "English")
-    assert out["language"] == "English" and out["language_override"] == "English"
-    back = _rewrite_with(monkeypatch, "default", override="English")
+    assert out["language_setting"] == "English" and out["language"] == "English" and out["language_override"] == ""
+    assert _rewrite_with(monkeypatch, "traditional Chinese")["language_setting"] == "中文（繁體）"
+    assert _rewrite_with(monkeypatch, "日语", session_language="English")["language_setting"] == "日本語"
+
+
+def test_in_chat_request_for_unsupported_language_only_changes_answers(monkeypatch):
+    out = _rewrite_with(monkeypatch, "Français")
+    assert out["language"] == "Français" and out["language_override"] == "Français" and "language_setting" not in out
+    back = _rewrite_with(monkeypatch, "default", override="Français")
     assert back["language"] == "中文（简体）" and back["language_override"] == ""
     none = _rewrite_with(monkeypatch, "")
     assert "language" not in none and "language_override" not in none   # writing in a language is not a request

@@ -60,6 +60,10 @@ export function PaperLensWorkspace() {
   const [draft, setDraft] = useState('');
   const [language, setLanguage] = useState<Language>(readLanguage);
   const t: Strings = STRINGS[language];
+  const rememberLanguage = (next: Language) => {
+    setLanguage(next);
+    try { window.localStorage.setItem(LANGUAGE_KEY, next); } catch { /* not remembered; still applied */ }
+  };
   const errorText = (error: unknown) => (error instanceof ApiError && error.code === 'unreachable' ? t.backendUnreachable
     : error instanceof Error ? error.message : String(error));
   const [viewerWidth, setViewerWidth] = useState(460);
@@ -127,7 +131,10 @@ export function PaperLensWorkspace() {
     setPending({ text, mode, retry }); setBusy(true); setScreen('conversation'); setActionError('');
     try {
       const result = await call();
-      setSession(await api.session(session.session_id));
+      const updated = await api.session(session.session_id);
+      setSession(updated);
+      // "Please answer in English" in the chat switches the language setting on the backend; follow it here too.
+      if (isLanguage(updated.language) && updated.language !== language) rememberLanguage(updated.language);
       setPending(result.ok ? null : { text, mode, retry, error: result.error });
     } catch (error) {
       setPending({ text, mode, retry, error: errorText(error) });
@@ -207,8 +214,7 @@ export function PaperLensWorkspace() {
     try { window.localStorage.setItem(TEXT_SIZE_KEY, next); } catch { /* not remembered; still applied */ }
   };
   const chooseLanguage = (next: Language) => {
-    setLanguage(next); setLanguagePanelPosition(null);
-    try { window.localStorage.setItem(LANGUAGE_KEY, next); } catch { /* not remembered; still applied */ }
+    rememberLanguage(next); setLanguagePanelPosition(null);
     if (session) api.updateSession(session.session_id, { language: next }).then(setSession).catch((e) => setActionError(errorText(e)));
   };
   const exportLog = () => { if (session) download(api.exportUrl(session.session_id), `paperlens-${session.session_id}.json`); };
