@@ -129,7 +129,6 @@ export function HistoryDrawer({ currentId, onClose, onSelect, onDeleted }: {
   return <aside className="history-drawer" aria-label="Chat history"
     onKeyDown={(event) => { if (event.key === 'Escape') { if (confirming) setConfirming(null); else onClose(); } }}>
     <div className="drawer-heading"><h2>Chat history</h2><button onClick={onClose} aria-label="Close history"><ChevronLeft /></button></div>
-    <small>THIS DEVICE · right-click or use the bin icon to delete</small>
     {error && <p className="inline-error" role="alert">{error}</p>}
     <div className="history-list">
       {items && !items.length && <p className="muted-text">No saved sessions yet.</p>}
