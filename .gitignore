@@ -2,3 +2,13 @@ node_modules/
 dist/
 .DS_Store
 *.log
+
+# Backend secrets and local runtime data
+backend/.env
+backend/.venv/
+backend/data/
+__pycache__/
+.pytest_cache/
+
+# Test papers may be copyrighted; keep them local
+test_papers/
