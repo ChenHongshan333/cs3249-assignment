@@ -39,7 +39,8 @@ class TurnState(TypedDict, total=False):
     paper_title: str
     reading_goal: str
     research_context: str
-    language: str
+    language: str              # effective answer language (setting, or an explicit request in the chat)
+    language_override: str     # explicit in-chat language request kept for this session ('' = use the setting)
     current_concept: str
     history: list[dict]
     # produced by the nodes
@@ -117,7 +118,8 @@ def load_session(state: TurnState) -> dict:
         "paper_title": paper.get("title", ""),
         "reading_goal": session.get("reading_goal", ""),
         "research_context": session.get("research_context", ""),
-        "language": session.get("language", "English"),
+        "language": session.get("language_override") or session.get("language", "English"),
+        "language_override": session.get("language_override", ""),
         "current_concept": session.get("current_concept", ""),
         "history": session.get("messages", []),
         "pipeline_version": settings.pipeline_version,
@@ -135,12 +137,20 @@ def rewrite_query(state: TurnState) -> dict:
               f"Latest learner message: {state['user_message']}")
     result = structured_call(load_prompt("rewrite"), prompt, QueryRewrite)
     scope = "overview" if state["mode"] == "critical_review" else result.scope
-    return {
+    update = {
         "retrieval_query": result.standalone_query.strip() or state["user_message"],
         "scope": scope,
         "current_concept": result.current_concept or state.get("current_concept", ""),
         "timings_ms": _timed(state, "rewrite_query", start),
     }
+    # An explicit "please answer in X" in the chat changes the answer language for the rest of the session
+    # (stored on the session, so it is not forgotten once the request scrolls out of the history window).
+    request = (result.language_request or "").strip()
+    if request:
+        override = "" if request.lower() == "default" else request
+        update["language_override"] = override
+        update["language"] = override or state["session"].get("language", "English")
+    return update
 
 
 def route_by_scope(state: TurnState) -> str:
@@ -273,6 +283,7 @@ def save_session(state: TurnState) -> dict:
                   "text": state["user_message"], "created_at": storage.now_iso()}
     session.setdefault("messages", []).extend([user_entry, state["assistant_message"]])
     session["current_concept"] = state.get("current_concept", "")
+    session["language_override"] = state.get("language_override", "")
     if state["mode"] == "critical_review" and state["assistant_message"].get("system_suggestion"):
         session["system_suggestion"] = state["assistant_message"]["system_suggestion"]
     storage.save_session(session)
@@ -317,5 +328,7 @@ def log_view(state: dict[str, Any]) -> dict:
         # one entry per evidence quote: did it occur in the cited passage? (ok / reason / similarity score)
         "quote_checks": state.get("quote_checks", []),
         "current_concept": state.get("current_concept"),
+        "answer_language": state.get("language"),
+        "language_override": state.get("language_override", ""),
         "timings_ms": state.get("timings_ms", {}),
     }

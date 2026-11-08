@@ -1,7 +1,8 @@
 // Left pane (upload + PDF viewer) and the indexing status shown while a paper is processed.
 import { useEffect, useRef, useState } from 'react';
 import { AlertTriangle, FilePlus2, LoaderCircle, X } from 'lucide-react';
-import { pageText, type Paper, type Source } from '../api';
+import type { Paper, Source } from '../api';
+import { useT } from '../i18n';
 import { type HighlightStatus, type PdfTarget, PdfViewer } from './PdfViewer';
 
 export type SourceFocus = Source & { label: string };
@@ -9,13 +10,14 @@ export type SourceFocus = Source & { label: string };
 export function LandingUpload({ onFile, onUrl, busy, error }: {
   onFile: (file: File) => void; onUrl: (url: string) => void; busy: boolean; error: string;
 }) {
+  const t = useT();
   const inputRef = useRef<HTMLInputElement>(null);
   const [paperUrl, setPaperUrl] = useState('');
   const [localError, setLocalError] = useState('');
   const acceptFile = (file?: File) => {
     if (!file || busy) return;
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-      setLocalError('Please choose a PDF file.');
+      setLocalError(t.notPdf);
       return;
     }
     setLocalError('');
@@ -28,29 +30,26 @@ export function LandingUpload({ onFile, onUrl, busy, error }: {
     onDragOver={(event) => { event.preventDefault(); event.dataTransfer.dropEffect = 'copy'; }}
     onDrop={(event) => { event.preventDefault(); acceptFile(event.dataTransfer.files[0]); }}>
     <input ref={inputRef} className="file-input" type="file" accept="application/pdf,.pdf" onClick={(event) => event.stopPropagation()}
-      aria-label="Choose a PDF file" onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
+      aria-label={t.chooseFile} onChange={(event) => { acceptFile(event.target.files?.[0]); event.target.value = ''; }} />
     {busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <FilePlus2 aria-hidden="true" />}
-    <span>{busy ? 'Uploading…' : <>Drop a PDF here<br />or click to browse</>}</span>
+    <span>{busy ? t.uploading : <>{t.dropHere[0]}<br />{t.dropHere[1]}</>}</span>
     <span className="url-field" onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()}>
       <input value={paperUrl} onChange={(event) => setPaperUrl(event.target.value)}
         onKeyDown={(event) => { if (event.key === 'Enter' && paperUrl.trim()) onUrl(paperUrl.trim()); }}
-        placeholder="Paste a direct PDF or arXiv link" aria-label="Paper URL" />
-      <button type="button" disabled={busy || !paperUrl.trim()} onClick={() => onUrl(paperUrl.trim())}>Open</button>
+        placeholder={t.urlPlaceholder} aria-label={t.urlLabel} />
+      <button type="button" disabled={busy || !paperUrl.trim()} onClick={() => onUrl(paperUrl.trim())}>{t.open}</button>
     </span>
     {shownError && <span className="upload-error" role="alert">{shownError}</span>}
-    <small>Text-based PDF · arXiv link</small>
+    <small>{t.uploadHint}</small>
   </div></div>;
 }
 
-const STATUS_TEXT: Record<HighlightStatus, string> = {
-  searching: 'Locating the passage on the page…',
-  quote: 'Highlighted on the page: the sentence PaperLens quoted from this passage.',
-  'quote-approx': 'Highlighted on the page. The PDF text differs slightly from the extracted text, so the highlight may be a few words off.',
-  'passage-start': 'This answer has no verified quote for this source, so the start of the cited passage is highlighted.',
-  'not-found': 'The exact position was not found on this page. Read the extracted passage below.',
-};
-
+/**
+ * PDF viewer plus a compact source bar. When the quote is highlighted exactly, the bar is a single line
+ * (the highlight on the page says the rest). A second line appears only for approximate / missing positions.
+ */
 export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; focus: SourceFocus | null; onCloseFocus: () => void }) {
+  const t = useT();
   const [target, setTarget] = useState<PdfTarget | null>(null);
   const [status, setStatus] = useState<HighlightStatus>('searching');
   const [showPassage, setShowPassage] = useState(false);
@@ -67,56 +66,49 @@ export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; f
     });
   }, [focus]);
   const jumpTo = (page: number) => { counter.current += 1; setTarget({ key: counter.current, page, quotes: [], passage: null, highlight: false }); };
-  const quotes = focus?.quotes ?? [];
+  const overview = focus?.kind === 'overview';
+  const passageOpen = showPassage || status === 'not-found';
+  const notice = !overview && status !== 'quote' ? t.status[status] : '';
 
   return <div className="paper-viewer">
     <PdfViewer url={pdfUrl} target={target} onStatus={setStatus} />
-    {focus && <aside className="cited-passage" aria-label="Cited passage">
+    {focus && <aside className={`cited-passage ${overview ? 'overview' : 'compact'}`} aria-label={t.citedPassage}>
       <header>
-        <span>{focus.label} · {pageText(focus)}</span>
-        <button onClick={onCloseFocus} aria-label="Close cited passage"><X /></button>
+        <span>{focus.label} · {t.pageText(focus)}</span>
+        {!overview && status !== 'not-found' && <button className="text-button" onClick={() => setShowPassage((v) => !v)}
+          aria-expanded={passageOpen}>{passageOpen ? t.hidePassage : t.showPassage}</button>}
+        <button className="close-button" onClick={onCloseFocus} aria-label={t.closePassage}><X /></button>
       </header>
-      {focus.kind === 'overview' ? <>
-        <small>PaperLens-generated summary of these pages, not the authors’ words. Open a page to read the original text.</small>
+      {notice && <small className={`highlight-status ${status}`} role="status">
+        {status !== 'searching' && <AlertTriangle aria-hidden="true" />}{notice}</small>}
+      {overview ? <>
+        <small>{t.summaryNote}</small>
         <p>{focus.text}</p>
         <div className="cited-pages">
-          {(focus.pages?.length ? focus.pages : [focus.page ?? 1]).map((page) => <button key={page} onClick={() => jumpTo(page)}>PDF p. {page}</button>)}
+          {(focus.pages?.length ? focus.pages : [focus.page ?? 1]).map((page) => <button key={page} onClick={() => jumpTo(page)}>{t.pageButton(page)}</button>)}
         </div>
-      </> : <>
-        <small className={`highlight-status ${status}`} role="status">{STATUS_TEXT[status]}</small>
-        {quotes.map((quote) => <blockquote key={quote}>“{quote}”</blockquote>)}
-        {quotes.length > 0
-          ? <button className="text-button" onClick={() => setShowPassage((v) => !v)}>
-            {showPassage ? 'Hide the full passage' : 'Show the full passage'}</button>
-          : null}
-        {(showPassage || !quotes.length) && <p>{focus.text}</p>}
-      </>}
+      </> : passageOpen && <p>{focus.text}</p>}
     </aside>}
   </div>;
 }
 
-// Shown only when preparation fails, so the learner knows which part went wrong.
-const FAILED_STAGE: Record<string, string> = {
-  parsing: 'Failed while reading the text of the PDF.',
-  indexing: 'Failed while building the search index.',
-  summarizing: 'Failed while writing the overview of the paper.',
-};
-
 export function IndexingStatus({ paper, onRetry, onUploadAnother }: { paper: Paper; onRetry: () => void; onUploadAnother: () => void }) {
+  const t = useT();
   if (paper.status !== 'failed') {
     return <div className="choice-screen indexing-status" aria-live="polite" aria-busy="true">
-      <h1><LoaderCircle className="spin" aria-hidden="true" /> Preparing your paper…</h1>
-      <p className="muted-text">Long papers can take a minute.</p>
+      <h1><LoaderCircle className="spin" aria-hidden="true" /> {t.preparing}</h1>
+      <p className="muted-text">{t.preparingHint}</p>
     </div>;
   }
   return <div className="choice-screen indexing-status" aria-live="polite">
-    <h1><AlertTriangle aria-hidden="true" /> This paper could not be prepared</h1>
+    <h1><AlertTriangle aria-hidden="true" /> {t.prepFailed}</h1>
     <div className="status-error" role="alert">
-      {paper.failed_stage && FAILED_STAGE[paper.failed_stage] && <p><strong>{FAILED_STAGE[paper.failed_stage]}</strong></p>}
+      {/* the failed stage tells the learner which part went wrong; the error text itself comes from the backend */}
+      {paper.failed_stage && t.failedStage[paper.failed_stage] && <p><strong>{t.failedStage[paper.failed_stage]}</strong></p>}
       <p>{paper.error}</p>
       <div className="form-actions">
-        <button className="text-button" onClick={onUploadAnother}>Upload a different PDF</button>
-        <button className="primary-button" onClick={onRetry}>Retry</button>
+        <button className="text-button" onClick={onUploadAnother}>{t.uploadDifferent}</button>
+        <button className="primary-button" onClick={onRetry}>{t.retry}</button>
       </div>
     </div>
   </div>;

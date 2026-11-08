@@ -179,3 +179,46 @@ def test_v0_baseline_has_no_quote_highlighting():
     state["raw_answer"]["evidence_quotes"] = [{"chunk_id": "p1-c0", "quote": "real text"}]
     out = validate_citations(state)
     assert all("quotes" not in s for s in out["assistant_message"]["sources"]) and out["quote_checks"] == []
+
+
+def _rewrite_with(monkeypatch, language_request, session_language="中文（简体）", override=""):
+    from app import graph
+    from app.schemas import QueryRewrite
+    monkeypatch.setattr(graph, "structured_call", lambda *a, **k: QueryRewrite(
+        standalone_query="q", scope="local", current_concept="c", language_request=language_request))
+    state = {"pipeline_version": "v1", "mode": "chat", "user_message": "m", "history": [],
+             "session": {"language": session_language, "language_override": override},
+             "language": override or session_language, "language_override": override, "timings_ms": {}}
+    return graph.rewrite_query(state)
+
+
+def test_in_chat_language_request_overrides_setting(monkeypatch):
+    out = _rewrite_with(monkeypatch, "English")
+    assert out["language"] == "English" and out["language_override"] == "English"
+    back = _rewrite_with(monkeypatch, "default", override="English")
+    assert back["language"] == "中文（简体）" and back["language_override"] == ""
+    none = _rewrite_with(monkeypatch, "")
+    assert "language" not in none and "language_override" not in none   # writing in a language is not a request
+
+
+def test_changing_language_setting_clears_chat_override(temp_store):
+    from app import core
+    session = core.create_session("p1", "Get a general overview of this paper", language="English")
+    session["language_override"] = "日本語"
+    temp_store.save_session(session)
+    updated = core.update_session(session["session_id"], language="中文（简体）")
+    assert updated["language"] == "中文（简体）" and updated["language_override"] == ""
+
+
+def test_note_markdown_uses_interface_language_but_keeps_stored_values(temp_store):
+    from app import core
+    session = core.create_session("p1", "Explore potential use in my research", language="中文（简体）")
+    session["note"] = {"selected_idea": "想法", "research_use": "", "adaptations_and_uncertainties": "", "next_actions": [],
+                       "evidence": [{"point": "要点", "sources": [{"kind": "paper", "page": 3, "page_label": "3"}]}],
+                       "learner_judgment": {"verdict": "Do not use", "rationale": "我的理由文字"},
+                       "system_suggestion": None, "generated_at": "t", "edited_by_learner": False}
+    temp_store.save_session(session)
+    md = core.note_markdown(session["session_id"])
+    assert md.startswith("# 研究应用笔记") and "**不使用**" in md and "探索在我研究中的潜在用途" in md
+    assert "[PDF 第 3 页]" in md
+    assert temp_store.load_session(session["session_id"])["note"]["learner_judgment"]["verdict"] == "Do not use"

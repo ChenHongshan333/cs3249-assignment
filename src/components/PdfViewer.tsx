@@ -7,6 +7,7 @@ import { getDocument, GlobalWorkerOptions, TextLayer, type PDFDocumentProxy, typ
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import 'pdfjs-dist/web/pdf_viewer.css';
 import { locateOnPage, type MatchKind } from '../highlight';
+import { useT } from '../i18n';
 
 GlobalWorkerOptions.workerSrc = workerUrl;
 
@@ -109,6 +110,7 @@ function PdfPage({ doc, pageNumber, size, scale, active, target, onHighlight, re
 export function PdfViewer({ url, target, onStatus }: {
   url: string; target: PdfTarget | null; onStatus: (status: HighlightStatus) => void;
 }) {
+  const t = useT();
   const scrollRef = useRef<HTMLDivElement>(null);
   const pageNodes = useRef(new Map<number, HTMLDivElement>());
   const scrolledFor = useRef<number | null>(null);
@@ -209,25 +211,25 @@ export function PdfViewer({ url, target, onStatus }: {
   const changeZoom = (factor: number) => setZoom(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, Math.round(scale * factor * 100) / 100)));
 
   return <div className="pdf-viewer">
-    <div className="pdf-toolbar" role="toolbar" aria-label="PDF controls">
-      <button onClick={() => goTo(currentPage - 1)} disabled={!doc || currentPage <= 1} aria-label="Previous page"><ChevronLeft /></button>
+    <div className="pdf-toolbar" role="toolbar" aria-label={t.pdfControls}>
+      <button onClick={() => goTo(currentPage - 1)} disabled={!doc || currentPage <= 1} aria-label={t.prevPage}><ChevronLeft /></button>
       <form onSubmit={(event) => { event.preventDefault(); goTo(Number(pageInput) || currentPage); }}>
-        <input value={pageInput} onChange={(event) => setPageInput(event.target.value.replace(/\D/g, ''))} aria-label="Page number" inputMode="numeric" />
+        <input value={pageInput} onChange={(event) => setPageInput(event.target.value.replace(/\D/g, ''))} aria-label={t.pageNumber} inputMode="numeric" />
         <span>/ {doc?.numPages ?? '–'}</span>
       </form>
-      <button onClick={() => goTo(currentPage + 1)} disabled={!doc || currentPage >= (doc?.numPages ?? 1)} aria-label="Next page"><ChevronRight /></button>
+      <button onClick={() => goTo(currentPage + 1)} disabled={!doc || currentPage >= (doc?.numPages ?? 1)} aria-label={t.nextPage}><ChevronRight /></button>
       <span className="pdf-toolbar-divider" />
-      <button onClick={() => changeZoom(1 / 1.2)} disabled={!doc || scale <= MIN_ZOOM} aria-label="Zoom out"><ZoomOut /></button>
+      <button onClick={() => changeZoom(1 / 1.2)} disabled={!doc || scale <= MIN_ZOOM} aria-label={t.zoomOut}><ZoomOut /></button>
       <button className={`pdf-zoom-label ${zoom === 'fit' ? 'active' : ''}`} onClick={() => setZoom('fit')} disabled={!doc}
-        title="Fit to width">{zoom === 'fit' ? 'Fit' : `${Math.round(scale * 100)}%`}</button>
-      <button onClick={() => changeZoom(1.2)} disabled={!doc || scale >= MAX_ZOOM} aria-label="Zoom in"><ZoomIn /></button>
+        title={t.fitTitle}>{zoom === 'fit' ? t.fit : `${Math.round(scale * 100)}%`}</button>
+      <button onClick={() => changeZoom(1.2)} disabled={!doc || scale >= MAX_ZOOM} aria-label={t.zoomIn}><ZoomIn /></button>
       <span className="pdf-toolbar-spacer" />
-      <a href={`${url}#page=${currentPage}`} target="_blank" rel="noreferrer" aria-label="Open in the browser's PDF viewer" title="Open in the browser's PDF viewer (search, print)"><ExternalLink /></a>
-      <a href={url} download aria-label="Download PDF" title="Download PDF"><Download /></a>
+      <a href={`${url}#page=${currentPage}`} target="_blank" rel="noreferrer" aria-label={t.openExternal} title={t.openExternal}><ExternalLink /></a>
+      <a href={url} download aria-label={t.downloadPdf} title={t.downloadPdf}><Download /></a>
     </div>
     <div className="pdf-scroll" ref={scrollRef} onScroll={onScroll}>
-      {error && <p className="pdf-error" role="alert">This PDF could not be displayed here ({error}). <a href={url} target="_blank" rel="noreferrer">Open it in the browser's viewer</a>.</p>}
-      {!doc && !error && <p className="pdf-loading">Loading PDF…</p>}
+      {error && <p className="pdf-error" role="alert">{t.pdfError(error)} <a href={url} target="_blank" rel="noreferrer">{t.openInBrowser}</a></p>}
+      {!doc && !error && <p className="pdf-loading">{t.loadingPdf}</p>}
       {doc && <div className="pdf-pages" style={{ gap: PAGE_GAP, padding: PAGE_GAP }}>
         {sizes.map((size, index) => <PdfPage key={index + 1} doc={doc} pageNumber={index + 1} size={size} scale={scale}
           active={visible.has(index + 1) || target?.page === index + 1} target={target} onHighlight={onHighlight} register={register} />)}

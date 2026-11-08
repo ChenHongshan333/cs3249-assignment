@@ -4,23 +4,34 @@ import {
   useEffect, useRef, useState,
 } from 'react';
 import { Search } from 'lucide-react';
-import { api, download, type Paper, type Session, type TurnResult, type Verdict } from '../api';
+import { api, ApiError, download, type Paper, type Session, type TurnResult, type Verdict } from '../api';
+import { GOAL_RESEARCH, I18nContext, isLanguage, type Language, STRINGS, type Strings } from '../i18n';
 import {
-  Composer, GoalPicker, Header, HistoryDrawer, LanguagePanel, type MenuPosition, menuPositionFor, OTHER_GOAL, PopoverMenu,
-  PromptPicker, QuestionNavigator, RESEARCH_USE_GOAL, ResearchContextForm, Welcome,
+  Composer, GoalPicker, Header, HistoryDrawer, LanguagePanel, type MenuPosition, menuPositionFor, PopoverMenu,
+  PromptPicker, QuestionNavigator, ResearchContextForm, Welcome,
 } from './Chrome';
 import { Conversation, JudgmentStep, type PendingTurn } from './Conversation';
 import { IndexingStatus, LandingUpload, PaperViewer, type SourceFocus } from './PaperPane';
 import { SessionNotes } from './SessionNotes';
 
 type Screen = 'landing' | 'indexing' | 'goals' | 'context' | 'prompts' | 'conversation' | 'notes';
-const errorText = (error: unknown) => (error instanceof Error ? error.message : String(error));
+// Sent to the backend in English (stored and logged as-is); shown to the learner in their language (see i18n.ts).
+const CRITICAL_REVIEW_REQUEST = 'Critically review whether the idea or method we have been discussing is applicable to my research.';
+
+// Interface + answer language. Remembered per browser; storage can be unavailable, so it is optional.
+const LANGUAGE_KEY = 'paperlens.language';
+function readLanguage(): Language {
+  try {
+    const saved = window.localStorage.getItem(LANGUAGE_KEY);
+    return isLanguage(saved) ? saved : 'English';
+  } catch { return 'English'; }
+}
 
 // Text size of the conversation pane. Remembered per browser; storage can be unavailable, so it is optional.
 const TEXT_SIZES = [
-  { key: 'standard', label: 'Standard', scale: 1 },
-  { key: 'large', label: 'Large', scale: 1.12 },
-  { key: 'larger', label: 'Larger', scale: 1.25 },
+  { key: 'standard', scale: 1 },
+  { key: 'large', scale: 1.12 },
+  { key: 'larger', scale: 1.25 },
 ] as const;
 type TextSize = (typeof TEXT_SIZES)[number]['key'];
 const TEXT_SIZE_KEY = 'paperlens.textSize';
@@ -47,7 +58,10 @@ export function PaperLensWorkspace() {
   const [notesError, setNotesError] = useState('');
   const [focus, setFocus] = useState<SourceFocus | null>(null);
   const [draft, setDraft] = useState('');
-  const [language, setLanguage] = useState('English');
+  const [language, setLanguage] = useState<Language>(readLanguage);
+  const t: Strings = STRINGS[language];
+  const errorText = (error: unknown) => (error instanceof ApiError && error.code === 'unreachable' ? t.backendUnreachable
+    : error instanceof Error ? error.message : String(error));
   const [viewerWidth, setViewerWidth] = useState(460);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [languagePanelPosition, setLanguagePanelPosition] = useState<MenuPosition | null>(null);
@@ -95,8 +109,8 @@ export function PaperLensWorkspace() {
     } catch (error) { setActionError(errorText(error)); }
   };
   const chooseGoal = (goal: string) => {
-    if (goal === RESEARCH_USE_GOAL) { setPendingGoal(goal); setContextReturn('prompts'); setScreen('context'); return; }
-    void startSession(goal === OTHER_GOAL ? 'Other (described by the learner in chat)' : goal);
+    if (goal === GOAL_RESEARCH) { setPendingGoal(goal); setContextReturn('prompts'); setScreen('context'); return; }
+    void startSession(goal);
   };
   const saveContext = async (context: string) => {
     if (!session) { await startSession(pendingGoal, context); return; }
@@ -131,16 +145,14 @@ export function PaperLensWorkspace() {
   const runCriticalReview = () => {
     if (!session || busy) return;
     if (!session.research_context) { setReviewNeedsContext(true); return; }
-    void runTurn('Critically review whether the idea or method we have been discussing is applicable to my research.',
-      'critical_review', () => api.criticalReview(session.session_id));
+    void runTurn(CRITICAL_REVIEW_REQUEST, 'critical_review', () => api.criticalReview(session.session_id));
   };
   const saveContextThenReview = async (context: string) => {
     if (!session) return;
     try {
       const updated = await api.updateSession(session.session_id, { research_context: context });
       setSession(updated); setReviewNeedsContext(false);
-      void runTurn('Critically review whether the idea or method we have been discussing is applicable to my research.',
-        'critical_review', () => api.criticalReview(updated.session_id));
+      void runTurn(CRITICAL_REVIEW_REQUEST, 'critical_review', () => api.criticalReview(updated.session_id));
     } catch (error) { setActionError(errorText(error)); }
   };
   const submitJudgment = (verdict: Verdict, rationale: string) => {
@@ -176,9 +188,11 @@ export function PaperLensWorkspace() {
   const openSession = async (sessionId: string) => {
     setHistoryOpen(false);
     try {
-      const loaded = await api.session(sessionId);
+      let loaded = await api.session(sessionId);
+      // The language setting is global: an older session opened later continues in the current language.
+      if (loaded.language !== language) loaded = await api.updateSession(sessionId, { language });
       setPaper(await api.paper(loaded.paper_id));
-      setSession(loaded); setLanguage(loaded.language); setPending(null); setFocus(null); setReviewNeedsContext(false);
+      setSession(loaded); setPending(null); setFocus(null); setReviewNeedsContext(false);
       setScreen(loaded.messages.length ? 'conversation' : 'prompts');
     } catch (error) { setActionError(errorText(error)); }
   };
@@ -192,8 +206,9 @@ export function PaperLensWorkspace() {
     setTextSize(next);
     try { window.localStorage.setItem(TEXT_SIZE_KEY, next); } catch { /* not remembered; still applied */ }
   };
-  const chooseLanguage = (next: string) => {
+  const chooseLanguage = (next: Language) => {
     setLanguage(next); setLanguagePanelPosition(null);
+    try { window.localStorage.setItem(LANGUAGE_KEY, next); } catch { /* not remembered; still applied */ }
     if (session) api.updateSession(session.session_id, { language: next }).then(setSession).catch((e) => setActionError(errorText(e)));
   };
   const exportLog = () => { if (session) download(api.exportUrl(session.session_id), `paperlens-${session.session_id}.json`); };
@@ -226,18 +241,19 @@ export function PaperLensWorkspace() {
       : null;
 
   return (
-    <main className="paperlens-workspace" style={{
+    <I18nContext.Provider value={t}>
+    <main className="paperlens-workspace" lang={t.locale ?? 'en'} style={{
       '--viewer-width': `${viewerWidth}px`,
       '--text-scale': TEXT_SIZES.find((s) => s.key === textSize)?.scale ?? 1,
     } as CSSProperties}>
-      <section className="paper-pane" aria-label="Paper viewer">
+      <section className="paper-pane" aria-label={t.paperViewer}>
         {paper
           ? <PaperViewer pdfUrl={api.pdfUrl(paper.paper_id)} focus={focus} onCloseFocus={() => setFocus(null)} />
           : <LandingUpload busy={uploadBusy} error={uploadError}
             onFile={(file) => void acceptUpload(() => api.uploadPaper(file))}
             onUrl={(url) => void acceptUpload(() => api.uploadPaperUrl(url))} />}
       </section>
-      <button className="splitter" onPointerDown={startResize} aria-label="Resize paper and conversation panels">
+      <button className="splitter" onPointerDown={startResize} aria-label={t.resizePanels}>
         <span aria-hidden="true">›</span>
       </button>
       <section className="reading-pane">
@@ -246,7 +262,7 @@ export function PaperLensWorkspace() {
           onLanguage={openLanguage} onTextSize={openMenu('textSize')} onNotes={() => session && setScreen('notes')}
           onExport={openMenu('export')} />
         <div className="reading-body" ref={contentRef}>
-          {session?.reading_goal && screen !== 'notes' && <div className="goal-chip">Goal: {session.reading_goal}</div>}
+          {session?.reading_goal && screen !== 'notes' && <div className="goal-chip">{t.goalChip(t.goals[session.reading_goal] ?? session.reading_goal)}</div>}
           {actionError && <p className="inline-error banner" role="alert">{actionError}</p>}
           {screen === 'landing' && <Welcome />}
           {screen === 'indexing' && paper && <IndexingStatus paper={paper} onRetry={retryIndexing} onUploadAnother={newConversation} />}
@@ -262,11 +278,11 @@ export function PaperLensWorkspace() {
             onBack={() => setScreen(messages.length ? 'conversation' : session ? 'prompts' : 'landing')} />}
         </div>
         {screen !== 'notes' && <Composer draft={draft} setDraft={setDraft} onSubmit={submit} disabled={!composerEnabled}
-          placeholder={!paper ? 'Load a paper to start a conversation…' : !session ? 'Choose a reading goal first…' : busy ? 'PaperLens is answering…' : 'Ask about the paper…'} />}
+          placeholder={!paper ? t.placeholderNoPaper : !session ? t.placeholderNoSession : busy ? t.placeholderBusy : t.placeholderAsk} />}
         {screen === 'conversation' && hasAnswer && !reviewDone && !reviewNeedsContext && !busy && (
           <button className="critical-review-launcher" onClick={runCriticalReview}>
             <Search aria-hidden="true" />
-            <span><strong>Critical review</strong><small>Evaluate applicability to my research</small></span>
+            <span><strong>{t.criticalReview}</strong><small>{t.criticalReviewHint}</small></span>
           </button>
         )}
         {screen === 'conversation' && questionCount > 0 && (
@@ -275,15 +291,15 @@ export function PaperLensWorkspace() {
       </section>
       {historyOpen && <HistoryDrawer currentId={session?.session_id ?? null} onClose={() => setHistoryOpen(false)}
         onSelect={openSession} onDeleted={sessionDeleted} />}
-      {menu?.kind === 'textSize' && <PopoverMenu label="TEXT SIZE · CONVERSATION PANE" position={menu.position} onClose={() => setMenu(null)}
-        items={TEXT_SIZES.map((size) => ({ label: size.label, active: size.key === textSize, onSelect: () => chooseTextSize(size.key) }))} />}
-      {menu?.kind === 'export' && <PopoverMenu label="DOWNLOAD" position={menu.position} onClose={() => setMenu(null)} items={[
-        { label: 'Research-use note (.md)', description: session?.note ? 'Your note as a Markdown document' : 'Draft the note on the note page first',
-          disabled: !session?.note, onSelect: downloadNote },
-        { label: 'Session log (.json)', description: 'Full conversation, sources and run log, for evaluation', disabled: !session, onSelect: exportLog },
+      {menu?.kind === 'textSize' && <PopoverMenu label={t.textSizeMenu} position={menu.position} onClose={() => setMenu(null)}
+        items={TEXT_SIZES.map((size) => ({ label: t.sizes[size.key], active: size.key === textSize, onSelect: () => chooseTextSize(size.key) }))} />}
+      {menu?.kind === 'export' && <PopoverMenu label={t.downloadTitle} position={menu.position} onClose={() => setMenu(null)} items={[
+        { label: t.noteMd, description: session?.note ? t.noteMdDesc : t.noteMdDisabled, disabled: !session?.note, onSelect: downloadNote },
+        { label: t.logJson, description: t.logJsonDesc, disabled: !session, onSelect: exportLog },
       ]} />}
       {languagePanelPosition && <LanguagePanel selected={language} position={languagePanelPosition}
         onSelect={chooseLanguage} onClose={() => setLanguagePanelPosition(null)} />}
     </main>
+    </I18nContext.Provider>
   );
 }

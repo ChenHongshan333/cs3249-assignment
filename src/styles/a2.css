@@ -152,8 +152,11 @@
 .cited-passage .highlight-status.searching { color: var(--muted); }
 .cited-passage .highlight-status.quote-approx, .cited-passage .highlight-status.passage-start { color: var(--warn-ink); }
 .cited-passage .highlight-status.not-found { color: var(--danger); }
-.cited-passage blockquote { margin: 9px 0 0; padding: 6px 10px; border-left: 3px solid var(--gold); background: #fff6dc; font-size: 14px; line-height: 1.5; }
-.cited-passage .text-button { margin-top: 6px; font-size: 12px; }
+.cited-passage header .text-button { width: auto; height: auto; margin: 0 0 0 auto; padding: 2px 4px; color: var(--sage-ink); font: 12px Arial, sans-serif; text-decoration: underline; text-underline-offset: 3px; }
+.cited-passage header > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cited-passage.compact { padding: 8px 10px 8px 14px; }
+.cited-passage .highlight-status { display: flex; align-items: flex-start; gap: 6px; }
+.cited-passage .highlight-status svg { width: 14px; height: 14px; flex: 0 0 auto; margin-top: 1px; }
 .cited-pages { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .cited-pages button { padding: 5px 9px; border: 1px solid var(--sage-dark); border-radius: 999px; background: transparent; color: var(--sage-ink); font: 12px Arial, sans-serif; }
 .cited-pages button:hover { background: var(--sage); }

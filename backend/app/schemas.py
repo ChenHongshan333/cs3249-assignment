@@ -16,6 +16,11 @@ class QueryRewrite(BaseModel):
     scope: Literal["local", "overview"] = Field(description="'overview' if the learner asks about the whole paper "
                                                             "(main argument, overall summary, structure); otherwise 'local'.")
     current_concept: str = Field(default="", description="The paper concept or method currently being discussed, in a few words. Empty if none.")
+    language_request: str = Field(default="", description="Only if the latest message EXPLICITLY asks PaperLens to answer in a "
+                                                          "particular language from now on (e.g. 'please reply in English', '请用中文回答'): "
+                                                          "that language's name, e.g. 'English', '中文（简体）', '日本語'. 'default' if they ask "
+                                                          "to go back to their usual language. Otherwise empty. Merely writing in a "
+                                                          "language is NOT a request.")
 
 
 class AnswerSection(BaseModel):

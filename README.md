@@ -30,7 +30,7 @@ cd ..
 Start both processes in two terminals:
 
 ```bash
-npm run backend    # FastAPI on http://127.0.0.1:8000  (scripts/backend.mjs -> uvicorn app.main:app --reload; restart after editing .env)
+npm run backend    # FastAPI on http://127.0.0.1:8000  (scripts/backend.mjs -> uvicorn app.main:app --reload; restart after editing .env, or if a code change does not seem to apply)
 npm start          # Vite dev server on http://127.0.0.1:5173, proxies /api to the backend
 ```
 
@@ -166,6 +166,7 @@ keeps the question and shows **Retry**.
 | `src/components/SessionNotes.tsx` | Research-use note: generated, editable, saved; learner judgment vs PaperLens suggestion shown separately |
 | `src/components/Chrome.tsx` | Header (incl. log export), goal picker, research-context form, starter questions, composer, history, language |
 | `src/api.ts` | Types and HTTP client |
+| `src/i18n.ts` | Interface text in English, 简体中文, 繁體中文 and 日本語; display of stored values (verdicts, goals, request messages) |
 | `src/styles/app.css`, `theme.css`, `a2.css` | A1 visual style + A2 additions |
 | `backend/app/main.py` | REST API |
 | `backend/app/core.py` | Single service layer used by the UI **and** test scripts |
@@ -177,6 +178,19 @@ keeps the question and shows **Retry**.
 | `backend/scripts/run_conversation.py` | Runs scripted multi-turn conversations through `core.py` and saves full transcripts |
 | `backend/tests/test_offline.py` | Tests for cleaning, chunking, scanned-PDF rejection and citation validation |
 | `llm_judge/`, `red_team/`, `ai_logs/` | Folders and instructions for Assignment 2 Step 2 evidence |
+
+### Language
+
+* The **language setting** (globe icon, remembered in the browser, default English) sets both the interface
+  language and the language PaperLens answers in. "PaperLens" and paper titles are not translated; quotes from
+  the paper stay in the paper's language so they can be highlighted.
+* An **explicit request in the chat** ("please answer in English from now on") changes only the answer language,
+  for the rest of the session: the query-rewrite step returns `language_request`, stored as
+  `session.language_override` (prompt p4). Choosing a language in the settings clears it. Writing a message in
+  another language is not treated as a request.
+* Stored and logged values stay in English (verdicts, reading goals, the critical-review and judgment request
+  texts); only their display is translated, so evaluation data is comparable across languages. Logs record
+  `answer_language` and `language_override` for every turn. The downloaded note uses the interface language.
 
 ## 6. Logs, export and test support
 

@@ -82,21 +82,23 @@ export type SessionSummary = {
 };
 export type TurnResult = { ok: true; message: AssistantMessage; event_id: string } | { ok: false; error: string; event_id: string };
 
-export class ApiError extends Error {}
+/** `code: 'unreachable'` lets the UI show its own translated message. */
+export class ApiError extends Error {
+  constructor(message: string, readonly code?: 'unreachable') { super(message); }
+}
+const unreachable = () => new ApiError('Cannot reach the PaperLens backend. Start it with `npm run backend`, then retry.', 'unreachable');
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`/api${path}`, init);
   } catch {
-    throw new ApiError('Cannot reach the PaperLens backend. Is it running on port 8000?');
+    throw unreachable();
   }
   const body = await response.json().catch(() => null);
   if (!response.ok) {
-    if (body === null && response.status >= 500) {
-      // No JSON body: the dev-server proxy could not reach FastAPI.
-      throw new ApiError('Cannot reach the PaperLens backend. Start it with `npm run backend`, then retry.');
-    }
+    // No JSON body on a 5xx: the dev-server proxy could not reach FastAPI.
+    if (body === null && response.status >= 500) throw unreachable();
     const detail = body?.detail;
     throw new ApiError(typeof detail === 'string' ? detail : `Request failed (${response.status}).`);
   }
@@ -141,11 +143,4 @@ export function download(url: string, filename: string) {
   link.href = url;
   link.download = filename;
   link.click();
-}
-
-export function pageText(source: Pick<Source, 'page' | 'page_label' | 'pages'>) {
-  if (source.pages && source.pages.length > 1) return `PDF pp. ${source.pages[0]}–${source.pages[source.pages.length - 1]}`;
-  if (source.page == null) return 'page unknown';
-  const printed = source.page_label && source.page_label !== String(source.page) ? ` (printed p. ${source.page_label})` : '';
-  return `PDF p. ${source.page}${printed}`;
 }

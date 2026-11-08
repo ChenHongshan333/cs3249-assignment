@@ -85,6 +85,10 @@ def update_session(session_id: str, reading_goal: str | None = None, research_co
         if value is not None and value.strip() != session.get(key, ""):
             session[key] = value.strip()
             changes[key] = session[key]
+    if "language" in changes and session.get("language_override"):
+        # choosing a language in the settings replaces an earlier in-chat request
+        session["language_override"] = ""
+        changes["language_override"] = ""
     if changes:
         storage.save_session(session)
         storage.append_log(session_id, {**_base_event("session_updated", session), "changes": changes})
@@ -191,7 +195,7 @@ def generate_note(session_id: str) -> dict:
     passages = "\n".join(f'<passage id="{ref}" pdf_page="{s["page"]}">\n{s["text"]}\n</passage>' for ref, s in sources.items())
     prompt = (f"Paper: {session.get('paper_title', '')}\nReading goal: {session.get('reading_goal') or '(not set)'}\n"
               f"Learner's research context: {session.get('research_context') or '(not provided)'}\n"
-              f"Response language: {session.get('language', 'English')}\n\n"
+              f"Response language: {session.get('language_override') or session.get('language', 'English')}\n\n"
               f"<transcript>\n" + "\n".join(transcript) + "\n</transcript>\n\n"
               f"<passages_cited_in_session>\n{passages or '(none)'}\n</passages_cited_in_session>")
     started = time.perf_counter()
@@ -253,19 +257,85 @@ def save_note(session_id: str, fields: dict) -> dict:
 
 # ------------------------------------------------------------------ export
 
-def _source_label(src: dict) -> str:
+# Labels of the Markdown note, in the learner's interface language (the language setting). Stored values
+# (verdicts, reading goals) stay in English in the session and logs; only their display is translated here.
+_EN = {
+    "title": "Research-use note", "paper": "Paper", "goal": "Reading goal", "research": "My research",
+    "untitled": "Untitled paper", "not_set": "Not set", "not_provided": "Not provided",
+    "idea": "Selected idea", "decision": "My decision", "reason": "My reason", "undecided": "Not decided yet.",
+    "suggestion": "PaperLens suggestion (not my decision)", "no_review": "No critical review in this session.",
+    "evidence": "Evidence from the paper", "no_evidence": "No cited evidence in this session.",
+    "use": "Possible use in my research", "adapt": "Required adaptations and uncertainties", "next": "Next actions",
+    "page": "PDF p. {n}", "pages": "PDF pp. {a}-{b}", "printed": " (printed p. {n})",
+    "summary": "PaperLens summary (not the authors' words)",
+    "footer": "Drafted by PaperLens from session {sid} on {at}; {edited}. Page numbers are PDF page indexes.",
+    "edited": "edited by the learner", "unedited": "not edited by the learner",
+    "verdicts": {}, "goals": {},
+}
+_ZH_HANS = {
+    "title": "研究应用笔记", "paper": "论文", "goal": "阅读目标", "research": "我的研究",
+    "untitled": "未命名论文", "not_set": "未设置", "not_provided": "未提供",
+    "idea": "选定的想法", "decision": "我的决定", "reason": "我的理由", "undecided": "尚未决定。",
+    "suggestion": "PaperLens 的建议（不是我的决定）", "no_review": "本次会话没有进行批判性评估。",
+    "evidence": "论文中的证据", "no_evidence": "本次会话没有引用证据。",
+    "use": "在我的研究中的可能用途", "adapt": "需要的调整与不确定之处", "next": "下一步",
+    "page": "PDF 第 {n} 页", "pages": "PDF 第 {a}-{b} 页", "printed": "（印刷页码 {n}）",
+    "summary": "PaperLens 生成的摘要（不是作者原话）",
+    "footer": "由 PaperLens 根据会话 {sid} 于 {at} 起草；{edited}。页码为 PDF 页序。",
+    "edited": "学习者已编辑", "unedited": "学习者未编辑",
+    "verdicts": {"Use as proposed": "按原样使用", "Use with adaptations": "调整后使用", "Do not use": "不使用",
+                 "Need more evidence": "需要更多证据"},
+    "goals": {"Get a general overview of this paper": "了解这篇论文的概况", "Reproduce the study or method": "复现研究或方法",
+              "Explore potential use in my research": "探索在我研究中的潜在用途"},
+}
+_ZH_HANT = {
+    "title": "研究應用筆記", "paper": "論文", "goal": "閱讀目標", "research": "我的研究",
+    "untitled": "未命名論文", "not_set": "未設定", "not_provided": "未提供",
+    "idea": "選定的想法", "decision": "我的決定", "reason": "我的理由", "undecided": "尚未決定。",
+    "suggestion": "PaperLens 的建議（不是我的決定）", "no_review": "本次對話沒有進行批判性評估。",
+    "evidence": "論文中的證據", "no_evidence": "本次對話沒有引用證據。",
+    "use": "在我的研究中的可能用途", "adapt": "需要的調整與不確定之處", "next": "下一步",
+    "page": "PDF 第 {n} 頁", "pages": "PDF 第 {a}-{b} 頁", "printed": "（印刷頁碼 {n}）",
+    "summary": "PaperLens 產生的摘要（不是作者原話）",
+    "footer": "由 PaperLens 根據對話 {sid} 於 {at} 起草；{edited}。頁碼為 PDF 頁序。",
+    "edited": "學習者已編輯", "unedited": "學習者未編輯",
+    "verdicts": {"Use as proposed": "按原樣使用", "Use with adaptations": "調整後使用", "Do not use": "不使用",
+                 "Need more evidence": "需要更多證據"},
+    "goals": {"Get a general overview of this paper": "了解這篇論文的概況", "Reproduce the study or method": "重現研究或方法",
+              "Explore potential use in my research": "探索在我研究中的潛在用途"},
+}
+_JA = {
+    "title": "研究活用ノート", "paper": "論文", "goal": "読む目的", "research": "自分の研究",
+    "untitled": "無題の論文", "not_set": "未設定", "not_provided": "未入力",
+    "idea": "選んだアイデア", "decision": "自分の判断", "reason": "理由", "undecided": "まだ判断していません。",
+    "suggestion": "PaperLens の提案（自分の判断ではありません）", "no_review": "このセッションでは批判的レビューを行っていません。",
+    "evidence": "論文からの根拠", "no_evidence": "このセッションで引用された根拠はありません。",
+    "use": "自分の研究での活用可能性", "adapt": "必要な調整と不確かな点", "next": "次のアクション",
+    "page": "PDF {n} ページ", "pages": "PDF {a}–{b} ページ", "printed": "（印刷ページ {n}）",
+    "summary": "PaperLens による要約（著者の言葉ではありません）",
+    "footer": "PaperLens がセッション {sid} から {at} に作成；{edited}。ページ番号は PDF のページ順です。",
+    "edited": "学習者が編集済み", "unedited": "学習者は未編集",
+    "verdicts": {"Use as proposed": "提案どおり使う", "Use with adaptations": "調整して使う", "Do not use": "使わない",
+                 "Need more evidence": "さらに根拠が必要"},
+    "goals": {"Get a general overview of this paper": "論文の全体像をつかむ", "Reproduce the study or method": "研究や手法を再現する",
+              "Explore potential use in my research": "自分の研究での活用を探る"},
+}
+NOTE_LABELS = {"English": _EN, "中文（简体）": _ZH_HANS, "中文（繁體）": _ZH_HANT, "日本語": _JA}
+
+
+def _source_label(src: dict, t: dict = _EN) -> str:
     pages = src.get("pages") or []
     if src.get("kind") == "overview":
-        span = f"PDF pp. {pages[0]}-{pages[-1]}" if len(pages) > 1 else f"PDF p. {src.get('page')}"
-        return f"{span}, PaperLens summary (not the authors' words)"
-    label = f"PDF p. {src.get('page')}"
+        span = t["pages"].format(a=pages[0], b=pages[-1]) if len(pages) > 1 else t["page"].format(n=src.get("page"))
+        return f"{span}, {t['summary']}"
+    label = t["page"].format(n=src.get("page"))
     if src.get("page_label") and str(src.get("page_label")) != str(src.get("page")):
-        label += f" (printed p. {src['page_label']})"
+        label += t["printed"].format(n=src["page_label"])
     return label
 
 
 def note_markdown(session_id: str) -> str:
-    """The research-use note as a Markdown document for the learner.
+    """The research-use note as a Markdown document for the learner, labelled in their interface language.
 
     The learner's decision and PaperLens's suggestion are kept in separate sections.
     """
@@ -273,45 +343,50 @@ def note_markdown(session_id: str) -> str:
     note = session.get("note")
     if not note:
         raise UserInputError("There is no research-use note in this session yet. Draft one on the note page first.")
+    t = NOTE_LABELS.get(session.get("language", "English"), _EN)
+
+    def verdict(value: str) -> str:
+        return t["verdicts"].get(value, value)
+
+    goal = session.get("reading_goal") or ""
     judgment = note.get("learner_judgment")
     suggestion = note.get("system_suggestion")
     lines = [
-        "# Research-use note",
+        f"# {t['title']}",
         "",
-        f"**Paper:** {session.get('paper_title') or 'Untitled paper'}  ",
-        f"**Reading goal:** {session.get('reading_goal') or 'Not set'}  ",
-        f"**My research:** {session.get('research_context') or 'Not provided'}",
+        f"**{t['paper']}:** {session.get('paper_title') or t['untitled']}  ",
+        f"**{t['goal']}:** {t['goals'].get(goal, goal) or t['not_set']}  ",
+        f"**{t['research']}:** {session.get('research_context') or t['not_provided']}",
         "",
-        "## Selected idea",
+        f"## {t['idea']}",
         "",
         note.get("selected_idea") or "-",
         "",
-        "## My decision",
+        f"## {t['decision']}",
         "",
     ]
     if judgment:
-        lines += [f"**{judgment['verdict']}**", "", f"My reason: {judgment['rationale']}"]
+        lines += [f"**{verdict(judgment['verdict'])}**", "", f"{t['reason']}: {judgment['rationale']}"]
     else:
-        lines += ["Not decided yet."]
-    lines += ["", "## PaperLens suggestion (not my decision)", ""]
-    lines += [f"{suggestion['verdict']}: {suggestion['reason']}" if suggestion else "No critical review in this session."]
-    lines += ["", "## Evidence from the paper", ""]
+        lines += [t["undecided"]]
+    lines += ["", f"## {t['suggestion']}", ""]
+    lines += [f"{verdict(suggestion['verdict'])}: {suggestion['reason']}" if suggestion else t["no_review"]]
+    lines += ["", f"## {t['evidence']}", ""]
     if note.get("evidence"):
         for item in note["evidence"]:
             # Several cited passages can sit on the same page; list each page once.
-            refs = "; ".join(dict.fromkeys(_source_label(s) for s in item.get("sources", [])))
+            refs = "; ".join(dict.fromkeys(_source_label(s, t) for s in item.get("sources", [])))
             lines.append(f"- {item['point']}" + (f" [{refs}]" if refs else ""))
     else:
-        lines.append("No cited evidence in this session.")
-    lines += ["", "## Possible use in my research", "", note.get("research_use") or "-",
-              "", "## Required adaptations and uncertainties", "", note.get("adaptations_and_uncertainties") or "-",
-              "", "## Next actions", ""]
+        lines.append(t["no_evidence"])
+    lines += ["", f"## {t['use']}", "", note.get("research_use") or "-",
+              "", f"## {t['adapt']}", "", note.get("adaptations_and_uncertainties") or "-",
+              "", f"## {t['next']}", ""]
     lines += [f"- {a}" for a in note.get("next_actions", []) if a.strip()] or ["-"]
-    edited = "edited by the learner" if note.get("edited_by_learner") else "not edited by the learner"
-    lines += ["", "---", "",
-              f"Drafted by PaperLens from session {session_id} on {note.get('generated_at', '')}; {edited}. "
-              "Page numbers are PDF page indexes."]
-    storage.append_log(session_id, {**_base_event("note_exported", session), "format": "markdown"})
+    edited = t["edited"] if note.get("edited_by_learner") else t["unedited"]
+    lines += ["", "---", "", t["footer"].format(sid=session_id, at=note.get("generated_at", ""), edited=edited)]
+    storage.append_log(session_id, {**_base_event("note_exported", session), "format": "markdown",
+                                    "language": session.get("language", "English")})
     return "\n".join(lines) + "\n"
 
 
