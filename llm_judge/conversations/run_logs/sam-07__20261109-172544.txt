@@ -1,0 +1,7 @@
+[sam-07 run 1] session s-1d04d5d9dab0 (pipeline v0, prompts p6, simulator anthropic/claude-haiku-5.5)
+  1. chat: 好，我先大概了解了一下这篇论文的整体思路。接下来我想知道它是怎么评估结果的？用了哪些 metrics？对我的研究来说，我比较关心在真实的网络照片条件下它的效果有 -> ok (17s)
+  2. chat: 那个对比呢？你刚才说的那个用户研究里，它是跟哪些 baseline 比的？是不是在所有指标上都赢了？ -> ok (26s)
+  3. chat: 好，那我直接问核心的：论文里真的说过用的是网上抓的真实照片（in-the-wild）吗？还是你刚才说的那个“视觉语言模型合成的提示图”就是全部测试输入？我需要确 -> ok (21s)
+  4. chat: 好，那作者自己在论文里提到过哪些 limitations 吗？比如你刚才说的那些 AR 相关的问题，或者在真实照片上的表现，他们有没有承认？我想知道这是原文明确 -> ok (13s)
+  5. chat: 好，那我想理清楚一下。到目前为止你说的这些内容，哪些是论文作者明确写的，哪些是你自己的解读或推断？请分开说一下，比如用户研究的结论、纹理指标的数值、还有“适合  -> ok (30s)
+  saved D:\NUS CS\Y3 S1\CS3249\assignments\as1\A1_A0311136W_Prototype\PaperLens-frontend\llm_judge\conversations\v0\sam-07__v0__run1__s-1d04d5d9dab0.json

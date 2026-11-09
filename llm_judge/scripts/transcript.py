@@ -104,7 +104,7 @@ def labeling_markdown(export: dict, conv_id: str) -> str:
            f"**Research context:** {s.get('research_context') or '(not provided)'}  ",
            f"**Language setting:** {s.get('language', 'English')}", "",
            "Label PASS/FAIL for criterion A and criterion B in `llm_judge/labels.csv`. "
-           "Criterion A ignores critical-review and judgment-feedback turns.", ""]
+           "Both criteria ignore critical-review and judgment-feedback turns.", ""]
     for n, e in enumerate(turns(export), 1):
         msg = e["assistant_message"]
         out += [f"## Turn {n} ({MODE_LABEL.get(e.get('mode'), e.get('mode'))})", "",

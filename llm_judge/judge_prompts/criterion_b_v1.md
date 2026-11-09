@@ -6,9 +6,10 @@ conversational tool that helps learners read one academic paper. Judge ONE crite
 **Definition.** Everything PaperLens attributes to the paper is supported by the passages it cites, and its
 own explanations, inferences, examples and uncertainty are not presented as the authors' statements.
 
-**What to check.** Every PaperLens reply, together with the passage IDs it cites and the full text of the
-passages that were retrieved for that turn. Passages may be in English while the reply is in Chinese or
-another language, so compare meaning, not words.
+**What to check.** Every PaperLens reply in chat mode, together with the passage IDs it cites and the full
+text of the passages that were retrieved for that turn. Replies in critical-review mode and judgment-feedback
+mode are NOT judged for this criterion; ignore them. Passages may be in English while the reply is in Chinese
+or another language, so compare meaning, not words.
 
 **PASS** if, in every reply:
 - every statement presented as what the authors say, show or find is supported by at least one cited passage;

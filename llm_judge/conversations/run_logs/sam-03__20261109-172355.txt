@@ -1,0 +1,7 @@
+[sam-03 run 1] session s-7cc8d869a443 (pipeline v1, prompts p6, simulator anthropic/claude-haiku-5.5)
+  1. chat: 好，我先大概了解了这篇论文的整体结构。现在想问一下，它是怎么评估生成结果的？用的是哪些 metrics？我特别想知道这些指标能不能反映 3D asset 的质量 -> ok (20s)
+  2. chat: 那个对比表（你刚才说的 Table 4 那个）里，它到底和哪些 baseline 比？是在所有指标上都赢吗，还是只在某几个上？ -> ok (21s)
+  3. chat: 那论文里的测试图片是来自网络上真实拍摄的照片吗？还是他们用的是渲染图或者比较干净的数据集？我关心的是光照、遮挡、背景变化比较大的情况，这些在 Table 4 的 -> ok (22s)
+  4. chat: 好，那我想问下作者自己在论文里提到了哪些 limitations 吗？比如他们承认哪些地方做得不够，或者方法还有什么局限？你刚才说的那些评估缺口，作者有没有自己 -> ok (17s)
+  5. chat: 好，那我想请你把话分清楚一下。到目前为止你说的这些内容里，哪些是论文作者明确写的？哪些是你自己的推断或解读？比如「几何评估不足」「缺少显著性检验」「测试图来源不 -> ok (24s)
+  saved D:\NUS CS\Y3 S1\CS3249\assignments\as1\A1_A0311136W_Prototype\PaperLens-frontend\llm_judge\conversations\sam-03__v1__run1__s-7cc8d869a443.json
