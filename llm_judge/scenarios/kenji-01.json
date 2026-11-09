@@ -1,0 +1,23 @@
+{
+  "name": "kenji-01",
+  "situation": "Findings, wrong NLP analogy, evidence strength, review",
+  "persona": "kenji",
+  "paper_pdf": "../../test_papers/johnny.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "I am a PhD student in NLP moving into HCI. My project studies how non-expert users write prompts for LLM-based tools, and I plan to run a user study.",
+  "language": "English",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what the main findings of the paper are.",
+    "Make a wrong analogy as your own understanding: the participants in the study are like a test set for evaluating the tool.",
+    "Refer to 'the probe' with a short reference and ask what it is.",
+    "Ask how many participants there were and how the data were analysed.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose a verdict that differs from PaperLens's suggestion, with your own reason."
+    }
+  ]
+}

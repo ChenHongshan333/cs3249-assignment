@@ -1,0 +1,23 @@
+{
+  "name": "sam-02",
+  "situation": "Misunderstanding of shape vs texture, repair",
+  "persona": "sam",
+  "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+  "language": "中文（简体）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask how the shape is generated from an input image.",
+    "State a misunderstanding as your own: you think the shape model (Hunyuan3D-DiT) also produces the final colours/textures in the same step.",
+    "Say you still do not quite understand the difference between the two parts and ask for a different explanation.",
+    "Ask whether the input has to be a single clean image, and what that means for web photos with cluttered backgrounds.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose a verdict that differs from PaperLens's suggestion, with your own reason."
+    }
+  ]
+}

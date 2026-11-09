@@ -1,0 +1,23 @@
+{
+  "name": "kenji-02",
+  "situation": "Change of focus to method, Japanese term request",
+  "persona": "kenji",
+  "paper_pdf": "../../test_papers/johnny.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "I am a PhD student in NLP moving into HCI. My project studies how non-expert users write prompts for LLM-based tools, and I plan to run a user study.",
+  "language": "English",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what strategies non-experts used when writing prompts.",
+    "Change focus: say you are more interested in how the study was run than in the findings, and ask about the study design.",
+    "Ask PaperLens to explain the term 'design probe' in Japanese.",
+    "Ask a short follow-up about 'that tool' the participants used.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose the verdict you find most reasonable, with your own reason."
+    }
+  ]
+}

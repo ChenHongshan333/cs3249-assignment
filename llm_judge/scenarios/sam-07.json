@@ -1,0 +1,18 @@
+{
+  "name": "sam-07",
+  "situation": "Numbers, comparison, not-in-paper question (same moves as sam-03, ablated baseline)",
+  "persona": "sam",
+  "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+  "language": "中文（简体）",
+  "pipeline_version": "v0",
+  "same_moves_as": "sam-03",
+  "moves": [
+    "Ask how the paper evaluates its results and which metrics it uses.",
+    "Refer to 'that comparison' with a short reference and ask which baselines it compares against and whether it wins on all of them.",
+    "Ask whether the paper tested on in-the-wild photos from the internet.",
+    "Ask what limitations the authors themselves mention.",
+    "Ask PaperLens to separate clearly: which of the points so far are the authors' claims and which are PaperLens's own interpretation."
+  ]
+}

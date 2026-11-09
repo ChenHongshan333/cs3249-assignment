@@ -1,0 +1,17 @@
+{
+  "name": "mei-03",
+  "situation": "Misconception about rules, evidence question",
+  "persona": "mei",
+  "paper_pdf": "../../test_papers/mda.pdf",
+  "reading_goal": "Get a general overview of this paper",
+  "research_context": "",
+  "language": "中文（繁體）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what the authors want designers to do with this framework.",
+    "State a misconception as your own: MDA says a game is more fun if it has more rules.",
+    "Ask a short follow-up on 'that example' PaperLens used.",
+    "Ask whether the authors ran experiments or user studies to prove the framework works.",
+    "Ask PaperLens to summarise what you should remember for class in two sentences."
+  ]
+}

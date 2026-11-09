@@ -1,0 +1,23 @@
+{
+  "name": "kenji-04",
+  "situation": "Limitations, reference, generalisation beyond the paper",
+  "persona": "kenji",
+  "paper_pdf": "../../test_papers/johnny.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "I am a PhD student in NLP moving into HCI. My project studies how non-expert users write prompts for LLM-based tools, and I plan to run a user study.",
+  "language": "English",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what the limitations of the study are.",
+    "Refer to 'the second limitation' with a short reference and ask why it matters.",
+    "Ask whether the findings still hold for today's LLMs.",
+    "Ask how you could adapt the study method for your own project.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose 'Need more evidence' unless the conversation clearly convinced you otherwise, with your own reason."
+    }
+  ]
+}

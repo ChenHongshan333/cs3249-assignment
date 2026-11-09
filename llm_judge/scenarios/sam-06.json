@@ -1,0 +1,24 @@
+{
+  "name": "sam-06",
+  "situation": "Overview, follow-up by reference, challenge, review (same moves as sam-01, ablated baseline)",
+  "persona": "sam",
+  "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+  "language": "中文（简体）",
+  "pipeline_version": "v0",
+  "same_moves_as": "sam-01",
+  "moves": [
+    "Ask for an overview of what the paper proposes, focusing on what matters for your goal.",
+    "Refer back with a short reference to the second component/stage PaperLens mentioned and ask how it works.",
+    "Challenge one specific claim in the last answer: ask whether the paper really says this or whether PaperLens is inferring it.",
+    "Ask which part of the pipeline would be most fragile for your setting (unconstrained web photos).",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose the verdict you find most reasonable after the review, with your own reason."
+    }
+  ]
+}
