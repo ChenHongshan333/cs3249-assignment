@@ -82,6 +82,9 @@ const en = {
   paperViewer: 'Paper viewer', sourceN: (n: number) => `Source ${n}`, noteEvidence: 'Note evidence', citedPassage: 'Cited passage',
   closePassage: 'Close cited passage', showPassage: 'Show passage', hidePassage: 'Hide passage',
   summaryNote: 'PaperLens-generated summary of these pages, not the authors’ words. Open a page to read the original text.',
+  figuresTitle: 'FIGURES AND TABLES · DESCRIBED BY PAPERLENS',
+  figureNote: 'PaperLens’s description of the image, not the authors’ words. Check the figure on the page.',
+  figureNoCaption: 'This figure has no caption in the paper, so nothing is highlighted; the page is shown.',
   status: {
     searching: 'Locating…', quote: '',
     'quote-approx': 'Approximate highlight: the PDF text differs slightly.',
@@ -184,6 +187,9 @@ const zhHans: Strings = {
   paperViewer: '论文查看器', sourceN: (n) => `来源 ${n}`, noteEvidence: '笔记证据', citedPassage: '引用段落',
   closePassage: '关闭引用段落', showPassage: '查看段落', hidePassage: '收起段落',
   summaryNote: '这是 PaperLens 对这几页生成的摘要，不是作者原话。打开页面可阅读原文。',
+  figuresTitle: '图表 · 由 PAPERLENS 描述',
+  figureNote: '这是 PaperLens 对图片的描述，不是作者原话。请对照页面上的图表核对。',
+  figureNoCaption: '论文里这张图没有图注，所以没有高亮，只显示所在页面。',
   status: {
     searching: '正在定位……', quote: '', 'quote-approx': '近似高亮：PDF 文字与提取文字略有不同。',
     'passage-start': '此来源没有经过核对的引文，已高亮段落开头。', 'not-found': '在本页没有找到准确位置，提取出的段落见下方。',
@@ -268,6 +274,9 @@ const zhHant: Strings = {
   paperViewer: '論文檢視器', sourceN: (n) => `來源 ${n}`, noteEvidence: '筆記證據', citedPassage: '引用段落',
   closePassage: '關閉引用段落', showPassage: '查看段落', hidePassage: '收起段落',
   summaryNote: '這是 PaperLens 對這幾頁產生的摘要，不是作者原話。開啟頁面可閱讀原文。',
+  figuresTitle: '圖表 · 由 PAPERLENS 描述',
+  figureNote: '這是 PaperLens 對圖片的描述，不是作者原話。請對照頁面上的圖表核對。',
+  figureNoCaption: '論文裡這張圖沒有圖說，所以沒有標示，只顯示所在頁面。',
   status: {
     searching: '正在定位……', quote: '', 'quote-approx': '近似標示：PDF 文字與擷取文字略有不同。',
     'passage-start': '此來源沒有經過核對的引文，已標示段落開頭。', 'not-found': '在本頁沒有找到準確位置，擷取出的段落見下方。',
@@ -352,6 +361,9 @@ const ja: Strings = {
   paperViewer: '論文ビューア', sourceN: (n) => `出典 ${n}`, noteEvidence: 'ノートの根拠', citedPassage: '引用箇所',
   closePassage: '引用箇所を閉じる', showPassage: '箇所を表示', hidePassage: '箇所を隠す',
   summaryNote: 'これらのページについて PaperLens が作成した要約で、著者の言葉ではありません。ページを開くと原文を読めます。',
+  figuresTitle: '図表 · PAPERLENS による説明',
+  figureNote: '画像についての PaperLens の説明で、著者の言葉ではありません。ページ上の図表で確認してください。',
+  figureNoCaption: 'この図には論文中にキャプションがないため、ハイライトせずにページを表示しています。',
   status: {
     searching: '位置を探しています……', quote: '', 'quote-approx': 'おおよそのハイライト：PDF の文字と抽出テキストが少し異なります。',
     'passage-start': 'この出典には確認済みの引用がないため、箇所の冒頭をハイライトしています。', 'not-found': 'このページで正確な位置が見つかりませんでした。抽出した箇所を下に表示します。',
@@ -407,4 +419,17 @@ export function displayUserMessage(t: Strings, mode: string, text: string): stri
     if (match) return t.judgmentMessage(t.verdicts[match[1] as Verdict] ?? match[1], match[2]);
   }
   return text;
+}
+
+/** How a source is named in lists and chips: figures by their label, everything else by page. */
+export function sourceText(t: Strings, source: Pick<Source, 'kind' | 'label' | 'page' | 'page_label' | 'pages'>): string {
+  return source.kind === 'figure' && source.label ? `${source.label}, ${t.pageText(source)}` : t.pageText(source);
+}
+
+/** Split a stored figure passage into PaperLens's description and the authors' caption. */
+export function figureParts(source: Pick<Source, 'text' | 'caption'>): { description: string; caption: string } {
+  const text = source.text ?? '';
+  const cut = text.search(/\n(Caption \(authors' words\):|No caption in the paper\.)/);
+  const head = cut >= 0 ? text.slice(0, cut) : text;
+  return { description: head.replace(/^.*?\(PaperLens description of the image\):\s*/, ''), caption: source.caption ?? '' };
 }

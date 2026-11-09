@@ -19,6 +19,7 @@ from pypdf import PdfReader
 
 from . import storage
 from .config import settings
+from .figures import MAX_FIGURES, describe_figures, find_captions, find_uncaptioned
 from .llm import ModelError, structured_call
 from .prompts import load_prompt
 from .retrieval import replace_paper_chunks
@@ -46,9 +47,15 @@ def safe_text(text: str) -> str:
     pypdf sometimes returns UTF-16 surrogate halves (e.g. mathematical italic letters such as
     U+1D465), which cannot be written as UTF-8. Valid pairs are rejoined, lone halves are
     dropped, and NFKC maps styled math letters and ligatures (fi, fl) to plain characters.
+    Some PDFs (e.g. the MDA paper) store curly quotes and dashes as Windows-1252 bytes, which arrive as
+    C1 control characters (U+0080-U+009F); they are mapped back to the intended characters.
     """
     text = text.encode("utf-16", "surrogatepass").decode("utf-16", "ignore")
+    text = _C1_CONTROLS.sub(lambda m: bytes([ord(m.group())]).decode("cp1252", "ignore"), text)
     return unicodedata.normalize("NFKC", text)
+
+
+_C1_CONTROLS = re.compile("[\u0080-\u009f]")
 
 
 def extract_pages(pdf_bytes: bytes) -> tuple[list[dict], dict]:
@@ -230,12 +237,24 @@ def run_ingestion(paper_id: str) -> None:
         storage.save_paper_json(paper_id, "pages.json", pages)
         labels_differ = any(p["page_label"] != str(p["page"]) for p in pages)
 
-        stage = "indexing"
-        storage.update_paper_meta(paper_id, status="indexing", page_count=len(pages),
+        # Figures and tables: optional. A problem here is logged in figures.json but never fails the paper.
+        stage = "figures"
+        storage.update_paper_meta(paper_id, status="figures", page_count=len(pages),
                                   title=guess_title(info, pages, meta.get("filename", "")),
                                   page_labels_differ=labels_differ)
+        figure_chunks, figure_problems = [], []
+        try:
+            captions = find_captions(raw_pages)
+            items = captions + find_uncaptioned(pdf_bytes, pages, {c["page"] for c in captions})
+            figure_chunks, figure_problems = describe_figures(pdf_bytes, items[:MAX_FIGURES], paper_id)
+        except Exception as exc:  # e.g. a PDF pypdfium2 cannot render
+            figure_problems = [{"label": "all", "page": None, "error": f"{type(exc).__name__}: {exc}"}]
+        storage.save_paper_json(paper_id, "figures.json", {"figures": figure_chunks, "problems": figure_problems})
+
+        stage = "indexing"
+        storage.update_paper_meta(paper_id, status="indexing", figure_count=len(figure_chunks))
         chunks = chunk_pages(paper_id, pages)
-        replace_paper_chunks(paper_id, chunks)
+        replace_paper_chunks(paper_id, chunks + figure_chunks)
         storage.save_paper_json(paper_id, "chunks.json", chunks)
 
         stage = "summarizing"

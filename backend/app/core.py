@@ -268,6 +268,7 @@ _EN = {
     "use": "Possible use in my research", "adapt": "Required adaptations and uncertainties", "next": "Next actions",
     "page": "PDF p. {n}", "pages": "PDF pp. {a}-{b}", "printed": " (printed p. {n})",
     "summary": "PaperLens summary (not the authors' words)",
+    "figure": "{label}, PDF p. {n}, PaperLens description of the image",
     "footer": "Drafted by PaperLens from session {sid} on {at}; {edited}. Page numbers are PDF page indexes.",
     "edited": "edited by the learner", "unedited": "not edited by the learner",
     "verdicts": {"Do not use": "Not suitable for my study"}, "goals": {},
@@ -281,6 +282,7 @@ _ZH_HANS = {
     "use": "在我的研究中的可能用途", "adapt": "需要的调整与不确定之处", "next": "下一步",
     "page": "PDF 第 {n} 页", "pages": "PDF 第 {a}-{b} 页", "printed": "（印刷页码 {n}）",
     "summary": "PaperLens 生成的摘要（不是作者原话）",
+    "figure": "{label}，PDF 第 {n} 页，PaperLens 对图的描述",
     "footer": "由 PaperLens 根据会话 {sid} 于 {at} 起草；{edited}。页码为 PDF 页序。",
     "edited": "学习者已编辑", "unedited": "学习者未编辑",
     "verdicts": {"Use as proposed": "按原样使用", "Use with adaptations": "调整后使用", "Do not use": "不适合我的研究",
@@ -297,6 +299,7 @@ _ZH_HANT = {
     "use": "在我的研究中的可能用途", "adapt": "需要的調整與不確定之處", "next": "下一步",
     "page": "PDF 第 {n} 頁", "pages": "PDF 第 {a}-{b} 頁", "printed": "（印刷頁碼 {n}）",
     "summary": "PaperLens 產生的摘要（不是作者原話）",
+    "figure": "{label}，PDF 第 {n} 頁，PaperLens 對圖的描述",
     "footer": "由 PaperLens 根據對話 {sid} 於 {at} 起草；{edited}。頁碼為 PDF 頁序。",
     "edited": "學習者已編輯", "unedited": "學習者未編輯",
     "verdicts": {"Use as proposed": "按原樣使用", "Use with adaptations": "調整後使用", "Do not use": "不適合我的研究",
@@ -313,6 +316,7 @@ _JA = {
     "use": "自分の研究での活用可能性", "adapt": "必要な調整と不確かな点", "next": "次のアクション",
     "page": "PDF {n} ページ", "pages": "PDF {a}–{b} ページ", "printed": "（印刷ページ {n}）",
     "summary": "PaperLens による要約（著者の言葉ではありません）",
+    "figure": "{label}、PDF {n} ページ、PaperLens による図の説明",
     "footer": "PaperLens がセッション {sid} から {at} に作成；{edited}。ページ番号は PDF のページ順です。",
     "edited": "学習者が編集済み", "unedited": "学習者は未編集",
     "verdicts": {"Use as proposed": "提案どおり使う", "Use with adaptations": "調整して使う", "Do not use": "自分の研究には合わない",
@@ -325,6 +329,8 @@ NOTE_LABELS = {"English": _EN, "中文（简体）": _ZH_HANS, "中文（繁體�
 
 def _source_label(src: dict, t: dict = _EN) -> str:
     pages = src.get("pages") or []
+    if src.get("kind") == "figure":
+        return t["figure"].format(label=src.get("label") or "Figure", n=src.get("page"))
     if src.get("kind") == "overview":
         span = t["pages"].format(a=pages[0], b=pages[-1]) if len(pages) > 1 else t["page"].format(n=src.get("page"))
         return f"{span}, {t['summary']}"

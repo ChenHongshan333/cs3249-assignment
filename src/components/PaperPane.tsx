@@ -2,10 +2,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertTriangle, FilePlus2, LoaderCircle, X } from 'lucide-react';
 import type { Paper, Source } from '../api';
-import { useT } from '../i18n';
+import { figureParts, sourceText, useT } from '../i18n';
 import { type HighlightStatus, type PdfTarget, PdfViewer } from './PdfViewer';
 
-export type SourceFocus = Source & { label: string };
+/** A source the learner clicked; focusLabel is how it is named in the panel ("Source 2", "Note evidence"). */
+export type SourceFocus = Source & { focusLabel: string };
 
 export function LandingUpload({ onFile, onUrl, busy, error }: {
   onFile: (file: File) => void; onUrl: (url: string) => void; busy: boolean; error: string;
@@ -60,6 +61,13 @@ export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; f
     counter.current += 1;
     setShowPassage(false);
     setStatus('searching');  // set before the viewer runs, so a quick result from the page is not overwritten
+    if (focus.kind === 'figure') {
+      // A figure: highlight the authors' caption (the description itself is not on the page).
+      const caption = focus.caption ?? '';
+      setTarget({ key: counter.current, page: focus.page, highlight: !!caption,
+        quotes: focus.quotes?.length ? focus.quotes : caption ? [caption] : [], passage: null });
+      return;
+    }
     setTarget({
       key: counter.current, page: focus.page, highlight: focus.kind === 'paper',
       quotes: focus.quotes ?? [], passage: focus.kind === 'paper' ? focus.text : null,
@@ -67,21 +75,26 @@ export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; f
   }, [focus]);
   const jumpTo = (page: number) => { counter.current += 1; setTarget({ key: counter.current, page, quotes: [], passage: null, highlight: false }); };
   const overview = focus?.kind === 'overview';
+  const figure = focus?.kind === 'figure' ? figureParts(focus) : null;
   const passageOpen = showPassage || status === 'not-found';
-  const notice = !overview && status !== 'quote' ? t.status[status] : '';
+  const highlighted = focus?.kind === 'paper' || !!figure?.caption;
+  const notice = highlighted && status !== 'quote' ? t.status[status] : '';
 
   return <div className="paper-viewer">
     <PdfViewer url={pdfUrl} target={target} onStatus={setStatus} />
     {focus && <aside className={`cited-passage ${overview ? 'overview' : 'compact'}`} aria-label={t.citedPassage}>
       <header>
-        <span>{focus.label} · {t.pageText(focus)}</span>
-        {!overview && status !== 'not-found' && <button className="text-button" onClick={() => setShowPassage((v) => !v)}
+        <span>{focus.focusLabel} · {sourceText(t, focus)}</span>
+        {focus.kind === 'paper' && status !== 'not-found' && <button className="text-button" onClick={() => setShowPassage((v) => !v)}
           aria-expanded={passageOpen}>{passageOpen ? t.hidePassage : t.showPassage}</button>}
         <button className="close-button" onClick={onCloseFocus} aria-label={t.closePassage}><X /></button>
       </header>
       {notice && <small className={`highlight-status ${status}`} role="status">
         {status !== 'searching' && <AlertTriangle aria-hidden="true" />}{notice}</small>}
-      {overview ? <>
+      {figure ? <>
+        <small>{figure.caption ? t.figureNote : t.figureNoCaption}</small>
+        <p>{figure.description}</p>
+      </> : overview ? <>
         <small>{t.summaryNote}</small>
         <p>{focus.text}</p>
         <div className="cited-pages">

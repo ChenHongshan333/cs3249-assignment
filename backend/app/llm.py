@@ -83,6 +83,26 @@ def structured_call(system_prompt: str, user_prompt: str, schema: type[T]) -> T:
         raise ModelError(f"Chat model returned an answer in the wrong format: {str(exc)[:300]}") from exc
 
 
+def vision_structured_call(system_prompt: str, user_prompt: str, image_jpeg_b64: str, schema: type[T]) -> T:
+    """Like structured_call, with one page image attached (used to describe figures and tables)."""
+    runnable = chat_model().with_structured_output(schema, method="json_schema", strict=True, include_raw=True)
+    message = HumanMessage(content=[
+        {"type": "text", "text": user_prompt},
+        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_jpeg_b64}"}},
+    ])
+    try:
+        result = runnable.invoke([SystemMessage(content=system_prompt), message])
+    except Exception as exc:
+        raise ModelError(f"Vision model call failed: {exc}") from exc
+    if result.get("parsed") is not None:
+        return result["parsed"]
+    content = getattr(result.get("raw"), "content", "")
+    try:
+        return schema.model_validate(_decode_json_strings(json.loads(content)))
+    except (json.JSONDecodeError, TypeError, ValidationError) as exc:
+        raise ModelError(f"Vision model returned an answer in the wrong format: {str(exc)[:300]}") from exc
+
+
 def embed_texts(texts: list[str]) -> list[list[float]]:
     try:
         vectors: list[list[float]] = []

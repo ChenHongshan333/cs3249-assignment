@@ -3,7 +3,7 @@
 export type Verdict = 'Use as proposed' | 'Use with adaptations' | 'Do not use' | 'Need more evidence';
 export const VERDICTS: Verdict[] = ['Use as proposed', 'Use with adaptations', 'Do not use', 'Need more evidence'];
 
-export type PaperStatus = 'queued' | 'parsing' | 'indexing' | 'summarizing' | 'ready' | 'failed';
+export type PaperStatus = 'queued' | 'parsing' | 'figures' | 'indexing' | 'summarizing' | 'ready' | 'failed';
 export type Paper = {
   paper_id: string;
   filename: string;
@@ -18,7 +18,10 @@ export type Paper = {
 
 export type Source = {
   ref_id: string;
-  kind: 'paper' | 'overview' | 'unknown';
+  kind: 'paper' | 'figure' | 'overview' | 'unknown';
+  /** Figures only: "Figure 3" (or "Figure on p. 3") and the authors' caption ('' if the figure has none). */
+  label?: string;
+  caption?: string;
   page: number | null;
   page_label: string | null;
   pages?: number[];

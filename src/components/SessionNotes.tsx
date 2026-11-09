@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, Download, LoaderCircle, NotebookPen } from 'lucide-react';
 import type { Note, Session } from '../api';
-import { useT } from '../i18n';
+import { sourceText, useT } from '../i18n';
 import type { SourceFocus } from './PaperPane';
 
 export function SessionNotes({ session, busy, error, onGenerate, onSave, onDownload, onBack, onSource }: {
@@ -76,7 +76,7 @@ export function SessionNotes({ session, busy, error, onGenerate, onSave, onDownl
           <textarea className="note-edit" value={item.point} rows={3}
             onChange={(e) => set({ evidence: draft.evidence.map((ev, i) => i === index ? { ...ev, point: e.target.value } : ev) })} />
           <span className="ref-chips">{item.sources.map((s) => <button key={s.ref_id} className="ref-chip wide"
-            onClick={() => onSource({ ...s, label: t.noteEvidence })}>{t.pageText(s)}</button>)}</span>
+            onClick={() => onSource({ ...s, focusLabel: t.noteEvidence })}>{sourceText(t, s)}</button>)}</span>
         </div>) : <p className="muted-text">{t.noEvidence}</p>}
       </article>
       <article><small>{t.possibleUse}</small>

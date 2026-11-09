@@ -229,3 +229,78 @@ def test_note_markdown_uses_interface_language_but_keeps_stored_values(temp_stor
     assert md.startswith("# 研究应用笔记") and "**不适合我的研究**" in md and "探索在我研究中的潜在用途" in md
     assert "[PDF 第 3 页]" in md
     assert temp_store.load_session(session["session_id"])["note"]["learner_judgment"]["verdict"] == "Do not use"
+
+
+def test_find_captions_takes_real_captions_only():
+    from app.figures import find_captions
+    raw = [{"page": 5, "page_label": "5", "text": "\n".join([
+        "As shown in Figure 1, the tool has two panes.",          # running text: not a caption
+        "Figure 1: BotDesigner main user interface. Right pane:",  # caption with separator: continues to a line end that is a full stop
+        "the prompt template authoring area.",
+        "Figure 2 shows the error browser.",                       # starts a line but continues in lower case
+        "TABLE 2.4 Example words illustrating the vowels",         # title-style caption: one line only
+        "Vowel height Vowel Description",                          # table header, not caption
+        "Figure 1: duplicate label later in the paper.",
+    ])}]
+    caps = find_captions(raw)
+    assert [(c["label"], c["caption"]) for c in caps] == [
+        ("Figure 1", "Figure 1: BotDesigner main user interface. Right pane: the prompt template authoring area."),
+        ("Table 2.4", "TABLE 2.4 Example words illustrating the vowels"),
+    ]
+
+
+def test_figure_quotes_count_only_from_the_caption():
+    state = _state("v1", ["p1-fig3"])
+    state["retrieved"] = [{"chunk_id": "p1-fig3", "kind": "figure", "page": 4, "page_label": "4", "similarity": 0.7,
+                           "label": "Figure 3", "caption": "Figure 3: Participants' prompt edits over time.",
+                           "text": "Figure 3 (PaperLens description of the image): a line chart rising steeply.\n"
+                                   "Caption (authors' words): Figure 3: Participants' prompt edits over time."}]
+    state["raw_answer"]["sections"] = []
+    state["raw_answer"]["evidence_quotes"] = [
+        {"chunk_id": "p1-fig3", "quote": "a line chart rising steeply"},            # generated description: rejected
+        {"chunk_id": "p1-fig3", "quote": "Participants' prompt edits over time."},  # caption: accepted
+    ]
+    out = validate_citations(state)
+    src = out["assistant_message"]["sources"][0]
+    assert (src["kind"], src["label"]) == ("figure", "Figure 3")
+    assert src["quotes"] == ["Participants' prompt edits over time."]
+    assert [c["ok"] for c in out["quote_checks"]] == [False, True]
+    assert out["assistant_message"]["has_verified_paper_source"] is False   # a description is not original text
+
+
+def test_figures_are_marked_as_generated_for_the_model():
+    from app.graph import format_passages
+    text = format_passages([{"chunk_id": "x-fig1", "kind": "figure", "label": "Figure 1", "page": 2, "page_label": "2",
+                             "text": "Figure 1 (PaperLens description of the image): a diagram."}])
+    assert text.startswith('<figure id="x-fig1"') and "PaperLens-generated description" in text and "</figure>" in text
+
+
+def test_note_markdown_labels_figure_sources(temp_store):
+    from app import core
+    session = core.create_session("p1", "Get a general overview of this paper")
+    session["note"] = {"selected_idea": "i", "research_use": "", "adaptations_and_uncertainties": "", "next_actions": [],
+                       "evidence": [{"point": "p", "sources": [{"kind": "figure", "label": "Figure 2", "page": 6}]}],
+                       "learner_judgment": None, "system_suggestion": None, "generated_at": "t", "edited_by_learner": False}
+    temp_store.save_session(session)
+    assert "[Figure 2, PDF p. 6, PaperLens description of the image]" in core.note_markdown(session["session_id"])
+
+
+def test_safe_text_repairs_windows_1252_quotes():
+    from app.ingest import safe_text
+    assert safe_text("a \x93lens\x94 or a \x93view\x94 \x96 separate") == "a “lens” or a “view” – separate"
+
+
+def test_figures_named_by_page_or_number(monkeypatch):
+    from app import retrieval
+
+    class Fake:
+        def get(self, **_):
+            return {"ids": ["a-fig1", "a-figp"], "documents": ["d1", "d2"],
+                    "metadatas": [{"page": 5, "label": "Figure 1", "kind": "figure", "caption": "c"},
+                                  {"page": 3, "label": "Figure on p. 3", "kind": "figure", "caption": ""}]}
+    monkeypatch.setattr(retrieval, "_collection", lambda: Fake())
+    ids = lambda *t: [h["chunk_id"] for h in retrieval.figures_named_in("p", *t)]  # noqa: E731
+    assert ids("What does Figure 1 show?") == ["a-fig1"]
+    assert ids("What does the chart on page 3 show?") == ["a-figp"]
+    assert ids("第3页的图表示什么？") == ["a-figp"]
+    assert ids("What does page 3 say about dynamics?") == []        # page without a figure word: normal retrieval

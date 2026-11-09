@@ -35,7 +35,8 @@ class AnswerSection(BaseModel):
 
 
 class EvidenceQuote(BaseModel):
-    chunk_id: str = Field(description="ID of the provided original passage the quote is copied from (a passage ID, never an overview ID).")
+    chunk_id: str = Field(description="ID of the provided original passage the quote is copied from (a passage ID, never an overview "
+                                      "ID). For a figure ID, the quote must come from the figure's caption.")
     quote: str = Field(description="One or two consecutive sentences copied word for word from that passage, that best support "
                                    "what you said (about 8-40 words). Copy exactly, including the authors' spelling; do not "
                                    "paraphrase, translate, shorten in the middle or join separate sentences.")

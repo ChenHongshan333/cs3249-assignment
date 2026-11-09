@@ -2,7 +2,7 @@
 import { type ReactNode, type RefObject, useState } from 'react';
 import { AlertTriangle, RotateCcw } from 'lucide-react';
 import { VERDICTS, type AssistantMessage, type Judgment, type Message, type Source, type SystemSuggestion, type Verdict } from '../api';
-import { displayUserMessage, useT } from '../i18n';
+import { displayUserMessage, figureParts, sourceText, useT } from '../i18n';
 import type { SourceFocus } from './PaperPane';
 
 export type PendingTurn = { text: string; mode: Message['mode']; error?: string; retry: () => void };
@@ -14,8 +14,8 @@ function RefChips({ refs, sources, onSource }: { refs: string[]; sources: Source
     const index = sources.findIndex((s) => s.ref_id === ref);
     const source = sources[index];
     if (!source) return null;
-    return <button key={ref} className={`ref-chip ${source.verified ? '' : 'unverified'}`} title={t.pageText(source)}
-      disabled={!source.verified} onClick={() => onSource({ ...source, label: t.sourceN(index + 1) })}>{index + 1}</button>;
+    return <button key={ref} className={`ref-chip ${source.verified ? '' : 'unverified'}`} title={sourceText(t, source)}
+      disabled={!source.verified} onClick={() => onSource({ ...source, focusLabel: t.sourceN(index + 1) })}>{index + 1}</button>;
   })}</span>;
 }
 
@@ -47,17 +47,23 @@ function SourceList({ sources, onSource }: { sources: Source[]; onSource: (s: So
   if (!sources.length) return null;
   const numbered = sources.map((source, index) => ({ source, number: index + 1 }));
   const groups = [
-    { key: 'paper', title: t.fromThePaper, items: numbered.filter((s) => s.source.kind !== 'overview') },
+    { key: 'paper', title: t.fromThePaper, items: numbered.filter((s) => s.source.kind === 'paper' || s.source.kind === 'unknown') },
+    { key: 'figure', title: t.figuresTitle, items: numbered.filter((s) => s.source.kind === 'figure') },
     { key: 'overview', title: t.summariesTitle, items: numbered.filter((s) => s.source.kind === 'overview') },
   ].filter((group) => group.items.length);
+  const previewOf = (source: Source) => {
+    if (source.quotes?.[0]) return `“${source.quotes[0]}”`;
+    if (source.kind === 'figure') return source.caption ? `“${source.caption}”` : `${figureParts(source).description.slice(0, 110)}…`;
+    return `${(source.text ?? '').slice(0, 110)}…`;
+  };
   return <div className="source-list">
     {groups.map((group) => <div key={group.key} className="source-group">
       <small>{group.title}</small>
       {group.items.map(({ source, number }) => {
-        const preview = source.quotes?.[0] ? `“${source.quotes[0]}”` : `${(source.text ?? '').slice(0, 110)}…`;
+        const preview = previewOf(source);
         return <button key={source.ref_id} className={`source-link ${source.verified ? '' : 'unverified'}`}
-          disabled={!source.verified} onClick={() => onSource({ ...source, label: t.sourceN(number) })}>
-          <span>[{number}] {source.verified ? t.pageText(source).toUpperCase() : t.unverifiedId}</span>
+          disabled={!source.verified} onClick={() => onSource({ ...source, focusLabel: t.sourceN(number) })}>
+          <span>[{number}] {source.verified ? sourceText(t, source).toUpperCase() : t.unverifiedId}</span>
           <strong>{source.verified ? preview : source.ref_id}</strong>
           <span aria-hidden="true">→</span>
         </button>;

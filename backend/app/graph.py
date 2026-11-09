@@ -19,7 +19,7 @@ from .config import settings
 from .llm import structured_call
 from .prompts import load_prompt
 from .quotes import match_quote
-from .retrieval import search
+from .retrieval import figures_named_in, search
 from .schemas import AnswerPayload, QueryRewrite
 
 Mode = Literal["chat", "critical_review", "judgment_feedback"]
@@ -82,6 +82,12 @@ def format_passages(passages: list[dict]) -> str:
     for p in passages:
         printed = f' printed_page="{p["page_label"]}"' if p["page_label"] != str(p["page"]) else ""
         carried = ' cited_in_previous_answer="true"' if p.get("carried_over") else ""
+        if p.get("kind") == "figure":
+            # A figure/table: PaperLens's description of the image plus the authors' caption (the only quotable part).
+            out.append(f'<figure id="{p["chunk_id"]}" pdf_page="{p["page"]}" label="{p.get("label", "")}"{printed}{carried} '
+                       f'note="PaperLens-generated description of the image; only the caption is the authors\' words">'
+                       f'\n{p["text"]}\n</figure>')
+            continue
         out.append(f'<passage id="{p["chunk_id"]}" pdf_page="{p["page"]}"{printed}{carried}>\n{p["text"]}\n</passage>')
     return "\n".join(out) or "(no passages retrieved)"
 
@@ -201,14 +207,23 @@ def retrieve(state: TurnState) -> dict:
     ("does that affect my study?") can still see the evidence it refers to."""
     start = time.perf_counter()
     hits = search(state["paper_id"], state["retrieval_query"], settings.top_k)
+    seen = {h["chunk_id"] for h in hits}
+    # A figure or table the learner names ("Figure 3", "表 2.4") is always included, whatever its similarity.
+    for hit in figures_named_in(state["paper_id"], state["user_message"], state["retrieval_query"]):
+        if hit["chunk_id"] not in seen:
+            hits.append({**hit, "named_by_learner": True})
+            seen.add(hit["chunk_id"])
     if state["pipeline_version"] != "v0":
         previous = next((m for m in reversed(state["history"]) if m["role"] == "assistant"), None)
-        seen = {h["chunk_id"] for h in hits}
-        carried = [s for s in (previous or {}).get("sources", []) if s["kind"] == "paper" and s["verified"]]
+        carried = [s for s in (previous or {}).get("sources", []) if s["kind"] in ("paper", "figure") and s["verified"]]
         for source in carried[:CARRY_OVER]:
             if source["ref_id"] not in seen:
-                hits.append({"chunk_id": source["ref_id"], "text": source["text"], "page": source["page"],
-                             "page_label": source["page_label"], "similarity": None, "carried_over": True})
+                hit = {"chunk_id": source["ref_id"], "text": source["text"], "page": source["page"],
+                       "page_label": source["page_label"], "similarity": None, "carried_over": True,
+                       "kind": source["kind"]}
+                if source["kind"] == "figure":
+                    hit.update(label=source.get("label", ""), caption=source.get("caption", ""))
+                hits.append(hit)
     return {"retrieved": hits, "timings_ms": _timed(state, "retrieve", start)}
 
 
@@ -237,8 +252,10 @@ def validate_citations(state: TurnState) -> dict:
     raw = state["raw_answer"]
     lookup: dict[str, dict] = {}
     for hit in state.get("retrieved", []):
-        lookup[hit["chunk_id"]] = {"ref_id": hit["chunk_id"], "kind": "paper", "page": hit["page"],
+        lookup[hit["chunk_id"]] = {"ref_id": hit["chunk_id"], "kind": hit.get("kind", "paper"), "page": hit["page"],
                                    "page_label": hit["page_label"], "text": hit["text"], "verified": True}
+        if hit.get("kind") == "figure":
+            lookup[hit["chunk_id"]].update(label=hit.get("label", ""), caption=hit.get("caption", ""))
     for item in state.get("overview", []):
         lookup[item["overview_id"]] = {"ref_id": item["overview_id"], "kind": "overview", "page": item["pages"][0],
                                        "pages": item["pages"], "page_label": str(item["pages"][0]),
@@ -272,16 +289,18 @@ def validate_citations(state: TurnState) -> dict:
         for item in raw.get("evidence_quotes", []) or []:
             ref, quote = (item.get("chunk_id") or "").strip(), (item.get("quote") or "").strip()
             source = by_ref.get(ref)
-            if source is None or source["kind"] != "paper":
+            if source is None or source["kind"] not in ("paper", "figure"):
                 if ref not in lookup:
                     reason = "unknown_id"
-                elif lookup[ref]["kind"] != "paper":
+                elif lookup[ref]["kind"] == "overview":
                     reason = "overview_id"
                 else:
                     reason = "passage_not_cited_in_answer"
                 quote_log.append({"chunk_id": ref, "quote": quote, "ok": False, "text": None, "score": 0.0, "reason": reason})
                 continue
-            result = match_quote(quote, source["text"] or "")
+            # For a figure, only the authors' caption may be quoted; the generated description never counts.
+            target = source.get("caption", "") if source["kind"] == "figure" else source["text"] or ""
+            result = match_quote(quote, target)
             quote_log.append({"chunk_id": ref, "quote": quote, **result})
             if result["ok"] and result["text"] not in source.setdefault("quotes", []):
                 source["quotes"].append(result["text"])
@@ -352,8 +371,10 @@ def log_view(state: dict[str, Any]) -> dict:
     return {
         "retrieval_query": state.get("retrieval_query"),
         "scope": state.get("scope"),
-        "retrieved": [{"chunk_id": h["chunk_id"], "page": h["page"], "page_label": h["page_label"],
-                       "similarity": h["similarity"], "carried_over": h.get("carried_over", False), "text": h["text"]}
+        "retrieved": [{"chunk_id": h["chunk_id"], "kind": h.get("kind", "paper"), "page": h["page"],
+                       "page_label": h["page_label"], "similarity": h["similarity"],
+                       "carried_over": h.get("carried_over", False), "named_by_learner": h.get("named_by_learner", False),
+                       "text": h["text"]}
                       for h in state.get("retrieved", [])],
         "overview_ids": [o["overview_id"] for o in state.get("overview", [])],
         "raw_model_output": state.get("raw_answer"),
