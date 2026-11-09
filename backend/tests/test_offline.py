@@ -133,7 +133,7 @@ def test_note_markdown_keeps_learner_decision_separate_from_suggestion(temp_stor
     temp_store.save_session(session)
     md = core.note_markdown(session["session_id"])
     mine, theirs = md.split("## PaperLens suggestion (not my decision)")
-    assert "**Do not use**" in mine and "My own reason here" in mine and "Model reason" not in mine
+    assert "**Not suitable for my study**" in mine and "My own reason here" in mine and "Model reason" not in mine
     assert "Use with adaptations: Model reason" in theirs
     assert "[PDF p. 3 (printed p. 12); PDF pp. 1-3, PaperLens summary (not the authors' words)]" in md
     assert "- Pilot it\n" in md and "edited by the learner" in md
@@ -226,6 +226,6 @@ def test_note_markdown_uses_interface_language_but_keeps_stored_values(temp_stor
                        "system_suggestion": None, "generated_at": "t", "edited_by_learner": False}
     temp_store.save_session(session)
     md = core.note_markdown(session["session_id"])
-    assert md.startswith("# 研究应用笔记") and "**不使用**" in md and "探索在我研究中的潜在用途" in md
+    assert md.startswith("# 研究应用笔记") and "**不适合我的研究**" in md and "探索在我研究中的潜在用途" in md
     assert "[PDF 第 3 页]" in md
     assert temp_store.load_session(session["session_id"])["note"]["learner_judgment"]["verdict"] == "Do not use"

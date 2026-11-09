@@ -24,7 +24,7 @@ else:
     API_KEY_SOURCE = "missing"
 
 # Bump this whenever any file in app/prompts/ changes, so logs show which prompts produced a reply.
-PROMPT_VERSION = "p4"  # p2: carried-over passages; p3: verbatim evidence_quotes; p4: in-chat language requests
+PROMPT_VERSION = "p5"  # p2: carried-over passages; p3: verbatim evidence_quotes; p4: in-chat language requests; p5: "Do not use" shown as "Not suitable for my study"
 
 
 @dataclass(frozen=True)
