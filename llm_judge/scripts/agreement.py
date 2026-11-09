@@ -80,6 +80,14 @@ def pipeline_of() -> dict[str, str]:
         return {r["conv_id"]: r["pipeline_version"] for r in csv.DictReader(f) if r["conv_id"]}
 
 
+def human(r: dict) -> str:
+    return r["human_label"].strip().upper()
+
+
+def human_rev(r: dict) -> str:
+    return (r.get("human_label_revised") or r["human_label"]).strip().upper()
+
+
 def report() -> None:
     _, rows = read_labels()
     pipe = pipeline_of()
@@ -91,18 +99,23 @@ def report() -> None:
         md += [f"**Warning:** {len(unlabeled)} rows have no human label yet: {', '.join(unlabeled)}", ""]
 
     md += ["## Agreement between the student's labels and the judge", "",
-           "| Criterion | Judge prompt | n | Agreement | Cohen's kappa | Human PASS / judge PASS | Human PASS / judge FAIL | Human FAIL / judge PASS | Human FAIL / judge FAIL |",
-           "|---|---|---|---|---|---|---|---|---|"]
+           "Human labels: 'original' = as first labelled (blind); 'revised' = after the student revised a label "
+           "on reading the judge disagreements (column human_label_revised; unchanged rows keep the original).", "",
+           "| Criterion | Judge prompt | Human labels | n | Agreement | Cohen's kappa | Human PASS / judge PASS | Human PASS / judge FAIL | Human FAIL / judge PASS | Human FAIL / judge FAIL |",
+           "|---|---|---|---|---|---|---|---|---|---|"]
     disagreements = []
+    revised_any = any(r.get("human_label_revised", "").strip() for r in rows)
+    label_sets = [("original", human)] + ([("revised", human_rev)] if revised_any else [])
     for crit in CRITERIA:
         for ver in vers:
+          for set_name, hfun in label_sets:
             pairs, ids = [], []
             for r in rows:
-                h, j = r["human_label"].strip().upper(), r.get(f"judge_label_{ver}", "").strip().upper()
+                h, j = hfun(r), r.get(f"judge_label_{ver}", "").strip().upper()
                 if r["criterion"] == crit and h in ("PASS", "FAIL") and j in ("PASS", "FAIL"):
                     pairs.append((h, j))
                     ids.append(r["conv_id"])
-                    if h != j:
+                    if h != j and set_name == label_sets[-1][0]:
                         rec = recs.get((crit, ver), {}).get(r["conv_id"], {})
                         disagreements.append((crit, ver, r["conv_id"], h, j, rec.get("failing_turns", []),
                                               rec.get("reason", ""), r.get("notes", "")))
@@ -110,14 +123,14 @@ def report() -> None:
                 continue
             po, k = kappa(pairs)
             cm = {(a, b): sum(1 for h, j in pairs if (h, j) == (a, b)) for a in ("PASS", "FAIL") for b in ("PASS", "FAIL")}
-            md.append(f"| {crit}: {CRITERIA[crit]} | {ver} | {len(pairs)} | {po:.0%} | "
+            md.append(f"| {crit}: {CRITERIA[crit]} | {ver} | {set_name} | {len(pairs)} | {po:.0%} | "
                       f"{'n/a (one class only)' if k is None else f'{k:.2f}'} | {cm['PASS', 'PASS']} | "
                       f"{cm['PASS', 'FAIL']} | {cm['FAIL', 'PASS']} | {cm['FAIL', 'FAIL']} |")
 
     md += ["", "## Pass rates", "",
            "Final system = pipeline v1 (current prompts); v0 = ablated baseline (expected-fail conversations).", "",
-           "| Criterion | Conversations | n | Human labels: PASS | " + " | ".join(f"Judge {v}: PASS" for v in vers) + " |",
-           "|---|---|---|---|" + "---|" * len(vers)]
+           "| Criterion | Conversations | n | Human (original): PASS | Human (revised): PASS | " + " | ".join(f"Judge {v}: PASS" for v in vers) + " |",
+           "|---|---|---|---|---|" + "---|" * len(vers)]
     for crit in CRITERIA:
         for group in ("v1", "v0"):
             sub = [r for r in rows if r["criterion"] == crit and pipe.get(r["conv_id"]) == group]
@@ -125,14 +138,14 @@ def report() -> None:
                 continue
 
             def rate(col):
-                vals = [r.get(col, "").strip().upper() for r in sub]
+                vals = [human(r) if col == "original" else human_rev(r) if col == "revised" else r.get(col, "").strip().upper() for r in sub]
                 vals = [v for v in vals if v in ("PASS", "FAIL")]
                 return f"{sum(v == 'PASS' for v in vals)}/{len(vals)} ({sum(v == 'PASS' for v in vals) / len(vals):.0%})" if vals else "-"
             label = "final system (v1)" if group == "v1" else "ablated baseline (v0)"
-            md.append(f"| {crit} | {label} | {len(sub)} | {rate('human_label')} | "
+            md.append(f"| {crit} | {label} | {len(sub)} | {rate('original')} | {rate('revised')} | "
                       + " | ".join(rate(f"judge_label_{v}") for v in vers) + " |")
 
-    md += ["", "## Disagreements", "", "| Criterion | Judge prompt | Conversation | Human | Judge | Judge's failing turns | Judge's reason | Student's notes |",
+    md += ["", "## Disagreements (with the latest human labels)", "", "| Criterion | Judge prompt | Conversation | Human | Judge | Judge's failing turns | Judge's reason | Student's notes |",
            "|---|---|---|---|---|---|---|---|"]
     for d in disagreements:
         md.append("| " + " | ".join(str(x).replace("|", "/").replace("\n", " ") for x in d) + " |")

@@ -1,41 +1,41 @@
-conv_id,criterion,human_label,judge_label_v1,judge_label_v2,notes
-C01,A,,,,
-C01,B,,,,
-C02,A,,,,
-C02,B,,,,
-C03,A,,,,
-C03,B,,,,
-C04,A,,,,
-C04,B,,,,
-C05,A,,,,
-C05,B,,,,
-C06,A,,,,
-C06,B,,,,
-C07,A,,,,
-C07,B,,,,
-C08,A,,,,
-C08,B,,,,
-C09,A,,,,
-C09,B,,,,
-C10,A,,,,
-C10,B,,,,
-C11,A,,,,
-C11,B,,,,
-C12,A,,,,
-C12,B,,,,
-C13,A,,,,
-C13,B,,,,
-C14,A,,,,
-C14,B,,,,
-C15,A,,,,
-C15,B,,,,
-C16,A,,,,
-C16,B,,,,
-C17,A,,,,
-C17,B,,,,
-C18,A,,,,
-C18,B,,,,
-C19,A,,,,
-C19,B,,,,
-C20,A,,,,
-C20,B,,,,
+conv_id,criterion,human_label,human_label_revised,judge_label_v1,judge_label_v2,judge_label_v3,notes
+C01,A,FAIL,,FAIL,FAIL,PASS,failing_turns: [4]。第4轮称检索段落没有解释为何选择10人，撤回了此前已经建立的说明。第2轮和第3轮已依据 d606a330-p007-c03 说明样本规模参照形成性可用性测试，目的是发现最先出现、容易发现的问题；第4轮没有提供新证据来解释这一改变。
+C01,B,FAIL,,FAIL,FAIL,FAIL,failing_turns: [1]。第1轮 From the paper 声称 ‘most participants declared success after a single instance’，但所引 d606a330-p001-c01 和 d606a330-p002-c01 仅支持机会式探索、过度概括等总体发现，没有支持‘大多数参与者一次成功就宣布成功’。同轮还将样本偏向STEM、访谈者建议不一致归于作者，却没有为这些说法提供引用；声明证据partial不能为这些确定的作者归属提供支持。
+C02,A,FAIL,,PASS,PASS,PASS,failing_turns: [3]。学习者第3轮明确表示仍不理解，并要求换一种解释方式。回复实质上重复第2轮的‘DiT生成裸网格，Paint以法线图和位置图生成多视角图像并烘焙纹理’；虽然更明确指出网格是衔接点，但没有换一种方式解释为什么几何与纹理是不同的工作。
+C02,B,PASS,,PASS,FAIL,PASS,failing_turns: []。DiT生成裸网格、Paint生成纹理及其法线图/位置图条件，分别由 2e0d0789-p003-c02、p003-c04 和 p004-c00 支持；第4轮关于Delighting的解释由 p007-c01 支持。研究建议明确置于 For your research，网格渲染步骤被标为推断，背景和遮挡要求也限定为目前检索段落无法确认。
+C03,A,PASS,,PASS,PASS,PASS,failing_turns: []。回复持续围绕学习者所指的游戏机制、规则和agent展开，第3轮明确纠正‘机制就是规则’，第4轮改用足球比赛解释。第5轮解析agent所指，第6轮将定义应用到跳跃，均承接当前问题，没有要求重复已给背景。
+C03,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [1, 6]。第1轮将术语含混、旧定义不精确及改善设计文档等说法直接归给作者，相关部分却只有 ov-1、ov-2 或 ov-7 等PaperLens概览支持，所引原文没有覆盖这些主张。第6轮又声称‘論文沒有討論平台遊戲’，但 f17ba500-p003-c02 和 p003-c03 只提供一般定义及游戏例子，无法支持整篇论文未讨论某类游戏；应限定为检索段落中未找到。"
+C04,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮按学习者的澄清聚焦参与者如何理解例子，并补充其偏好直接指令的行为。第3轮纠正probe等于baseline、参与者等于test set的类比；第4轮继续回答人数、分析方法和证据强度，均保持共同语境。
+C04,B,PASS,,PASS,PASS,PASS,failing_turns: []。过度概括及人际互动预期分别由 d606a330-p010-c00、p010-c01 支持，跨领域例子难迁移由 p011-c05 支持。10名参与者、两位作者进行定性分析及形成性研究目的有 p007-c03、p009-c00 和 p009-c01 支持，未找到的编码可靠性细节明确限定在检索段落内，研究建议单独标示。
+C05,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮明确回应‘规则越多越好玩’的误解，第3轮正确承接自举的弹药例子，并用‘设置表’与实际行为区分机制和动态。随后按学习者的新重点讨论验证证据，并提供课前总结；篇幅是否恰好两句不属于A。
+C05,B,FAIL,,PASS,PASS,FAIL,failing_turns: [3]。第3轮短答称‘論文中並沒有射擊遊戲或彈藥的例子’，超出了当前检索段落所能支持的范围。所引 f024c53f-p002-c00、p002-c01 给出MDA定义及因果关系，不能证明整篇论文没有此类例子；应说自己的弹药例子是说明用假设，且未在检索段落中找到。
+C06,A,PASS,,PASS,PASS,PASS,failing_turns: []。第3轮明确指出学习者将Mechanics与Dynamics对调，并逐项对应其原话；第4轮改用下棋的规则与局势、再提供判断方法。第5轮承接Minecraft农场，第6轮将‘第三个’正确解析为Aesthetics，均直接回应所指。
+C06,B,FAIL,,PASS,PASS,FAIL,failing_turns: [5]。第5轮声称‘論文本身並未討論 Minecraft’，并在限制部分重复说论文没有提到Minecraft或建造行为。该轮所引 f024c53f-p002-c00、p002-c01 只支持MDA的一般定义，无法据此断言整篇论文未讨论这些主题；应限定为当前检索段落未找到。
+C07,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮点明core按功能与目标而非乐趣划分，第3轮把‘另外一个’正确解析为secondary，并给出GTA IV的cover例子。第4轮跟随新焦点比较MDA，第5轮分别解释mechanics、rules与goals，均承接学习者的具体问题。
+C07,B,PASS,,PASS,PASS,FAIL,failing_turns: []。核心/主要/次要机制的定义及cover例子均由 f17ba500-p005-c01 至 p005-c04 支持，分类不固定的限制由 p005-c06 支持。对MDA的批评有 p002-c04、p002-c05 和 p003-c00 支持，跨论文的阅读建议标为PaperLens inference，目标关系不完整也明确限定于当前段落。
+C08,A,FAIL,,FAIL,FAIL,FAIL,"failing_turns: [2, 4]。第2轮两次断言上轮没有提到时间限制，但第1轮展开的Explanation明确列出 ‘limited time for prompt design’，否认了学习者正确的指代。第4轮又以无法确认think-aloud设置为由退回到缺乏信息，尽管第2轮已引用 d606a330-p007-c02 说明10人think-aloud改进baseline chatbot的设置，没有利用已建立的上下文。"
+C08,B,PASS,,FAIL,PASS,PASS,failing_turns: []。样本局限和定性分析由 d606a330-p007-c03、p009-c01 支持，概览信息明确称为PaperLens摘要并要求核查原文后再引用。第3轮新增 p014-c03 后确认时间限制，同时把跨模型迁移标为自身推断；对未检索到的协议或当代模型证据也保留限定。
+C09,A,PASS,,PASS,PASS,PASS,failing_turns: []。第3轮直接将学习者对调的Mechanics/Dynamics纠正回其自己的跳跃例子，第4轮换用射击游戏并给出判断问题。第5轮按英雄联盟的冷却与装备分类，第6轮正确解析‘第三个’为Aesthetics，并区分设计者因果顺序与玩家视角。
+C09,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [1, 5, 6]。第1轮From the paper将Monopoly调整和AI原型归于论文，却只引 ov-3、ov-4，且‘不是原文逐字内容’并没有明确这些作者归属尚未经原文核实。第5轮说‘論文本身並沒有討論《英雄聯盟》’，第6轮说作者没有解释名称排序，均未限定为当前检索段落未找到；p002-c00、p002-c01、p002-c02支持定义和讨论顺序，不能证明整篇论文的内容缺席。"
+C10,A,FAIL,,PASS,PASS,PASS,failing_turns: [4]。第4轮针对‘多少人分析/编码’先说明两位作者比较和归类数据，随后又在同一回复称检索段落没有提到编码者人数，给出了相互冲突的答复。其余轮次能跟随对参与者行为的澄清，并纠正probe等于baseline的类比。
+C10,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [1, 3, 4]。第1轮称 ‘The paper also does not test the number of examples’，第3轮称论文不测试probe是否优于其他方案，但 d606a330-p011-c05、p010-c00、p007-c03、p009-c01 等所引局部段落不足以证明整篇论文未做这些研究。第4轮又说 ‘do not mention ... a number of coders’，而同轮引用的 p009-c01 明确写两位作者比较并分类参与者的困难，至少支持两位分析者，而不能一概声称人数未提及。"
+C11,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮按学习者的目标转移从几何改谈纹理与光照，第3轮准确承接delighting并区分原文的can cause和具体后果推断。第4轮依要求将论文证据、未覆盖范围和自己的推测分开，没有要求重述已给的AR研究背景。
+C11,B,PASS,,PASS,PASS,FAIL,failing_turns: []。vector-set表示和VAE由 2e0d0789-p004-c01、p018-c01 支持，编码采样由 p010-c01 及图3作者caption支持；图示解码过程明确称为根据图示的解释。去光照及训练照明由 p007-c01、p009-c04 支持，重阴影与遮挡效果被限定为当前段落不能验证，具体后果列为PaperLens inference。
+C12,A,FAIL,,PASS,PASS,FAIL,"failing_turns: [3, 4]。第3轮称自己先前不应把合成提示图当作全部测试输入，但第1轮明说‘有一部分’，第2轮也表示不知道300个输入的来源，属于无新证据却撤回未曾作出的主张。第4轮又否认先前提过AR相关问题，忽略第1轮提出的真实场景对齐与稳定性，以及第3轮继续讨论的AR迁移背景。"
+C12,B,FAIL,,PASS,FAIL,FAIL,"failing_turns: [1, 5]。第1轮短答把ULIP、Uni3D同时说成形状与纹理生成的相似度指标，但 2e0d0789-p010-c02 只将它们用于shape generative performance，纹理段落 p013-c03 使用的是另一组渲染指标。第5轮又称‘论文没有给出Fig.10的具体数值’，但 p015-c00、p015-c01 只提供当前抽取的文本，不能证明原论文图中没有数值，应限定为所检索文本未提供。"
+C13,A,PASS,,PASS,PASS,PASS,failing_turns: []。第3轮用学习者的‘不能跳到墙外’与‘跳’对照纠正机制等于规则的误解，第4轮针对按按钮是否为方法，改用‘玩家—按键—动作’说明。第5轮解析代理者，第6轮沿用跳跃并区分输入途径与方法，均承接实际所指。
+C13,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [2, 6]。第2轮将作者的区分写成‘規則是為能動性而建模，機制是對能動性而建模’，与 f17ba500-p004-c00 的 ‘rules are modeled after agency, while mechanics are modeled for agency’ 方向相反。第6轮又把平台游戏跳跃细节在检索段落中未见，扩大成论文未讨论；p003-c02、p003-c03、p003-c04只能支持定义和列举的游戏实例。"
+C14,A,PASS,FAIL,FAIL,FAIL,FAIL,"failing_turns: []。第2轮遵循新重点转向研究设计，第3轮解释design probe，第4轮正确把‘that tool’解析为BotDesigner并纠正baseline/test set类比。第3轮未按要求使用日语属于语言问题，按A明确排除的范围不计为失败。 || REVISED after reading the judge disagreement (2026-11-09): student decided that an explicit learner request, including a request to explain in another language, must be followed; turn 3 answered in English instead of Japanese -> FAIL. Criterion A v2 states this rule."
+C14,B,FAIL,,FAIL,FAIL,FAIL,"failing_turns: [2, 3]。第2轮称研究者在 ‘During an initial phase’ 提供提示建议，但所引 d606a330-p009-c00 明确写 ‘After this initial phase’，把干预时机说反了。第3轮称整篇论文未提供design probe的正式定义，而 p004-c00、p004-c01 仅说明研究如何使用probe，不足以证明全文没有正式定义，应限于当前检索段落。"
+C15,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮按学习者的纠正从纹理分辨率转向PBR材质通道，第3轮随新焦点解释Figure 1，第4轮再转向面数和手机实时渲染。对于图1位置的不同描述，回复明确指出不一致并建议以原图为准，没有无依据替换先前说法。
+C15,B,FAIL,,PASS,PASS,PASS,failing_turns: [4]。第4轮虽将手机端开销标为自己的推测，却又声称‘论文中没有对此做验证’。引用 2e0d0789-p017-c02 只能支持低多边形模块及‘几十个三角形’，无法证明整篇论文没有移动端验证，应说当前检索段落中未找到；第3轮对图像描述与作者caption的区分本身合格。
+C16,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮正确承接Table 4并逐项解释baseline与数值，第3轮转向测试图来源，第4轮区分作者自述局限与自身评估。第5轮按学习者要求重新分清作者报告和PaperLens解读，并以来源明确修正对几何评估范围的过强表述。
+C16,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [1, 2]。第1轮称对几何的直接评估‘只在形状重建实验中用IoU做过’，但 2e0d0789-p010-c00 明列形状评估同时包含重建与生成，不能据此排除其他几何评估。第2轮称‘论文没有报告多次运行的方差或显著性检验’，而 p015-c00、p013-c00 只是当前表格与部分正文，未提供全文缺席的依据；应限定为检索段落未见。"
+C17,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮正确承接‘第二阶段’解释Paint，第3轮直接回应被质疑的‘法线朝向/位置坐标所以贴合形状’，明确区分概念说明与原文。第4轮围绕已给的网络照片条件讨论脆弱环节，并把阶段排序标为推测。
+C17,B,FAIL,,PASS,PASS,FAIL,"failing_turns: [1, 4]。第1轮将输入通常去背景和居中作为论文事实，但相关信息只有 ov-4 概览支持，所引原文 p020-c00 未说明；同轮也无依据断言整篇论文未评估AR。第4轮From the paper称去光照环节是‘原文直接点名的薄弱点’，但 2e0d0789-p007-c01、p007-c00 只说明光照烘焙风险及去光照的设计目的，没有将去光照模块自身的鲁棒性判为薄弱点。"
+C18,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮明确修正参与者等于test set的类比，第3轮将probe解析为BotDesigner并区分baseline。第4轮回应当前的人数与分析方法问题；其对是否进行transcript coding的证据判断归B，不因论文内容判断本身而判A失败。
+C18,B,FAIL,,FAIL,FAIL,FAIL,"failing_turns: [1, 4]。第1轮称 ‘participants ... declared success after a single successful instance and rarely used error labeling’，所引 d606a330-p001-c01、p001-c00 只支持机会式探索等总体发现；样本与干预局限等细节也只有生成概览支持。第4轮从 p009-c01 所述affinity diagrams与service blueprint进一步断言 ‘not as coding of think-aloud transcripts’，但这些方法不排斥对转录内容编码，检索段落未说明不能变成确定的否定。"
+C19,A,PASS,FAIL,PASS,PASS,FAIL,"failing_turns: []。第2轮准确承接第二阶段与网格条件，第3轮针对法线图/位置图是否原文明确回答，并指出图2说明文字支持核心流程。第4轮围绕已给的光照、遮挡、背景条件分析两个阶段，保持研究目标与指代一致。 || REVISED after reading the judge v3 disagreement (2026-11-09): turn 3 says its earlier inferences were how the normal/position maps are injected and the role of the Multi-Task Attention labels, but turn 2 said neither; correcting claims it never made breaks rule A3 -> FAIL."
+C19,B,FAIL,,PASS,PASS,FAIL,failing_turns: [1]。第1轮在研究建议中把‘DINOv2特征’、‘论文输入是干净的单张图像’及‘作者使用了自采数据集’当作已知论文事实。所引 2e0d0789-p003-c04、p020-c00 只支持两阶段模型及图像生成资产，并没有支持编码器名称、干净图像要求或数据集来源；research_use标签不能使其中嵌入的作者事实免于证据要求。
+C20,A,PASS,,PASS,PASS,PASS,failing_turns: []。第2轮正确解析‘第二个’为Dynamics并补充例子，第3轮针对玩家与设计者方向相同的误解作出纠正。第4轮承接课堂‘功能多但无聊’的案例，第5轮按新要求给出论文中的具体游戏，不要求重述已给背景。
+C20,B,FAIL,,PASS,PASS,FAIL,failing_turns: [4]。第4轮在推断部分说‘論文本身沒有討論「無聊」’，这仍然是关于整篇论文的确定断言。该轮所引 f024c53f-p002-c01、p002-c03只支持MDA因果关系与没有fun公式，不足以证明全文未讨论无聊或无趣；应限定为当前检索段落未见，而不能由inference标签豁免这一作者内容判断。

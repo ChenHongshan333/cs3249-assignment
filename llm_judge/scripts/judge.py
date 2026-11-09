@@ -40,6 +40,22 @@ class JudgeVerdict(BaseModel):
     reason: str
 
 
+class Check(BaseModel):
+    turn: int
+    item: str = Field(description="The statement or learner move being checked (quoted).")
+    evidence: str = Field(description="What the cited passage or the earlier conversation says.")
+    ok: bool
+
+
+class JudgeVerdictWithChecks(BaseModel):
+    """From judge prompt v3 on: the judge writes out the turns it judged and every check before the verdict."""
+    judged_turns: list[int]
+    checks: list[Check]
+    verdict: Literal["PASS", "FAIL"]
+    failing_turns: list[int] = Field(default_factory=list)
+    reason: str
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--criterion", required=True, choices=["A", "B"])
@@ -47,6 +63,8 @@ def main() -> int:
     parser.add_argument("--model", default=os.getenv("JUDGE_MODEL", DEFAULT_JUDGE_MODEL))
     parser.add_argument("--only", default="", help="comma-separated conversation IDs (e.g. to retry errors)")
     parser.add_argument("--force", action="store_true", help="re-judge; the old results file is kept with a timestamp suffix")
+    parser.add_argument("--reasoning", choices=["none", "low", "medium", "high"], default="none",
+                        help="OpenRouter reasoning effort for the judge model (default: none)")
     args = parser.parse_args()
 
     from langchain_core.messages import HumanMessage, SystemMessage
@@ -74,22 +92,25 @@ def main() -> int:
         wanted = {x.strip() for x in args.only.split(",")}
         rows = [r for r in rows if r["conv_id"] in wanted]
 
+    extra = {"reasoning": {"effort": args.reasoning}} if args.reasoning != "none" else None
     model = ChatOpenAI(model=args.model, api_key=settings.api_key, base_url=settings.base_url,
-                       temperature=0, timeout=180, max_retries=2)
-    runnable = model.with_structured_output(JudgeVerdict, method="json_schema", strict=True, include_raw=True)
+                       temperature=0, timeout=300, max_retries=2, extra_body=extra)
+    schema = JudgeVerdictWithChecks if int(args.version.lstrip("v")) >= 3 else JudgeVerdict
+    runnable = model.with_structured_output(schema, method="json_schema", strict=True, include_raw=True)
 
     def judge(row: dict) -> dict:
         export = load(LLM_JUDGE / row["file"])
         started = time.perf_counter()
         record = {"conv_id": row["conv_id"], "file": row["file"], "criterion": args.criterion,
                   "judge_prompt": prompt_file.name, "judge_prompt_sha": prompt_sha, "judge_model": args.model,
+                  "reasoning": args.reasoning,
                   "judged_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
         try:
             result = runnable.invoke([SystemMessage(content=system),
                                       HumanMessage(content=render(export, args.criterion))])
             parsed = result.get("parsed")
             if parsed is None:
-                parsed = JudgeVerdict.model_validate(_decode_json_strings(json.loads(result["raw"].content)))
+                parsed = schema.model_validate(_decode_json_strings(json.loads(result["raw"].content)))
             usage = getattr(result.get("raw"), "usage_metadata", None) or {}
             record.update(parsed.model_dump(), usage=dict(usage), error=None)
         except Exception as exc:
