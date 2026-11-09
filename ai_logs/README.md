@@ -1,10 +1,16 @@
-# ai_logs — records of AI tool use for this assignment
+# ai_logs: records of AI tool use for this assignment
 
-Put the full records of every AI tool used for Assignment 2 here (exported transcripts or shared links).
+This folder holds the full records of every AI tool used for Assignment 2.
 
 | Tool | What it was used for | Record |
 |---|---|---|
-| Claude Code (VS Code extension) | Planning and implementing the A2 system (backend, frontend changes, docs) | Export the session transcript into this folder (e.g. `claude-code-implementation.md`). |
-| _add other tools_ | | |
+| Claude Code (VS Code extension), session 01 | Part 1: planning and building the A2 system (backend, frontend, docs, figures), and drafting the Part 1 report section | [claude-code-session-01.md](claude-code-session-01.md) is the English account, with every user message translated. [claude-code-session-01-transcript.md](claude-code-session-01-transcript.md) is the verbatim export. |
+| _add later sessions and other tools_ | | |
 
-Tools without chat history (e.g. inline code completion) must be named in the main README instead.
+`export_transcript.py` turns a Claude Code session file (`~/.claude/projects/<project>/<session>.jsonl`) into Markdown:
+
+```
+python export_transcript.py <session.jsonl> <out.md>
+```
+
+Tools without chat history (for example inline code completion) must be named in the main README instead.
