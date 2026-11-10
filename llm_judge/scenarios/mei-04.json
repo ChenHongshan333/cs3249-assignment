@@ -1,0 +1,18 @@
+{
+  "name": "mei-04",
+  "situation": "Definition, wrong restatement, agent reference",
+  "persona": "mei",
+  "paper_pdf": "../../test_papers/game-mechanics.pdf",
+  "reading_goal": "Get a general overview of this paper",
+  "research_context": "",
+  "language": "中文（繁體）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask in a broad way what this article is about.",
+    "Ask how the author defines a game mechanic.",
+    "Restate it wrongly in your own words: a game mechanic is just a rule of the game.",
+    "Say you still do not get it and ask for another explanation.",
+    "Refer to 'the agent' with a short reference and ask who that is.",
+    "Ask whether jumping in a platform game counts as a mechanic under this definition."
+  ]
+}

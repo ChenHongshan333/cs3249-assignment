@@ -1,0 +1,2234 @@
+{
+  "exported_at": "2026-11-09T09:22:18+00:00",
+  "paper": {
+    "paper_id": "f024c53fde7d44d3",
+    "filename": "MDA.pdf",
+    "title": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek",
+    "status": "ready",
+    "error": null,
+    "failed_stage": null,
+    "created_at": "2026-11-08T10:50:40+00:00",
+    "updated_at": "2026-11-09T03:43:53+00:00",
+    "page_count": 5,
+    "page_labels_differ": false,
+    "chunk_count": 21,
+    "overview_count": 5,
+    "figure_count": 1
+  },
+  "session": {
+    "session_id": "s-2fa85dda169c",
+    "paper_id": "f024c53fde7d44d3",
+    "paper_title": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek",
+    "created_at": "2026-11-09T09:20:47+00:00",
+    "reading_goal": "Get a general overview of this paper",
+    "research_context": "",
+    "language": "中文（繁體）",
+    "current_concept": "MDA 中 Aesthetics 的排序與位置",
+    "messages": [
+      {
+        "id": "u-77acf37f96",
+        "role": "user",
+        "mode": "chat",
+        "text": "你好，我想先問一下，這篇論文到底在講什麼？我是修遊戲設計課的學生，老師推薦我看的，但我英文不是很好，所以想先大概了解一下。",
+        "created_at": "2026-11-09T09:20:57+00:00"
+      },
+      {
+        "id": "a-0be3920bb1",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:20:57+00:00",
+        "short_answer": "這篇論文提出 MDA 框架（Mechanics、Dynamics、Aesthetics，即機制、動態、美學），作為理解與設計遊戲的一種形式化方法，目的是讓遊戲設計者、開發者、遊戲評論者與技術研究者能用同一套語言拆解、研究與設計遊戲。",
+        "short_answer_refs": [
+          "f024c53f-p001-c02",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "論文的核心目標",
+            "kind": "paper",
+            "text": "作者說 MDA 是一種形式化的遊戲理解方法，試圖彌合遊戲設計與開發、遊戲批評以及技術性遊戲研究之間的差距，並幫助各方更清楚地拆解、研究與設計遊戲。",
+            "refs": [
+              "f024c53f-p001-c02",
+              "f024c53f-p001-c00"
+            ]
+          },
+          {
+            "title": "三個元素各自是什麼",
+            "kind": "paper",
+            "text": "論文將遊戲拆成三個部分：機制（Mechanics）指遊戲的具體組成，屬於資料表示與演算法層次；動態（Dynamics）指機制在執行時，對玩家輸入與彼此輸出互動後產生的行為；美學（Aesthetics）指玩家與系統互動時被引發的情緒反應。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用簡單的方式理解三者關係",
+            "kind": "explanation",
+            "text": "可以把 MDA 想成從三個角度看同一款遊戲：設計者從機制出發，機制產生動態行為，動態再帶來美學體驗；玩家則從美學感受出發，回推到可觀察的動態與機制。三者是分開的觀點，但彼此有因果關聯。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "論文的另一個重要觀點",
+            "kind": "paper",
+            "text": "論文主張遊戲更像是「人工製品」而非一般媒體，遊戲的內容就是它的行為，而不是傳送給玩家的影音媒體；因此遊戲與書、音樂、電影不同，玩家的消費過程相對不可預測。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p001-c02",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay.",
+            "verified": true,
+            "quotes": [
+              "MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p001-c00",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work.",
+            "verified": true
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "MDA 的八種美學類別分別是什麼？",
+          "論文如何用 Monopoly 說明回饋迴圈與動態？",
+          "論文中的 AI 例子想說明什麼？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework mechanics dynamics aesthetics game design research main argument overview",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-7f45c97d18",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，那我想再確認一下三個詞的意思。Mechanics、Dynamics、Aesthetics 各自是什麼？可以用簡單一點的方式說明嗎？",
+        "created_at": "2026-11-09T09:21:12+00:00"
+      },
+      {
+        "id": "a-542fa9a386",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:12+00:00",
+        "short_answer": "簡單來說，Mechanics 是遊戲的規則與元件，Dynamics 是這些規則在遊戲進行時的運作行為，Aesthetics 是玩家在互動時產生的情緒感受。論文的順序是由下往上：設計者從機制出發，產生動態，進而形成美學體驗。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics：遊戲的組成元件",
+            "kind": "paper",
+            "text": "論文將 Mechanics 描述為遊戲中的特定組成部分，層次在資料表示與演算法。你可以把它理解成遊戲的「零件」，例如規則、數值、程式邏輯等。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics：規則開始運作後的行為",
+            "kind": "paper",
+            "text": "論文指出 Dynamics 是機制在執行時的運作行為，會對玩家的輸入以及彼此的輸出產生反應，並隨時間展開。簡單說，就是「零件動起來之後，遊戲實際上會怎麼表現」。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Aesthetics：玩家的情緒感受",
+            "kind": "paper",
+            "text": "論文將 Aesthetics 描述為玩家與遊戲系統互動時，所被引發的理想情緒反應。這裡的美學不只是畫面好不好看，而是玩家感受到的樂趣、緊張、驚喜等體驗。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用比喻理解三者的先後關係",
+            "kind": "example",
+            "text": "（本例為說明用的比喻，不是論文內容）可以想像一款跳躍遊戲：機制是「按下跳躍鍵會跳多高」的數值設定；動態是玩家連續跳躍、躲避障礙時出現的節奏變化；美學則是玩家因此感到刺激或挫折的情緒。論文也說，設計者是從機制開始，經由動態形成美學體驗，而玩家的角度則相反。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "設計者視角與玩家視角的差別是什麼？",
+          "論文為什麼說遊戲比較像「人造物」而不是媒體？",
+          "MDA 如何幫助遊戲設計的迭代調整？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework definitions of Mechanics, Dynamics, and Aesthetics in game design",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-e5d2cb931e",
+        "role": "user",
+        "mode": "chat",
+        "text": "所以我再用自己的話整理一下：Dynamics 其實就是設計者寫下的規則，像是數值設定、程式邏輯那些，玩家真正按下去的時候才會開始動。Mechanics 則是遊戲進行時產生的行為，玩家跟系統互動後看到的東西。這樣理解對嗎？",
+        "created_at": "2026-11-09T09:21:26+00:00"
+      },
+      {
+        "id": "a-e7e14776c5",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:26+00:00",
+        "short_answer": "不太對，你把 Mechanics 和 Dynamics 的意思對調了。Mechanics 是設計者寫下的規則、數值與程式邏輯等組成元件；Dynamics 是這些規則在玩家互動、隨時間運作時產生的行為。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，位於資料表示與演算法的層次，也就是你說的「設計者寫下的規則、數值設定、程式邏輯」。它是設計者直接建立的東西。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行期（run-time）的行為，會受玩家輸入以及彼此的輸出影響，並隨時間展開。它是規則開始運作後才看得到的行為，所以你說「玩家按下去才開始動」這一點其實是對 Dynamics 的描述，而不是 Mechanics。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用例子區分兩者",
+            "kind": "example",
+            "text": "（此例子不是論文內容）假設遊戲中角色跳躍高度是一個數值。這個數值和跳躍的程式邏輯屬於 Mechanics；當玩家連續跳躍、躲避障礙而形成的節奏與緊張感，則屬於 Dynamics。兩者的差別在於：一個是寫好的規則，一個是規則運作後的行為。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Aesthetics 在論文中是如何與 Dynamics 連結的？",
+          "論文說三者是「透鏡」，這是什麼意思？",
+          "能否用一個你熟悉的遊戲來練習區分三個元素？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework definition of Mechanics as game rules and components and Dynamics as run-time behavior",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-02e92390f9",
+        "role": "user",
+        "mode": "chat",
+        "text": "還是不太懂耶，Mechanics 跟 Dynamics 的差別我還是有點分不清楚。可以換個方式解釋嗎？",
+        "created_at": "2026-11-09T09:21:41+00:00"
+      },
+      {
+        "id": "a-4f404413bb",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:41+00:00",
+        "short_answer": "可以用「設計圖」和「實際比賽過程」來區分。Mechanics 是遊戲的零件與規則本身，Dynamics 是這些規則在玩家實際操作、隨時間互相作用後，遊戲「跑起來」的行為。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "用下棋來比喻",
+            "kind": "example",
+            "text": "（這是為了理解而舉的例子，不是論文內容）把遊戲想成下棋。Mechanics 就像棋子的種類與走法規則，例如「車可以直走」「馬走日字」。Dynamics 則是雙方真的下起來之後出現的局面，例如某方為了牽制對手而犧牲一顆兵、形成攻防壓力。規則寫在棋盤外，局勢則是在對弈中產生的。",
+            "refs": []
+          },
+          {
+            "title": "論文怎麼定義 Mechanics",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層次是資料表示與演算法。簡單說，它們是設計者可以直接寫下、調整的東西。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "論文怎麼定義 Dynamics",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行時的行為：機制如何回應玩家的輸入，以及彼此的輸出，並隨時間變化。重點在「時間」與「互動」，所以它只有在遊戲進行時才會出現。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "一個判斷的小方法",
+            "kind": "explanation",
+            "text": "可以問自己：這個東西在沒有玩家操作、只是寫在文件或程式碼裡時就已經存在嗎？如果是，它大概屬於 Mechanics；如果它要等玩家互動、並隨時間展開才會出現，它大概屬於 Dynamics。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Aesthetics 和 Dynamics 的差別是什麼？",
+          "論文說三個層次是「相互連結」的，這在實際設計中是什麼意思？",
+          "可以用你熟悉的一款遊戲，幫我分辨哪些是 Mechanics、哪些是 Dynamics 嗎？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Mechanics Dynamics definition difference rules components run-time behavior player interaction",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-3546f70cd0",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，那我想用我玩的遊戲來試試看。我常玩《Minecraft》，如果我在裡面蓋了一個自動農場，每次作物長好就自動收成，這個應該是 Mechanics 還是 Dynamics 呢？還是兩個都有一點？",
+        "created_at": "2026-11-09T09:21:58+00:00"
+      },
+      {
+        "id": "a-c93083cd94",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:58+00:00",
+        "short_answer": "兩個都有，但層次不同。農場用的方塊、農田、水流與作物生長規則等零件屬於 Mechanics；這些零件設好後，作物隨時間自動生長與收成的運作行為則屬於 Dynamics。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00",
+          "f024c53f-p002-c01"
+        ],
+        "sections": [
+          {
+            "title": "論文對兩者的定義",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層級在資料表示與演算法；Dynamics 則是機制在執行時，隨時間作用於玩家輸入與彼此輸出的行為。判斷時可以問：這是「東西本身」，還是「東西跑起來之後的表現」？",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "把自動農場拆成兩層",
+            "kind": "inference",
+            "text": "Mechanics 層可以看成農田、水、作物的生長規則，以及你用來連接自動收成的機關與線路等零件。Dynamics 層則是你放好之後，作物不斷生長、系統不需你介入就自動收成的整體運作。這是我依照論文定義做的推論，論文本身並未討論 Minecraft。",
+            "refs": []
+          },
+          {
+            "title": "為什麼說兩者有因果關係",
+            "kind": "explanation",
+            "text": "論文認為 Mechanics 會產生動態系統行為，而這些行為再帶來美學體驗，且一層的小改變可能影響其他層。換句話說，如果你改動農場的某個零件，自動收成的運作行為也會跟著改變。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "這個例子的限制",
+            "kind": "limitation",
+            "text": "論文提供的是抽象框架，沒有提到 Minecraft、建造行為，或玩家自己搭建的機關應如何歸類。上面的拆分是把框架套用到你的例子上，並非論文的明確說法。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+              "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "玩家親手蓋農場的過程，在 MDA 裡算哪一層？",
+          "自動農場讓玩家產生的感受，對應論文中的哪一種美學？",
+          "如果我只改動農場中的一個零件，動態行為會怎麼改變？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Mechanics versus Dynamics definition: game rules and components compared with emergent runtime behavior during player interaction over time",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-899273b862",
+        "role": "user",
+        "mode": "chat",
+        "text": "我想再問一下，你剛才說的第三個那個，為什麼作者要把它放在最後呢？是因為它是最後才會產生的結果嗎？",
+        "created_at": "2026-11-09T09:22:18+00:00"
+      },
+      {
+        "id": "a-bbb113e19b",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:18+00:00",
+        "short_answer": "你的理解大致符合論文從設計者角度的描述：機制產生動態，動態再帶出美學體驗，所以美學位於這條鏈的末端。但檢索到的段落沒有明確寫出「放最後」的理由，而且論文也從玩家角度說美學會先定下基調，因此不宜只把它理解成最後才出現的結果。",
+        "short_answer_refs": [
+          "f024c53f-p002-c01",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "設計者視角的順序",
+            "kind": "paper",
+            "text": "論文從設計者視角描述：機制產生動態系統行為，動態再帶出特定的美學體驗。論文也將美學定義為玩家與遊戲系統互動時，所期望引發的情緒反應。",
+            "refs": [
+              "f024c53f-p002-c01",
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "玩家視角的反向說法",
+            "kind": "paper",
+            "text": "從玩家視角看，美學先定下基調，之後體現在可觀察的動態，最後落到可操作的機制。這表示三者不只是單向流程，而是可以從不同方向閱讀的層次。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "為什麼美學可以被看成終點",
+            "kind": "explanation",
+            "text": "一種較簡單的理解是：設計者先決定規則，規則運作後產生行為，而玩家最後實際感受到的是體驗本身，所以美學常被當作設計的目標或結果。論文也提到，看似不起眼的底層決定，會一路往上影響最終的遊戲體驗。",
+            "refs": [
+              "f024c53f-p001-c03"
+            ]
+          },
+          {
+            "title": "論文沒有明說的部分",
+            "kind": "limitation",
+            "text": "在檢索到的段落中，作者沒有明確解釋為何把美學排在最後，這個排序較像是設計者視角下的因果鏈。論文也說三者是各自分開但彼此因果相連的視角，因此較適合把它理解成層次關係，而不是嚴格的時間先後。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+              "From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Aesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p001-c03",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts.",
+            "verified": true,
+            "quotes": [
+              "Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "論文說的 lens（視角）是什麼意思？",
+          "如果用 Minecraft 的自動農場來看，美學體驗具體會出現在哪裡？",
+          "為什麼論文強調以體驗為導向（experience-driven）而不是功能導向的設計？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Aesthetics last order why emotional response results from Mechanics and Dynamics designer consumer perspective",
+        "pipeline_version": "v1"
+      }
+    ],
+    "system_suggestion": null,
+    "judgment": null,
+    "note": null,
+    "updated_at": "2026-11-09T09:22:18+00:00",
+    "language_override": ""
+  },
+  "events": [
+    {
+      "event": "session_created",
+      "event_id": "9acdd26f7d17",
+      "timestamp": "2026-11-09T09:20:47+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "reading_goal": "Get a general overview of this paper",
+      "research_context": "",
+      "language": "中文（繁體）"
+    },
+    {
+      "event": "turn",
+      "event_id": "fc8d1f064fa7",
+      "timestamp": "2026-11-09T09:20:57+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "你好，我想先問一下，這篇論文到底在講什麼？我是修遊戲設計課的學生，老師推薦我看的，但我英文不是很好，所以想先大概了解一下。",
+      "retrieval_query": "MDA framework mechanics dynamics aesthetics game design research main argument overview",
+      "scope": "overview",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.7575,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7216,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6872,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6697,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6572,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6529,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        }
+      ],
+      "overview_ids": [
+        "ov-1",
+        "ov-2",
+        "ov-3",
+        "ov-4",
+        "ov-5"
+      ],
+      "raw_model_output": {
+        "short_answer": "這篇論文提出 MDA 框架（Mechanics、Dynamics、Aesthetics，即機制、動態、美學），作為理解與設計遊戲的一種形式化方法，目的是讓遊戲設計者、開發者、遊戲評論者與技術研究者能用同一套語言拆解、研究與設計遊戲。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p001-c02",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "論文的核心目標",
+            "kind": "paper",
+            "text": "作者說 MDA 是一種形式化的遊戲理解方法，試圖彌合遊戲設計與開發、遊戲批評以及技術性遊戲研究之間的差距，並幫助各方更清楚地拆解、研究與設計遊戲。",
+            "chunk_ids": [
+              "f024c53f-p001-c02",
+              "f024c53f-p001-c00"
+            ]
+          },
+          {
+            "title": "三個元素各自是什麼",
+            "kind": "paper",
+            "text": "論文將遊戲拆成三個部分：機制（Mechanics）指遊戲的具體組成，屬於資料表示與演算法層次；動態（Dynamics）指機制在執行時，對玩家輸入與彼此輸出互動後產生的行為；美學（Aesthetics）指玩家與系統互動時被引發的情緒反應。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用簡單的方式理解三者關係",
+            "kind": "explanation",
+            "text": "可以把 MDA 想成從三個角度看同一款遊戲：設計者從機制出發，機制產生動態行為，動態再帶來美學體驗；玩家則從美學感受出發，回推到可觀察的動態與機制。三者是分開的觀點，但彼此有因果關聯。",
+            "chunk_ids": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "論文的另一個重要觀點",
+            "kind": "paper",
+            "text": "論文主張遊戲更像是「人工製品」而非一般媒體，遊戲的內容就是它的行為，而不是傳送給玩家的影音媒體；因此遊戲與書、音樂、電影不同，玩家的消費過程相對不可預測。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p001-c02",
+            "quote": "MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c01",
+            "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "MDA 框架總覽",
+        "follow_up_suggestions": [
+          "MDA 的八種美學類別分別是什麼？",
+          "論文如何用 Monopoly 說明回饋迴圈與動態？",
+          "論文中的 AI 例子想說明什麼？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-0be3920bb1",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:20:57+00:00",
+        "short_answer": "這篇論文提出 MDA 框架（Mechanics、Dynamics、Aesthetics，即機制、動態、美學），作為理解與設計遊戲的一種形式化方法，目的是讓遊戲設計者、開發者、遊戲評論者與技術研究者能用同一套語言拆解、研究與設計遊戲。",
+        "short_answer_refs": [
+          "f024c53f-p001-c02",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "論文的核心目標",
+            "kind": "paper",
+            "text": "作者說 MDA 是一種形式化的遊戲理解方法，試圖彌合遊戲設計與開發、遊戲批評以及技術性遊戲研究之間的差距，並幫助各方更清楚地拆解、研究與設計遊戲。",
+            "refs": [
+              "f024c53f-p001-c02",
+              "f024c53f-p001-c00"
+            ]
+          },
+          {
+            "title": "三個元素各自是什麼",
+            "kind": "paper",
+            "text": "論文將遊戲拆成三個部分：機制（Mechanics）指遊戲的具體組成，屬於資料表示與演算法層次；動態（Dynamics）指機制在執行時，對玩家輸入與彼此輸出互動後產生的行為；美學（Aesthetics）指玩家與系統互動時被引發的情緒反應。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用簡單的方式理解三者關係",
+            "kind": "explanation",
+            "text": "可以把 MDA 想成從三個角度看同一款遊戲：設計者從機制出發，機制產生動態行為，動態再帶來美學體驗；玩家則從美學感受出發，回推到可觀察的動態與機制。三者是分開的觀點，但彼此有因果關聯。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "論文的另一個重要觀點",
+            "kind": "paper",
+            "text": "論文主張遊戲更像是「人工製品」而非一般媒體，遊戲的內容就是它的行為，而不是傳送給玩家的影音媒體；因此遊戲與書、音樂、電影不同，玩家的消費過程相對不可預測。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p001-c02",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay.",
+            "verified": true,
+            "quotes": [
+              "MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p001-c00",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work.",
+            "verified": true
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "MDA 的八種美學類別分別是什麼？",
+          "論文如何用 Monopoly 說明回饋迴圈與動態？",
+          "論文中的 AI 例子想說明什麼？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework mechanics dynamics aesthetics game design research main argument overview",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "quote": "MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research.",
+          "ok": true,
+          "text": "MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "ok": true,
+          "text": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "ok": true,
+          "text": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "MDA 框架總覽",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1699,
+        "retrieve": 1097,
+        "generate_answer": 5781
+      },
+      "latency_ms": 8590,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "65540cd1b319",
+      "timestamp": "2026-11-09T09:21:12+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，那我想再確認一下三個詞的意思。Mechanics、Dynamics、Aesthetics 各自是什麼？可以用簡單一點的方式說明嗎？",
+      "retrieval_query": "MDA framework definitions of Mechanics, Dynamics, and Aesthetics in game design",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.775,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7386,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7055,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6916,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6806,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6729,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "簡單來說，Mechanics 是遊戲的規則與元件，Dynamics 是這些規則在遊戲進行時的運作行為，Aesthetics 是玩家在互動時產生的情緒感受。論文的順序是由下往上：設計者從機制出發，產生動態，進而形成美學體驗。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics：遊戲的組成元件",
+            "kind": "paper",
+            "text": "論文將 Mechanics 描述為遊戲中的特定組成部分，層次在資料表示與演算法。你可以把它理解成遊戲的「零件」，例如規則、數值、程式邏輯等。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics：規則開始運作後的行為",
+            "kind": "paper",
+            "text": "論文指出 Dynamics 是機制在執行時的運作行為，會對玩家的輸入以及彼此的輸出產生反應，並隨時間展開。簡單說，就是「零件動起來之後，遊戲實際上會怎麼表現」。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Aesthetics：玩家的情緒感受",
+            "kind": "paper",
+            "text": "論文將 Aesthetics 描述為玩家與遊戲系統互動時，所被引發的理想情緒反應。這裡的美學不只是畫面好不好看，而是玩家感受到的樂趣、緊張、驚喜等體驗。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用比喻理解三者的先後關係",
+            "kind": "example",
+            "text": "（本例為說明用的比喻，不是論文內容）可以想像一款跳躍遊戲：機制是「按下跳躍鍵會跳多高」的數值設定；動態是玩家連續跳躍、躲避障礙時出現的節奏變化；美學則是玩家因此感到刺激或挫折的情緒。論文也說，設計者是從機制開始，經由動態形成美學體驗，而玩家的角度則相反。",
+            "chunk_ids": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms. Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c01",
+            "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "MDA 三元素（Mechanics、Dynamics、Aesthetics）的定義",
+        "follow_up_suggestions": [
+          "設計者視角與玩家視角的差別是什麼？",
+          "論文為什麼說遊戲比較像「人造物」而不是媒體？",
+          "MDA 如何幫助遊戲設計的迭代調整？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-542fa9a386",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:12+00:00",
+        "short_answer": "簡單來說，Mechanics 是遊戲的規則與元件，Dynamics 是這些規則在遊戲進行時的運作行為，Aesthetics 是玩家在互動時產生的情緒感受。論文的順序是由下往上：設計者從機制出發，產生動態，進而形成美學體驗。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics：遊戲的組成元件",
+            "kind": "paper",
+            "text": "論文將 Mechanics 描述為遊戲中的特定組成部分，層次在資料表示與演算法。你可以把它理解成遊戲的「零件」，例如規則、數值、程式邏輯等。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics：規則開始運作後的行為",
+            "kind": "paper",
+            "text": "論文指出 Dynamics 是機制在執行時的運作行為，會對玩家的輸入以及彼此的輸出產生反應，並隨時間展開。簡單說，就是「零件動起來之後，遊戲實際上會怎麼表現」。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Aesthetics：玩家的情緒感受",
+            "kind": "paper",
+            "text": "論文將 Aesthetics 描述為玩家與遊戲系統互動時，所被引發的理想情緒反應。這裡的美學不只是畫面好不好看，而是玩家感受到的樂趣、緊張、驚喜等體驗。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用比喻理解三者的先後關係",
+            "kind": "example",
+            "text": "（本例為說明用的比喻，不是論文內容）可以想像一款跳躍遊戲：機制是「按下跳躍鍵會跳多高」的數值設定；動態是玩家連續跳躍、躲避障礙時出現的節奏變化；美學則是玩家因此感到刺激或挫折的情緒。論文也說，設計者是從機制開始，經由動態形成美學體驗，而玩家的角度則相反。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "設計者視角與玩家視角的差別是什麼？",
+          "論文為什麼說遊戲比較像「人造物」而不是媒體？",
+          "MDA 如何幫助遊戲設計的迭代調整？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework definitions of Mechanics, Dynamics, and Aesthetics in game design",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms. Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "ok": true,
+          "text": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "ok": true,
+          "text": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "MDA 三元素（Mechanics、Dynamics、Aesthetics）的定義",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1317,
+        "retrieve": 633,
+        "generate_answer": 10463
+      },
+      "latency_ms": 12425,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "a8236fd40b2e",
+      "timestamp": "2026-11-09T09:21:26+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "所以我再用自己的話整理一下：Dynamics 其實就是設計者寫下的規則，像是數值設定、程式邏輯那些，玩家真正按下去的時候才會開始動。Mechanics 則是遊戲進行時產生的行為，玩家跟系統互動後看到的東西。這樣理解對嗎？",
+      "retrieval_query": "MDA framework definition of Mechanics as game rules and components and Dynamics as run-time behavior",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6773,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.655,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6456,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6253,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5938,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5863,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "不太對，你把 Mechanics 和 Dynamics 的意思對調了。Mechanics 是設計者寫下的規則、數值與程式邏輯等組成元件；Dynamics 是這些規則在玩家互動、隨時間運作時產生的行為。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，位於資料表示與演算法的層次，也就是你說的「設計者寫下的規則、數值設定、程式邏輯」。它是設計者直接建立的東西。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行期（run-time）的行為，會受玩家輸入以及彼此的輸出影響，並隨時間展開。它是規則開始運作後才看得到的行為，所以你說「玩家按下去才開始動」這一點其實是對 Dynamics 的描述，而不是 Mechanics。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用例子區分兩者",
+            "kind": "example",
+            "text": "（此例子不是論文內容）假設遊戲中角色跳躍高度是一個數值。這個數值和跳躍的程式邏輯屬於 Mechanics；當玩家連續跳躍、躲避障礙而形成的節奏與緊張感，則屬於 Dynamics。兩者的差別在於：一個是寫好的規則，一個是規則運作後的行為。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "MDA 三元素：Mechanics 與 Dynamics 的定義",
+        "follow_up_suggestions": [
+          "Aesthetics 在論文中是如何與 Dynamics 連結的？",
+          "論文說三者是「透鏡」，這是什麼意思？",
+          "能否用一個你熟悉的遊戲來練習區分三個元素？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-e7e14776c5",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:26+00:00",
+        "short_answer": "不太對，你把 Mechanics 和 Dynamics 的意思對調了。Mechanics 是設計者寫下的規則、數值與程式邏輯等組成元件；Dynamics 是這些規則在玩家互動、隨時間運作時產生的行為。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "Mechanics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，位於資料表示與演算法的層次，也就是你說的「設計者寫下的規則、數值設定、程式邏輯」。它是設計者直接建立的東西。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "Dynamics 的正確意思",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行期（run-time）的行為，會受玩家輸入以及彼此的輸出影響，並隨時間展開。它是規則開始運作後才看得到的行為，所以你說「玩家按下去才開始動」這一點其實是對 Dynamics 的描述，而不是 Mechanics。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "用例子區分兩者",
+            "kind": "example",
+            "text": "（此例子不是論文內容）假設遊戲中角色跳躍高度是一個數值。這個數值和跳躍的程式邏輯屬於 Mechanics；當玩家連續跳躍、躲避障礙而形成的節奏與緊張感，則屬於 Dynamics。兩者的差別在於：一個是寫好的規則，一個是規則運作後的行為。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Aesthetics 在論文中是如何與 Dynamics 連結的？",
+          "論文說三者是「透鏡」，這是什麼意思？",
+          "能否用一個你熟悉的遊戲來練習區分三個元素？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework definition of Mechanics as game rules and components and Dynamics as run-time behavior",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "ok": true,
+          "text": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "MDA 三元素：Mechanics 與 Dynamics 的定義",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2335,
+        "retrieve": 781,
+        "generate_answer": 9827
+      },
+      "latency_ms": 12954,
+      "error": null
+    },
+    {
+      "event": "session_updated",
+      "event_id": "87f84c47f2f0",
+      "timestamp": "2026-11-09T09:21:38+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "changes": {
+        "language": "English"
+      }
+    },
+    {
+      "event": "turn",
+      "event_id": "2478c5685186",
+      "timestamp": "2026-11-09T09:21:41+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "還是不太懂耶，Mechanics 跟 Dynamics 的差別我還是有點分不清楚。可以換個方式解釋嗎？",
+      "retrieval_query": "MDA framework Mechanics Dynamics definition difference rules components run-time behavior player interaction",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6344,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6331,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6309,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6218,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5939,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c01",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.5872,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Agents in this space, in addition to coordinating movement and attacks must operate over a wide range of sensory data. Reasoning about the pl ayer’s position and intent should indicate challenge, but promote their overall success. Will enemies be able to pass over obstacles and navigate challenging terrain, or will you “cheat”? Will sound propagation be “realistic” or will simple metrics based on distance suffice? Wrapping Up Here we see that simple changes in the aesthetic requirements of a game will introduce mechanical changes for its AI on many levels – sometimes requiring the development of entirely new systems for navigation, reasoning, and strategic problem solving.\n\nConversely, we see that there are no “AI mechanics” as such – intelligence or coherence comes from the interaction of AI logic with gameplay logic. Using the MDA framework, we can reason explicitly about aesthetic goals, draw out dynamics that support those goals, and then scope the range of our mechanics accordingly. Conclusions"
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "可以用「設計圖」和「實際比賽過程」來區分。Mechanics 是遊戲的零件與規則本身，Dynamics 是這些規則在玩家實際操作、隨時間互相作用後，遊戲「跑起來」的行為。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "用下棋來比喻",
+            "kind": "example",
+            "text": "（這是為了理解而舉的例子，不是論文內容）把遊戲想成下棋。Mechanics 就像棋子的種類與走法規則，例如「車可以直走」「馬走日字」。Dynamics 則是雙方真的下起來之後出現的局面，例如某方為了牽制對手而犧牲一顆兵、形成攻防壓力。規則寫在棋盤外，局勢則是在對弈中產生的。",
+            "chunk_ids": []
+          },
+          {
+            "title": "論文怎麼定義 Mechanics",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層次是資料表示與演算法。簡單說，它們是設計者可以直接寫下、調整的東西。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "論文怎麼定義 Dynamics",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行時的行為：機制如何回應玩家的輸入，以及彼此的輸出，並隨時間變化。重點在「時間」與「互動」，所以它只有在遊戲進行時才會出現。",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "一個判斷的小方法",
+            "kind": "explanation",
+            "text": "可以問自己：這個東西在沒有玩家操作、只是寫在文件或程式碼裡時就已經存在嗎？如果是，它大概屬於 Mechanics；如果它要等玩家互動、並隨時間展開才會出現，它大概屬於 Dynamics。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "MDA 三元素：Mechanics 與 Dynamics 的差別（以棋局比喻說明）",
+        "follow_up_suggestions": [
+          "Aesthetics 和 Dynamics 的差別是什麼？",
+          "論文說三個層次是「相互連結」的，這在實際設計中是什麼意思？",
+          "可以用你熟悉的一款遊戲，幫我分辨哪些是 Mechanics、哪些是 Dynamics 嗎？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-4f404413bb",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:41+00:00",
+        "short_answer": "可以用「設計圖」和「實際比賽過程」來區分。Mechanics 是遊戲的零件與規則本身，Dynamics 是這些規則在玩家實際操作、隨時間互相作用後，遊戲「跑起來」的行為。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "用下棋來比喻",
+            "kind": "example",
+            "text": "（這是為了理解而舉的例子，不是論文內容）把遊戲想成下棋。Mechanics 就像棋子的種類與走法規則，例如「車可以直走」「馬走日字」。Dynamics 則是雙方真的下起來之後出現的局面，例如某方為了牽制對手而犧牲一顆兵、形成攻防壓力。規則寫在棋盤外，局勢則是在對弈中產生的。",
+            "refs": []
+          },
+          {
+            "title": "論文怎麼定義 Mechanics",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層次是資料表示與演算法。簡單說，它們是設計者可以直接寫下、調整的東西。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "論文怎麼定義 Dynamics",
+            "kind": "paper",
+            "text": "論文說 Dynamics 描述機制在執行時的行為：機制如何回應玩家的輸入，以及彼此的輸出，並隨時間變化。重點在「時間」與「互動」，所以它只有在遊戲進行時才會出現。",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "一個判斷的小方法",
+            "kind": "explanation",
+            "text": "可以問自己：這個東西在沒有玩家操作、只是寫在文件或程式碼裡時就已經存在嗎？如果是，它大概屬於 Mechanics；如果它要等玩家互動、並隨時間展開才會出現，它大概屬於 Dynamics。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Aesthetics 和 Dynamics 的差別是什麼？",
+          "論文說三個層次是「相互連結」的，這在實際設計中是什麼意思？",
+          "可以用你熟悉的一款遊戲，幫我分辨哪些是 Mechanics、哪些是 Dynamics 嗎？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Mechanics Dynamics definition difference rules components run-time behavior player interaction",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "ok": true,
+          "text": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "MDA 三元素：Mechanics 與 Dynamics 的差別（以棋局比喻說明）",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1813,
+        "retrieve": 632,
+        "generate_answer": 9237
+      },
+      "latency_ms": 11692,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "858b55818500",
+      "timestamp": "2026-11-09T09:21:58+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，那我想用我玩的遊戲來試試看。我常玩《Minecraft》，如果我在裡面蓋了一個自動農場，每次作物長好就自動收成，這個應該是 Mechanics 還是 Dynamics 呢？還是兩個都有一點？",
+      "retrieval_query": "MDA framework Mechanics versus Dynamics definition: game rules and components compared with emergent runtime behavior during player interaction over time",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7006,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6663,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6568,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.643,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6256,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        },
+        {
+          "chunk_id": "f024c53f-p003-c01",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6204,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It’s easy to see that supporting adversarial play and clear feedback about who is winning are essential to competitive games. If the player doesn’t see a clear winning condition, or feels like they can’t possibly win, the game is suddenly a lot less interesting. Dynamic Models Dynamics work to create aesthetic experiences. For example, challenge is created by things like time pressure and opponent play. Fellowship can be encouraged by sharing information across certain members of a session (a team) or supplying winning c onditions that are more difficult to achieve alone (such as capturing an enemy base).\n\nExpression comes from dynamics that encourage individual users to leave their mark: systems for purchasing, building or earning game items, for designing, constructing and changing le vels or worlds, and for creating personalized, unique characters . Dramatic tension comes from dynamics that en courage a rising tension, a release, and a denouement.\n\nAs with aesthetics, we want our discussion of dynamics to remain as concrete as possible. By developing models that predict and describe gameplay dynamics, we can avoid some common design pitfalls."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "兩個都有，但層次不同。農場用的方塊、農田、水流與作物生長規則等零件屬於 Mechanics；這些零件設好後，作物隨時間自動生長與收成的運作行為則屬於 Dynamics。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p002-c00",
+          "f024c53f-p002-c01"
+        ],
+        "sections": [
+          {
+            "title": "論文對兩者的定義",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層級在資料表示與演算法；Dynamics 則是機制在執行時，隨時間作用於玩家輸入與彼此輸出的行為。判斷時可以問：這是「東西本身」，還是「東西跑起來之後的表現」？",
+            "chunk_ids": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "把自動農場拆成兩層",
+            "kind": "inference",
+            "text": "Mechanics 層可以看成農田、水、作物的生長規則，以及你用來連接自動收成的機關與線路等零件。Dynamics 層則是你放好之後，作物不斷生長、系統不需你介入就自動收成的整體運作。這是我依照論文定義做的推論，論文本身並未討論 Minecraft。",
+            "chunk_ids": []
+          },
+          {
+            "title": "為什麼說兩者有因果關係",
+            "kind": "explanation",
+            "text": "論文認為 Mechanics 會產生動態系統行為，而這些行為再帶來美學體驗，且一層的小改變可能影響其他層。換句話說，如果你改動農場的某個零件，自動收成的運作行為也會跟著改變。",
+            "chunk_ids": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "這個例子的限制",
+            "kind": "limitation",
+            "text": "論文提供的是抽象框架，沒有提到 Minecraft、建造行為，或玩家自己搭建的機關應如何歸類。上面的拆分是把框架套用到你的例子上，並非論文的明確說法。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c01",
+            "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "Mechanics 與 Dynamics 的區分（Minecraft 自動農場例子）",
+        "follow_up_suggestions": [
+          "玩家親手蓋農場的過程，在 MDA 裡算哪一層？",
+          "自動農場讓玩家產生的感受，對應論文中的哪一種美學？",
+          "如果我只改動農場中的一個零件，動態行為會怎麼改變？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-c93083cd94",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:21:58+00:00",
+        "short_answer": "兩個都有，但層次不同。農場用的方塊、農田、水流與作物生長規則等零件屬於 Mechanics；這些零件設好後，作物隨時間自動生長與收成的運作行為則屬於 Dynamics。",
+        "short_answer_refs": [
+          "f024c53f-p002-c00",
+          "f024c53f-p002-c01"
+        ],
+        "sections": [
+          {
+            "title": "論文對兩者的定義",
+            "kind": "paper",
+            "text": "論文說 Mechanics 是遊戲的特定組成部分，層級在資料表示與演算法；Dynamics 則是機制在執行時，隨時間作用於玩家輸入與彼此輸出的行為。判斷時可以問：這是「東西本身」，還是「東西跑起來之後的表現」？",
+            "refs": [
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "把自動農場拆成兩層",
+            "kind": "inference",
+            "text": "Mechanics 層可以看成農田、水、作物的生長規則，以及你用來連接自動收成的機關與線路等零件。Dynamics 層則是你放好之後，作物不斷生長、系統不需你介入就自動收成的整體運作。這是我依照論文定義做的推論，論文本身並未討論 Minecraft。",
+            "refs": []
+          },
+          {
+            "title": "為什麼說兩者有因果關係",
+            "kind": "explanation",
+            "text": "論文認為 Mechanics 會產生動態系統行為，而這些行為再帶來美學體驗，且一層的小改變可能影響其他層。換句話說，如果你改動農場的某個零件，自動收成的運作行為也會跟著改變。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "這個例子的限制",
+            "kind": "limitation",
+            "text": "論文提供的是抽象框架，沒有提到 Minecraft、建造行為，或玩家自己搭建的機關應如何歸類。上面的拆分是把框架套用到你的例子上，並非論文的明確說法。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+              "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "玩家親手蓋農場的過程，在 MDA 裡算哪一層？",
+          "自動農場讓玩家產生的感受，對應論文中的哪一種美學？",
+          "如果我只改動農場中的一個零件，動態行為會怎麼改變？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Mechanics versus Dynamics definition: game rules and components compared with emergent runtime behavior during player interaction over time",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "ok": true,
+          "text": "Mechanics describes the particular components of the game, at the level of data representation and algorithms.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "ok": true,
+          "text": "Dynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "ok": true,
+          "text": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Mechanics 與 Dynamics 的區分（Minecraft 自動農場例子）",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2134,
+        "retrieve": 572,
+        "generate_answer": 11752
+      },
+      "latency_ms": 14468,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "b870f1fd4b8c",
+      "timestamp": "2026-11-09T09:22:18+00:00",
+      "session_id": "s-2fa85dda169c",
+      "paper_id": "f024c53fde7d44d3",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "我想再問一下，你剛才說的第三個那個，為什麼作者要把它放在最後呢？是因為它是最後才會產生的結果嗎？",
+      "retrieval_query": "MDA framework Aesthetics last order why emotional response results from Mechanics and Dynamics designer consumer perspective",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6428,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c02",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6023,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004 [LeBlanc, 2004a]. MDA is a formal approach to understanding games – one which attempts to bridge the gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of developers, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts. Towards a Comprehensive Framework Game design and authorship happen at many levels, and the fields of games research and development involve people from diverse creative and scholarly backgrounds. While it’s often necessary to focus on one area, everyone, regardless of discipline, will at some point need to consider issues outside that area: base mechanisms of game systems, the overarching design goals, or the desired experiential results of gameplay."
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.5845,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player."
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5589,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts."
+        },
+        {
+          "chunk_id": "f024c53f-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.5483,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA supports a formal, iterative approach to design and tuning. It allows us to reas on explicitly about particular design goals, and to anticipate how changes will impact each aspect of the framework and the resulting designs/implementations.\n\nBy moving between MDA’s three levels of abstraction, we can conceptualize the dynamic behavior of game systems. Understanding games as dynamic systems helps us develop techniques for iterative design and improvement – allowing us to control for undesired outcomes, and tune for desired behavior.\n\nIn addition, by understanding how formal decisions about gameplay impact the end user experience, we are able to better decompose that experience, and use it to fuel new designs, research and criticism respectively. References Barwood, H. & Falstein, N. 2002. “More of the 400: Discovering Design Rules”. Lecture at Game Developers Conference, 2002. Available online at: http://www.gdconf.com/archives/2002/hal_barwood.ppt\n\nChurch, D. 1999. “Formal Abstract Design Tools.” Game Developer, August 1999. San Francisco, CA: CMP Media. Available online at: http://www.gamasutra.com/features/19990716/design_tool s_01.htm"
+        },
+        {
+          "chunk_id": "f024c53f-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5422,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "MDA: A Formal Approach to Game Design and Game Research Robin Hunicke, Marc LeBlanc, Robert Zubek\n\nhunicke@cs.northwestern.edu, marc_leblanc@alum.mit.edu, rob@cs.northwestern.edu\n\nAbstract In this paper we present the MDA framework (standing for Mechanics, Dynamics, and Aesthetics), developed and taught as part of the Game Design and Tuning Workshop at the Game Developers Conference, San Jose 2001-2004.\n\nMDA is a formal approach to understanding games – one which attempts to bridge th e gap between game design and development, game criticism, and technical game research. We believe this methodology will clarify and strengthen the iterative processes of develope rs, scholars and researchers alike, making it easier for all parties to decompose, study and design a broad class of game designs and game artifacts.\n\nIntroduction All artifacts are created within some design methodology. Whether building a physical prototype, architecting a software interface, constructing an argument or implementing a series of controlled experiments – design methodologies guide the creative thought process and help ensure quality work."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "你的理解大致符合論文從設計者角度的描述：機制產生動態，動態再帶出美學體驗，所以美學位於這條鏈的末端。但檢索到的段落沒有明確寫出「放最後」的理由，而且論文也從玩家角度說美學會先定下基調，因此不宜只把它理解成最後才出現的結果。",
+        "short_answer_chunk_ids": [
+          "f024c53f-p002-c01",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "設計者視角的順序",
+            "kind": "paper",
+            "text": "論文從設計者視角描述：機制產生動態系統行為，動態再帶出特定的美學體驗。論文也將美學定義為玩家與遊戲系統互動時，所期望引發的情緒反應。",
+            "chunk_ids": [
+              "f024c53f-p002-c01",
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "玩家視角的反向說法",
+            "kind": "paper",
+            "text": "從玩家視角看，美學先定下基調，之後體現在可觀察的動態，最後落到可操作的機制。這表示三者不只是單向流程，而是可以從不同方向閱讀的層次。",
+            "chunk_ids": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "為什麼美學可以被看成終點",
+            "kind": "explanation",
+            "text": "一種較簡單的理解是：設計者先決定規則，規則運作後產生行為，而玩家最後實際感受到的是體驗本身，所以美學常被當作設計的目標或結果。論文也提到，看似不起眼的底層決定，會一路往上影響最終的遊戲體驗。",
+            "chunk_ids": [
+              "f024c53f-p001-c03"
+            ]
+          },
+          {
+            "title": "論文沒有明說的部分",
+            "kind": "limitation",
+            "text": "在檢索到的段落中，作者沒有明確解釋為何把美學排在最後，這個排序較像是設計者視角下的因果鏈。論文也說三者是各自分開但彼此因果相連的視角，因此較適合把它理解成層次關係，而不是嚴格的時間先後。",
+            "chunk_ids": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f024c53f-p002-c01",
+            "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c01",
+            "quote": "From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics."
+          },
+          {
+            "chunk_id": "f024c53f-p002-c00",
+            "quote": "Aesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system."
+          },
+          {
+            "chunk_id": "f024c53f-p001-c03",
+            "quote": "Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "MDA 中 Aesthetics 的排序與位置",
+        "follow_up_suggestions": [
+          "論文說的 lens（視角）是什麼意思？",
+          "如果用 Minecraft 的自動農場來看，美學體驗具體會出現在哪裡？",
+          "為什麼論文強調以體驗為導向（experience-driven）而不是功能導向的設計？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-bbb113e19b",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:18+00:00",
+        "short_answer": "你的理解大致符合論文從設計者角度的描述：機制產生動態，動態再帶出美學體驗，所以美學位於這條鏈的末端。但檢索到的段落沒有明確寫出「放最後」的理由，而且論文也從玩家角度說美學會先定下基調，因此不宜只把它理解成最後才出現的結果。",
+        "short_answer_refs": [
+          "f024c53f-p002-c01",
+          "f024c53f-p002-c00"
+        ],
+        "sections": [
+          {
+            "title": "設計者視角的順序",
+            "kind": "paper",
+            "text": "論文從設計者視角描述：機制產生動態系統行為，動態再帶出特定的美學體驗。論文也將美學定義為玩家與遊戲系統互動時，所期望引發的情緒反應。",
+            "refs": [
+              "f024c53f-p002-c01",
+              "f024c53f-p002-c00"
+            ]
+          },
+          {
+            "title": "玩家視角的反向說法",
+            "kind": "paper",
+            "text": "從玩家視角看，美學先定下基調，之後體現在可觀察的動態，最後落到可操作的機制。這表示三者不只是單向流程，而是可以從不同方向閱讀的層次。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          },
+          {
+            "title": "為什麼美學可以被看成終點",
+            "kind": "explanation",
+            "text": "一種較簡單的理解是：設計者先決定規則，規則運作後產生行為，而玩家最後實際感受到的是體驗本身，所以美學常被當作設計的目標或結果。論文也提到，看似不起眼的底層決定，會一路往上影響最終的遊戲體驗。",
+            "refs": [
+              "f024c53f-p001-c03"
+            ]
+          },
+          {
+            "title": "論文沒有明說的部分",
+            "kind": "limitation",
+            "text": "在檢索到的段落中，作者沒有明確解釋為何把美學排在最後，這個排序較像是設計者視角下的因果鏈。論文也說三者是各自分開但彼此因果相連的視角，因此較適合把它理解成層次關係，而不是嚴格的時間先後。",
+            "refs": [
+              "f024c53f-p002-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f024c53f-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Thinking about games as designed artifacts helps frame them as systems that build behavior via interaction. It supports clearer design choices and analysis at all levels of study and development. MDA in Detail MDA as Lens Each component of the MDA framework can be thought of as a “lens” or a “view” of the game – separate, but causally linked. [LeBlanc, 2004b].\n\nFrom the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences. From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.\n\nWhen working with games, it is helpful to consider both the designer and player perspectives. It helps us observe how even small changes in one layer can cascade into others. In addition, thinking about the player encourages experience-driven (as opposed to feature-driven) design.",
+            "verified": true,
+            "quotes": [
+              "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+              "From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p002-c00",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The difference between games and other entertainment products (such as books, music, movies and plays) is that their consumption is relatively unpredictable. The string of events that occur during gameplay and the outcome of those events are unknown at the time the product is finished.\n\nThe MDA framework formalizes the consumption of games by breaking them into their distinct components:\n\n...and establishing their design counterparts:\n\nMechanics describes the particular components of the game, at the level of data representation and algorithms.\n\nDynamics describes the run-time behavior of the mechanics acting on player inputs and each others’ outputs over time.\n\nAesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.\n\nFundamental to this framework is the idea that games are more like artifacts than media. By this we mean that the content of a game is its behavior – not the media that streams out of it towards the player.",
+            "verified": true,
+            "quotes": [
+              "Aesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system."
+            ]
+          },
+          {
+            "ref_id": "f024c53f-p001-c03",
+            "kind": "paper",
+            "page": 1,
+            "page_label": "1",
+            "text": "AI coders and researchers are no exception. Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay. Similarly, all desired user experience must bottom out, somewhere, in code. As games continue to generate increasingly complex agent, object and system behavior, AI and game design merge.\n\nSystematic coherence comes when conflicting constraints are satisfied, and each of the game’s parts can relate to each other as a whole. D ecomposing, understanding and creating this coherence requires travel between all levels of abstraction – fluent motion from systems and code, to content and play experience, and back.\n\nWe propose the MDA framework as a tool to help designers, researchers and scholars perform this translation. MDA Games are created by designers/teams of developers, and consumed by players. They are purchased, used and eventually cast away like most other consumable goods.\n\nGame Creates Consumes Designer Player The production and consumption of game artifacts.",
+            "verified": true,
+            "quotes": [
+              "Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "論文說的 lens（視角）是什麼意思？",
+          "如果用 Minecraft 的自動農場來看，美學體驗具體會出現在哪裡？",
+          "為什麼論文強調以體驗為導向（experience-driven）而不是功能導向的設計？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "MDA framework Aesthetics last order why emotional response results from Mechanics and Dynamics designer consumer perspective",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "quote": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "ok": true,
+          "text": "From the designer’s perspective, the mechanics give rise to dynamic system behavior, which in turn leads to particular aesthetic experiences.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c01",
+          "quote": "From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.",
+          "ok": true,
+          "text": "From the player’s perspective, aesthetics set the tone, which is born out in observable dynamics and eventually, operable mechanics.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p002-c00",
+          "quote": "Aesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.",
+          "ok": true,
+          "text": "Aesthetics describes the desirable emotional responses evoked in the player, when she interacts with the game system.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f024c53f-p001-c03",
+          "quote": "Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay.",
+          "ok": true,
+          "text": "Seemingly inconsequential decisions about data, representation, algorithms, tools, vocabulary and methodology will trickle upward, shaping the final gameplay.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "MDA 中 Aesthetics 的排序與位置",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2432,
+        "retrieve": 634,
+        "generate_answer": 15052
+      },
+      "latency_ms": 18128,
+      "error": null
+    }
+  ],
+  "scenario": {
+    "name": "mei-01",
+    "situation": "Overview, MDA terms, wrong restatement, still confused",
+    "persona": "mei",
+    "paper_pdf": "../../test_papers/mda.pdf",
+    "reading_goal": "Get a general overview of this paper",
+    "research_context": "",
+    "language": "中文（繁體）",
+    "pipeline_version": "v1",
+    "moves": [
+      "Ask in a broad way what this paper is about.",
+      "Ask what mechanics, dynamics and aesthetics each mean.",
+      "Restate it in your own words but mix up mechanics and dynamics (e.g. say dynamics are the rules written by the designer).",
+      "Say you still do not quite understand and ask for another way to explain it.",
+      "Bring an example from a game you play and ask which of the three parts it belongs to.",
+      "Refer to 'the third one' with a short reference and ask why the authors put it last."
+    ]
+  },
+  "persona_text": "# Persona: Mei\n\n**Who.** Mei is a third-year undergraduate from Taiwan taking a game design course, and a non-native\nEnglish speaker. A topic from the lecture caught her interest, so she is reading the teacher's extra\nreadings on her own.\n\n**What she wants.** To understand the main ideas well enough to explain them and connect them to the\nlecture. She has no research project. Reading goal: *Get a general overview of this paper*.\n\n**How she behaves.**\n- Writes in Traditional Chinese (繁體字). Interface language: 中文（繁體）.\n- Has limited background. Starts with broad questions (\"這篇在講什麼？\"), then asks for basic definitions.\n- Often restates an idea in her own words to check her understanding, and is sometimes wrong (e.g. mixes up\n  mechanics and dynamics, or treats a game mechanic as the same thing as a rule or a goal).\n- Says plainly when she still does not understand (\"還是不太懂\", \"可以換個方式解釋嗎？\").\n- Tends to accept answers and rarely opens the sources unless prompted.\n- Brings in examples from games she plays or from the lecture and asks whether they fit the paper.\n\n**Papers.** MDA: A Formal Approach to Game Design and Game Research; Game Studies – Defining Game Mechanics.\n",
+  "simulator": {
+    "model": "anthropic/claude-haiku-5.5",
+    "prompt": "You are role-playing a learner who is reading an academic paper with PaperLens, a conversational reading\ntool. Stay in character as the persona below for the whole conversation.\n\n<persona>\n{persona}\n</persona>\n\nSituation\n- Paper: {paper_title}\n- Reading goal chosen in PaperLens: {reading_goal}\n- Research context the learner typed into PaperLens: {research_context}\n\nYour task each turn\n- Write ONLY the learner's next chat message, as the persona would type it into a chat box.\n- Carry out the move given for this turn, adapted naturally to what PaperLens has just said. The move says\n  WHAT the learner does; you decide the exact wording in the persona's voice.\n- If the move asks you to state a misunderstanding, state it confidently as your own understanding; do not\n  hint that it is wrong.\n- If the move asks you to refer back to something, use a short reference (\"that\", \"the second one\",\n  \"你刚才说的那个\") instead of repeating the full term, exactly as a real learner would.\n- Use the persona's language and writing style. Keep the message short (usually 1-3 sentences).\n- Base what you say about the paper only on what PaperLens has told you so far; you have not read the paper\n  yourself beyond that.\n- Never mention that you are simulated, never describe the move, and never evaluate PaperLens.\n",
+    "log": [
+      {
+        "move": 1,
+        "type": "chat",
+        "instruction": "Ask in a broad way what this paper is about.",
+        "learner_message": "你好，我想先問一下，這篇論文到底在講什麼？我是修遊戲設計課的學生，老師推薦我看的，但我英文不是很好，所以想先大概了解一下。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 2,
+        "type": "chat",
+        "instruction": "Ask what mechanics, dynamics and aesthetics each mean.",
+        "learner_message": "好，那我想再確認一下三個詞的意思。Mechanics、Dynamics、Aesthetics 各自是什麼？可以用簡單一點的方式說明嗎？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 3,
+        "type": "chat",
+        "instruction": "Restate it in your own words but mix up mechanics and dynamics (e.g. say dynamics are the rules written by the designer).",
+        "learner_message": "所以我再用自己的話整理一下：Dynamics 其實就是設計者寫下的規則，像是數值設定、程式邏輯那些，玩家真正按下去的時候才會開始動。Mechanics 則是遊戲進行時產生的行為，玩家跟系統互動後看到的東西。這樣理解對嗎？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 4,
+        "type": "chat",
+        "instruction": "Say you still do not quite understand and ask for another way to explain it.",
+        "learner_message": "還是不太懂耶，Mechanics 跟 Dynamics 的差別我還是有點分不清楚。可以換個方式解釋嗎？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 5,
+        "type": "chat",
+        "instruction": "Bring an example from a game you play and ask which of the three parts it belongs to.",
+        "learner_message": "好，那我想用我玩的遊戲來試試看。我常玩《Minecraft》，如果我在裡面蓋了一個自動農場，每次作物長好就自動收成，這個應該是 Mechanics 還是 Dynamics 呢？還是兩個都有一點？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 6,
+        "type": "chat",
+        "instruction": "Refer to 'the third one' with a short reference and ask why the authors put it last.",
+        "learner_message": "我想再問一下，你剛才說的第三個那個，為什麼作者要把它放在最後呢？是因為它是最後才會產生的結果嗎？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      }
+    ]
+  },
+  "run": 1,
+  "stopped_early": false,
+  "error": null
+}

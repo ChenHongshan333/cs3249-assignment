@@ -1,0 +1,2243 @@
+{
+  "exported_at": "2026-11-09T09:23:40+00:00",
+  "paper": {
+    "paper_id": "f17ba50063dfeb3d",
+    "filename": "Game Studies - Defining Game Mechanics.pdf",
+    "title": "Game Studies - Defining Game Mechanics",
+    "status": "ready",
+    "error": null,
+    "failed_stage": null,
+    "created_at": "2026-11-08T14:05:46+00:00",
+    "updated_at": "2026-11-08T14:05:58+00:00",
+    "page_count": 7,
+    "page_labels_differ": false,
+    "chunk_count": 52,
+    "overview_count": 7
+  },
+  "session": {
+    "session_id": "s-7cf95ab149fe",
+    "paper_id": "f17ba50063dfeb3d",
+    "paper_title": "Game Studies - Defining Game Mechanics",
+    "created_at": "2026-11-09T09:22:14+00:00",
+    "reading_goal": "Get a general overview of this paper",
+    "research_context": "",
+    "language": "中文（繁體）",
+    "current_concept": "機制、規則與目標的關係",
+    "messages": [
+      {
+        "id": "u-20c5d983bc",
+        "role": "user",
+        "mode": "chat",
+        "text": "想請問一下，這篇文章裡的 core mechanics 和 primary mechanics 有什麼不同？我看到兩個詞好像都在講同一件事，所以有點搞混。",
+        "created_at": "2026-11-09T09:22:28+00:00"
+      },
+      {
+        "id": "a-c2b066b514",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:28+00:00",
+        "short_answer": "兩者不是同一件事，而是層級不同。core mechanics（核心機制）是較大的類別：玩家反覆用來達到遊戲系統所獎勵之終點狀態的機制。primary mechanics（主要機制）是核心機制中的一種，指能直接用來解決達成終點狀態之挑戰、且早期就容易取得、全程一致的機制。secondary mechanics（次要機制）同樣屬於核心機制，但主要是輔助玩家前往終點，且只偶爾可用或需要與主要機制搭配。",
+        "short_answer_refs": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "三者的層級關係",
+            "kind": "paper",
+            "text": "作者先定義核心機制為玩家反覆用來達到系統獎勵之終點狀態的遊戲機制，並指出在討論複雜遊戲時，會使用「primary (core) mechanics」與「secondary (core) mechanics」來處理複雜度問題。這表示作者把主要與次要機制放在核心機制之下討論。",
+            "refs": [
+              "f17ba500-p005-c01",
+              "f17ba500-p005-c02"
+            ]
+          },
+          {
+            "title": "GTA IV 與 Gears of War 的 cover 例子",
+            "kind": "paper",
+            "text": "作者以 cover 機制說明差異：在 Grand Theft Auto IV 中，cover 不能單獨用來解決主要挑戰，因此是次要機制；在 Gears of War 中，不使用 cover 幾乎會讓角色立即死亡，因此是主要機制。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "閱讀時可注意的地方",
+            "kind": "explanation",
+            "text": "可以把它理解成：core 是「大類」，primary 與 secondary 是 core 底下依其在遊戲中的角色所做的區分。文中也提到，作者的 primary 定義是在 Järvinen 較形式化的定義上調整而來，因此讀到不同作者的用法時，要先確認其定義依據。",
+            "refs": [
+              "f17ba500-p005-c03"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c01",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state.",
+            "verified": true,
+            "quotes": [
+              "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c03",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm.",
+            "verified": true,
+            "quotes": [
+              "Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state.",
+              "In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c02",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "In the case of simulations like Sim City, core mechanics are those that focus on reaching an equilibrium state; in games like EverQuest, core mechanics are those that allow players to reach a level cap, and further expand their agency by fine tuning their characters' abilities. At this stage, readers will most likely object that complex games like Grand Theft Auto IV have such a vast number of mechanics, and so many are used to make the game progress, that the very use of the core mechanics concept may be useless. It is a valid point - complexity requires a precise terminology. Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues. The concept of primary mechanics has been defined by Järvinen (2008, p. 268) as \"what the player does in relation to a game state during a standard turn or sequence\", differentiating then between submechanics, or actions available to the player \"as a consequence of the primary mechanic\" (ibid), and modifier mechanics, or actions the player does \"in a specific game state which occurs on some condition (...) specified in the rules\" (ibid).",
+            "verified": true,
+            "quotes": [
+              "Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Järvinen 對 primary mechanics 的原始定義是什麼？",
+          "作者為什麼認為 Orbital 只有 primary mechanics？",
+          "這篇文章如何區分 mechanics 與 rules？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "difference between core mechanics and primary mechanics in defining game mechanics",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-9d89ce71ff",
+        "role": "user",
+        "mode": "chat",
+        "text": "喔，我現在比較懂了，謝謝。所以我的理解是：core mechanics 就是遊戲裡最好玩的那些機制，玩家最常在玩的、最有趣的部分，然後 primary 和 secondary 再把它們依照好不好玩分成兩類。這樣理解對嗎？",
+        "created_at": "2026-11-09T09:22:44+00:00"
+      },
+      {
+        "id": "a-9c609b8f6a",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:44+00:00",
+        "short_answer": "這個理解不太正確。作者是用「功能」來定義 core mechanics：玩家反覆用來達成遊戲系統所獎勵之終點狀態的機制，文中沒有以「好不好玩」或「有趣程度」來區分。primary 與 secondary 都屬於 core mechanics 之下的次類，區分依據是能否直接用來解決挑戰、是否早期就容易取得且全程一致，而不是樂趣高低。",
+        "short_answer_refs": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "core mechanics 的定義依據",
+            "kind": "paper",
+            "text": "作者明確定義 core mechanics 是玩家反覆用來達成系統所獎勵之終點狀態的遊戲機制，並以《Shadow of the Colossus》的刺擊為例，因為玩家會重複執行它來完成遊戲。這個定義是從系統與目標的角度出發，文中並未提到樂趣或受歡迎程度。",
+            "refs": [
+              "f17ba500-p005-c01"
+            ]
+          },
+          {
+            "title": "primary 與 secondary 的區分方式",
+            "kind": "paper",
+            "text": "作者指出 primary mechanics 是能直接用來解決達成終點狀態之挑戰的核心機制，且早期就說明、容易取得、全程一致；secondary mechanics 則是幫助玩家前往終點的核心機制，只偶爾可用或需要搭配 primary mechanic 才能發揮作用。兩者的分別在於功能與可取得性，而非樂趣。",
+            "refs": [
+              "f17ba500-p005-c03",
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "這些分類不是固定的",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成僵硬的分類，次要機制在遊戲進程中可能變成主要機制，有些主要機制也可能在遊戲後段消失。作者把它們定位為分析工具，用來依據機制對遊戲進行的影響做初步分類。",
+            "refs": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c01",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state.",
+            "verified": true,
+            "quotes": [
+              "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c03",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm.",
+            "verified": true,
+            "quotes": [
+              "Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c06",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode.",
+            "verified": true,
+            "quotes": [
+              "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "能否用文中的 GTA IV 例子說明 primary 與 secondary 的差別？",
+          "作者為什麼說 Orbital 中只有 primary mechanics？",
+          "core mechanics 在沒有明確終點狀態的遊戲（如 Sim City）中如何理解？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "definition of core mechanics, primary mechanics and secondary mechanics hierarchy in game mechanics",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-0fe45456e2",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，那我知道 core 不是看好不好玩了。那另外一個（secondary 那個）呢？可以舉一個遊戲的例子嗎？我平常玩的遊戲應該也有類似的東西，想看看是不是符合。",
+        "created_at": "2026-11-09T09:22:58+00:00"
+      },
+      {
+        "id": "a-c4e03d9cd0",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:58+00:00",
+        "short_answer": "Secondary mechanics 也屬於 core mechanics，但它的角色是輔助玩家更容易走向遊戲的終點狀態，而不是直接用來解決主要挑戰。作者說它們只偶爾可用，或需要和 primary mechanic 搭配才會有作用。文中用 GTA IV 的掩護（cover）機制當例子。",
+        "short_answer_refs": [
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "作者對 secondary mechanics 的定義",
+            "kind": "paper",
+            "text": "作者說 secondary mechanics 是能讓玩家更容易朝終點狀態前進的 core mechanics。它們要嘛只偶爾可用，要嘛必須和 primary mechanic 組合才會有功能。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "GTA IV 掩護機制為什麼是次要的",
+            "kind": "paper",
+            "text": "文中說 GTA IV 的掩護機制不能單獨用來解決遊戲的主要挑戰，但熟練後能幫助玩家達成遊戲的終點狀態。相較之下，《戰爭機器》（Gears of War）的掩護機制被視為 primary，因為不用它，角色幾乎會立刻死亡。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "用自己常玩的遊戲來比對",
+            "kind": "example",
+            "text": "以下只是示意，不是論文內容：有些遊戲中，玩家可以在特定情境才使用的輔助動作（例如某種翻滾、攀爬或道具技能），它們不一定能單獨過關，但能幫助推進關卡。你可以問自己：這個動作是否只在特定時機才有用，或必須搭配主要的攻擊或移動才有效？如果是，它可能較接近 secondary 的特徵。",
+            "refs": []
+          },
+          {
+            "title": "判斷時要注意的界線",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成固定類別：secondary mechanics 有時會在遊戲進程中變成 primary，而某些 primary 也可能在遊戲後期消失。因此用它來分類時，最好看該機制在你所選遊戲的某個階段中的作用，而不是一次性貼標籤。",
+            "refs": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+              "The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c06",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode.",
+            "verified": true,
+            "quotes": [
+              "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "如果我想判斷自己遊戲中某個動作是 primary 還是 secondary，可以用哪些條件來檢查？",
+          "論文中 GTA IV 的 cover 與 Gears of War 的 cover 有什麼差別，為什麼一個是 primary？",
+          "Secondary mechanics 會在遊戲進程中變成 primary，文中有沒有舉例說明？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "secondary mechanics definition example game core mechanics support player reaching goal state occasionally available combined with primary mechanics",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-49663e2fd2",
+        "role": "user",
+        "mode": "chat",
+        "text": "那我還想問一下，作者有沒有說他對 mechanics 的定義比 MDA 那篇的定義更好？我看到老師的閱讀清單裡也有 MDA，不知道兩篇是不是在講同一個東西。",
+        "created_at": "2026-11-09T09:23:17+00:00"
+      },
+      {
+        "id": "a-0a1d854976",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:23:17+00:00",
+        "short_answer": "有。作者認為自己的定義比 MDA 更精確，也比文中回顧的其他定義更具包容性，理由是 MDA 對 mechanic 的描述在表述上不夠一致，難以用來描述和分析單一機制。不過這是作者的評價，不是已被驗證的結論。兩篇都在討論 mechanics，但 MDA 是涵蓋機制、動態與美學的框架，本文則專注於定義機制本身。",
+        "short_answer_refs": [
+          "f17ba500-p002-c05",
+          "f17ba500-p003-c00"
+        ],
+        "sections": [
+          {
+            "title": "作者如何批評 MDA 的定義",
+            "kind": "paper",
+            "text": "作者引用 MDA 對 mechanics 的描述，但認為該定義需要更精確的表述，並指出它在行為與背景運算等方面的界線不清楚。作者因此認為 MDA 的定義因表述不一致，無法用來描述和分析一個 mechanic。",
+            "refs": [
+              "f17ba500-p002-c04",
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "作者認為更精確的替代方案：Järvinen",
+            "kind": "paper",
+            "text": "作者指出 Järvinen（2008）的做法更精確，因為它把 mechanics 與玩家能動性及遊戲體驗聯繫起來，並以動詞描述 mechanics，例如 Gears of War 的 take cover。作者認為這比 MDA 更接近可分析的定義。",
+            "refs": [
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "兩篇是否在講同一件事",
+            "kind": "inference",
+            "text": "兩者的主題都是 mechanics，也都涉及形式元素與玩家操作之間的關係。差別在於 MDA 是一個更大的設計分析框架，而本文試圖提出可用來描述與歸類機制的形式定義，並借用物件導向程式設計的概念。因此閱讀 MDA 時可以把它當作背景，再比較本文如何修正其定義。",
+            "refs": [
+              "f17ba500-p002-c04",
+              "f17ba500-p003-c00"
+            ]
+          },
+          {
+            "title": "閱讀時要注意的界線",
+            "kind": "limitation",
+            "text": "「比 MDA 更好」是作者自己的判斷，目前的段落只能說明作者如何批評 MDA，無法確認 MDA 原文的完整論點。若要評估，建議讀 MDA 原文，並檢查作者的批評是否與其原意相符。",
+            "refs": [
+              "f17ba500-p002-c05"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p002-c05",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p.",
+            "verified": true,
+            "quotes": [
+              "Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition.",
+              "A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p003-c00",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "to player agency and game rules. In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section. Defining Game Mechanics Let's start with a definition: game mechanics are methods invoked by agents, designed for interaction with the game state. The different components of this definition require further explanation: \"Methods invoked by agents\" defines this approach to game mechanics, as it formalizes the use of terminology taken from the object oriented programming paradigm (Weisfeld, 2000). In this appropriation of the terminology, object orientation provides a set of metaphors that describe the elements of systems and their interrelations. I do not want to imply that the analysis of the source code of a game will reveal that all game mechanics have been implemented as methods of classes or that object-oriented programming should be considered a default methodology for the actual production of computer games. Nor am I implying that the Object Oriented Framework should be extended to a formal analysis of all elements of the game.",
+            "verified": true,
+            "quotes": [
+              "In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c04",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA Framework (Hunicke, Zubek, LeBlanc, 2004) provides some more detail on the formal nature of game mechanics: \"mechanics describes the particular components of the game, at the level of data representations and algorithms (...) mechanics are the various actions, behaviours, and control mechanisms afforded to the player within a game context\". The latter part of the definition provides a set of elements that will allow us to identify a mechanic. However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action); and the operations that the game system does in the background to calculate the success of player actions (as the effect of gravitational fields in Orbital - external to player agency, yet related with the player's actions). The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players.",
+            "verified": true,
+            "quotes": [
+              "However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action);"
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "作者具體指出 MDA 定義中哪些表述不一致？",
+          "本文的 object-oriented 定義如何避免 MDA 的問題？",
+          "MDA 原文中 mechanics、dynamics 與 aesthetics 各自是什麼？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Defining Game Mechanics author's definition compared with MDA framework definition of mechanics, critique or claimed improvement",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-35c80aaee8",
+        "role": "user",
+        "mode": "chat",
+        "text": "那我還想問，文章裡 mechanics 跟 rules（規則）和 goals（目標）是什麼關係？我覺得機制應該就是規則，玩家要達成的目標也算是機制的一部分，所以這三個其實是同一件事吧？",
+        "created_at": "2026-11-09T09:23:40+00:00"
+      },
+      {
+        "id": "a-3e917b72aa",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:23:40+00:00",
+        "short_answer": "三者不是同一件事。作者主張 rules（規則）與 mechanics（機制）在本體上有區別：規則提供互動可發生的可能性空間並規範狀態轉換，機制則是玩家與遊戲狀態的實際互動。goals（目標）在文中是與 mechanics 並列的遊戲形式性質之一，文中並未說目標就是機制的一部分。",
+        "short_answer_refs": [
+          "f17ba500-p004-c00",
+          "f17ba500-p007-c03",
+          "f17ba500-p002-c07"
+        ],
+        "sections": [
+          {
+            "title": "作者如何區分規則與機制",
+            "kind": "paper",
+            "text": "作者認為 mechanics 與 rules 有本體上的差別：mechanics 關心與遊戲狀態的實際互動，rules 則規範互動得以發生的可能性空間，並管理狀態之間的轉換。作者進一步指出 rules 具有規範性，mechanics 則具有表演性。",
+            "refs": [
+              "f17ba500-p004-c00",
+              "f17ba500-p007-c03"
+            ]
+          },
+          {
+            "title": "Shadow of the Colossus 的攀爬例子",
+            "kind": "paper",
+            "text": "文中以 Shadow of the Colossus 為例：攀爬是一種 mechanic，而體力是由規則轉換而來的屬性。攀爬會consume體力，而規則規定體力低於某門檻時就無法再攀爬，因此規則會限制機制的效果與邊界。",
+            "refs": [
+              "f17ba500-p004-c01"
+            ]
+          },
+          {
+            "title": "目標在文中的位置與未明確之處",
+            "kind": "paper",
+            "text": "文中把 game goals 與 player actions、strategies、game states 並列為遊戲的形式性質，並未說目標屬於機制。Järvinen 則把機制描述為限制玩家計畫空間、以達成目標的手段；遊戲的勝利條件也是在 game loop 中依規則計算。目前檢索到的段落沒有完整說明 mechanics 與 goals 的所有關係，若要更精確需要再查看原文其他段落。",
+            "refs": [
+              "f17ba500-p002-c07",
+              "f17ba500-p002-c05",
+              "f17ba500-p004-c00"
+            ]
+          },
+          {
+            "title": "你的直覺從何而來",
+            "kind": "explanation",
+            "text": "你的想法有文獻依據：Lundgren 與 Björk 把 mechanics 定義為規則系統的一部分，因此認為不需要區分兩者。不過這是作者批評或與之對照的立場，作者認為區分 rules 與 mechanics 有助於分析電玩。",
+            "refs": [
+              "f17ba500-p002-c01",
+              "f17ba500-p007-c03"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Implicit in this definition is an ontological difference between rules and mechanics. Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states. In this sense, rules are modeled after agency, while mechanics are modeled for agency. In this object oriented framework, rules could be considered general or particular properties of the game system and its agents. All objects in games have properties. These properties are often either rules or determined by rules. These rules are evaluated by a game loop, an algorithm that relates the current state of the game and the properties of the objects with a number of conditions that consequently can modify the game state. For example, the winning condition, the losing condition and the effects of action in the player's avatar health are calculated when running the game loop. This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics.",
+            "verified": true,
+            "quotes": [
+              "Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p007-c03",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "Perhaps the most significant is the ontological distinction between rules and mechanics. Game researchers have argued convincingly that mechanics could be understood as subsets of rules. However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games. Game studies history shows that there is no dominant definition of key concepts like rules or mechanics, and that those that attempted have yet to succeed. This article should not be read as the ultimate definition of game mechanics. This definition is 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 13/16 flawed, yet less so than some previous ones. My goal will be achieved if I have succeeded in communicating to the reader one simple notion: that it is possible and useful to understand game mechanics as different from game rules, and in that understanding, we can more clearly describe how games can be designed to affect players in unprecedented ways.",
+            "verified": true,
+            "quotes": [
+              "However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c07",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states. However, these definitions do not provide a single, dominant approach that encompasses all these aspects. All the previous definitions have attempted to provide pragmatic approaches to allow for a flexible understanding of game mechanics in games and how they relate",
+            "verified": true,
+            "quotes": [
+              "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics. For example, in Shadow of the Colossus players have a game mechanic called \"climb\", but they are also determined by a property called \"stamina\", which is the algorithmic translation of a rule: \"players have x stamina units\". The climbing mechanic states that when invoked, stamina is lost at a certain ratio. A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore. The game loop checks the game state; if the player invokes the climb mechanic, those functions that determine the consequences and boundaries of the players' interaction are called, and the resulting changes in the game state are evaluated against the rules of the game. Then, the player will succeed or not in \"climbing\", depending on their \"stamina\". The second part of the definition claims that game mechanics are methods \"designed for interaction with the game state\". This implies that the task of game designers is to create mechanics that agents can use to interact with the game. These interactions modify the game state (Juul, 2005, 59-64).",
+            "verified": true,
+            "quotes": [
+              "A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c05",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p.",
+            "verified": true,
+            "quotes": [
+              "Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254)."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "11). Some formalist approaches makes a difference between the rules of the game and the actions afforded to players by those rules. This conceptual perspective can be tracked back to Avedon (1971) who suggests a formal structure of games in which there are \"specific operations, required courses of action, method of play,\" which he defines as the \"procedure for action\", as opposed to the \"rules governing action\", which are \"fixed principles that determine conduct and standards for behavior\" (p. 422). However, this formal distinction between rules and mechanics is not always applied in game mechanics research. Lundgren and Björk (2003) define game mechanics as \"any part of the rule system of a game that covers one, and only one, possible kind of interaction that takes place during the game, be it general or specific (...) mechanics are regarded as a way to summarize game rules\". In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics. Game mechanics would be low-level descriptions of game rules or clusters of game rules.",
+            "verified": true,
+            "quotes": [
+              "In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "作者如何看待 Järvinen 的 mechanics 定義與本文定義的差異？",
+          "game loop 在文中是如何把規則與機制連結起來的？",
+          "如果玩家目標與遊戲規則衝突，文中會怎麼描述？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "mechanics rules goals relationship definition game mechanics distinction from rules and goals",
+        "pipeline_version": "v1"
+      }
+    ],
+    "system_suggestion": null,
+    "judgment": null,
+    "note": null,
+    "updated_at": "2026-11-09T09:23:40+00:00",
+    "language_override": ""
+  },
+  "events": [
+    {
+      "event": "session_created",
+      "event_id": "aca28f7463d9",
+      "timestamp": "2026-11-09T09:22:14+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "reading_goal": "Get a general overview of this paper",
+      "research_context": "",
+      "language": "中文（繁體）"
+    },
+    {
+      "event": "turn",
+      "event_id": "4ac1e0826d91",
+      "timestamp": "2026-11-09T09:22:28+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "想請問一下，這篇文章裡的 core mechanics 和 primary mechanics 有什麼不同？我看到兩個詞好像都在講同一件事，所以有點搞混。",
+      "retrieval_query": "difference between core mechanics and primary mechanics in defining game mechanics",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f17ba500-p004-c06",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7978,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It is not rare to find in the literature notions like \"core mechanics\" (Järvinen, 2998, p. 255; Rollings and Adams, 2007, pp. 316-357), and in more casual settings, an implicit categorization like primary mechanics and secondary mechanics (Järvinen, 2008, p. 268). These qualifiers do not describe what concept of game mechanics the authors are adopting - if a rule based one, in which mechanics is a subset of rules, or one that advocates for an ontological differentiation of both. In this section, I briefly discuss how core mechanics, primary mechanics and secondary mechanics can be used as functional terms within the context of the definition I have introduced. These concepts are, as said, widely used in game design literature, thus it is important to define them according to this article's definition of game mechanics. Core mechanics, in the traditional sense, have been defined as \"the essential play activity players perform again and again in a game (...) however, in many games, the core mechanic is a compound activity composed of a suite of actions\" (Salen and Zimmerman, 2004, p. 316). Järvinen defined core mechanics as"
+        },
+        {
+          "chunk_id": "f17ba500-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7829,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In the case of simulations like Sim City, core mechanics are those that focus on reaching an equilibrium state; in games like EverQuest, core mechanics are those that allow players to reach a level cap, and further expand their agency by fine tuning their characters' abilities. At this stage, readers will most likely object that complex games like Grand Theft Auto IV have such a vast number of mechanics, and so many are used to make the game progress, that the very use of the core mechanics concept may be useless. It is a valid point - complexity requires a precise terminology. Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues. The concept of primary mechanics has been defined by Järvinen (2008, p. 268) as \"what the player does in relation to a game state during a standard turn or sequence\", differentiating then between submechanics, or actions available to the player \"as a consequence of the primary mechanic\" (ibid), and modifier mechanics, or actions the player does \"in a specific game state which occurs on some condition (...) specified in the rules\" (ibid)."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7405,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c03",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7288,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm."
+        },
+        {
+          "chunk_id": "f17ba500-p004-c05",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7218,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "For designers and theorists, game mechanics are discrete units that can be created, analyzed and put in relation to others. But for any agent in a game, the mechanics is everything that affords agency in the game world. Mechanics is thus tied to agency in the game system. With this definition of game mechanics, I have intended to contribute to game studies by: Formalizing an ontological difference between rules and mechanics that can potentially lead to detailed game analysis, and Suggesting a mapping between game mechanics, input procedures, and player experience. This very formal definition still leaves some questions unanswered, especially with regards to well-known terminology such as core mechanics. In the next section, I present some further implications of this definition for the analysis of games. Interlude: Core, Primary and Secondary Mechanics Game design literature uses the \"game mechanics\" concept extensively, incorporating certain qualifiers to it. It is not rare to find in the literature notions like \"core mechanics\" (Järvinen, 2998, p. 255; Rollings and Adams, 2007, pp."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c01",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7173,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "兩者不是同一件事，而是層級不同。core mechanics（核心機制）是較大的類別：玩家反覆用來達到遊戲系統所獎勵之終點狀態的機制。primary mechanics（主要機制）是核心機制中的一種，指能直接用來解決達成終點狀態之挑戰、且早期就容易取得、全程一致的機制。secondary mechanics（次要機制）同樣屬於核心機制，但主要是輔助玩家前往終點，且只偶爾可用或需要與主要機制搭配。",
+        "short_answer_chunk_ids": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "三者的層級關係",
+            "kind": "paper",
+            "text": "作者先定義核心機制為玩家反覆用來達到系統獎勵之終點狀態的遊戲機制，並指出在討論複雜遊戲時，會使用「primary (core) mechanics」與「secondary (core) mechanics」來處理複雜度問題。這表示作者把主要與次要機制放在核心機制之下討論。",
+            "chunk_ids": [
+              "f17ba500-p005-c01",
+              "f17ba500-p005-c02"
+            ]
+          },
+          {
+            "title": "GTA IV 與 Gears of War 的 cover 例子",
+            "kind": "paper",
+            "text": "作者以 cover 機制說明差異：在 Grand Theft Auto IV 中，cover 不能單獨用來解決主要挑戰，因此是次要機制；在 Gears of War 中，不使用 cover 幾乎會讓角色立即死亡，因此是主要機制。",
+            "chunk_ids": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "閱讀時可注意的地方",
+            "kind": "explanation",
+            "text": "可以把它理解成：core 是「大類」，primary 與 secondary 是 core 底下依其在遊戲中的角色所做的區分。文中也提到，作者的 primary 定義是在 Järvinen 較形式化的定義上調整而來，因此讀到不同作者的用法時，要先確認其定義依據。",
+            "chunk_ids": [
+              "f17ba500-p005-c03"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f17ba500-p005-c01",
+            "quote": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c03",
+            "quote": "Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c04",
+            "quote": "Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c02",
+            "quote": "Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c04",
+            "quote": "In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "core、primary、secondary mechanics 的層級關係",
+        "follow_up_suggestions": [
+          "Järvinen 對 primary mechanics 的原始定義是什麼？",
+          "作者為什麼認為 Orbital 只有 primary mechanics？",
+          "這篇文章如何區分 mechanics 與 rules？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-c2b066b514",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:28+00:00",
+        "short_answer": "兩者不是同一件事，而是層級不同。core mechanics（核心機制）是較大的類別：玩家反覆用來達到遊戲系統所獎勵之終點狀態的機制。primary mechanics（主要機制）是核心機制中的一種，指能直接用來解決達成終點狀態之挑戰、且早期就容易取得、全程一致的機制。secondary mechanics（次要機制）同樣屬於核心機制，但主要是輔助玩家前往終點，且只偶爾可用或需要與主要機制搭配。",
+        "short_answer_refs": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "三者的層級關係",
+            "kind": "paper",
+            "text": "作者先定義核心機制為玩家反覆用來達到系統獎勵之終點狀態的遊戲機制，並指出在討論複雜遊戲時，會使用「primary (core) mechanics」與「secondary (core) mechanics」來處理複雜度問題。這表示作者把主要與次要機制放在核心機制之下討論。",
+            "refs": [
+              "f17ba500-p005-c01",
+              "f17ba500-p005-c02"
+            ]
+          },
+          {
+            "title": "GTA IV 與 Gears of War 的 cover 例子",
+            "kind": "paper",
+            "text": "作者以 cover 機制說明差異：在 Grand Theft Auto IV 中，cover 不能單獨用來解決主要挑戰，因此是次要機制；在 Gears of War 中，不使用 cover 幾乎會讓角色立即死亡，因此是主要機制。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "閱讀時可注意的地方",
+            "kind": "explanation",
+            "text": "可以把它理解成：core 是「大類」，primary 與 secondary 是 core 底下依其在遊戲中的角色所做的區分。文中也提到，作者的 primary 定義是在 Järvinen 較形式化的定義上調整而來，因此讀到不同作者的用法時，要先確認其定義依據。",
+            "refs": [
+              "f17ba500-p005-c03"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c01",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state.",
+            "verified": true,
+            "quotes": [
+              "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c03",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm.",
+            "verified": true,
+            "quotes": [
+              "Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state.",
+              "In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c02",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "In the case of simulations like Sim City, core mechanics are those that focus on reaching an equilibrium state; in games like EverQuest, core mechanics are those that allow players to reach a level cap, and further expand their agency by fine tuning their characters' abilities. At this stage, readers will most likely object that complex games like Grand Theft Auto IV have such a vast number of mechanics, and so many are used to make the game progress, that the very use of the core mechanics concept may be useless. It is a valid point - complexity requires a precise terminology. Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues. The concept of primary mechanics has been defined by Järvinen (2008, p. 268) as \"what the player does in relation to a game state during a standard turn or sequence\", differentiating then between submechanics, or actions available to the player \"as a consequence of the primary mechanic\" (ibid), and modifier mechanics, or actions the player does \"in a specific game state which occurs on some condition (...) specified in the rules\" (ibid).",
+            "verified": true,
+            "quotes": [
+              "Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Järvinen 對 primary mechanics 的原始定義是什麼？",
+          "作者為什麼認為 Orbital 只有 primary mechanics？",
+          "這篇文章如何區分 mechanics 與 rules？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "difference between core mechanics and primary mechanics in defining game mechanics",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f17ba500-p005-c01",
+          "quote": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state.",
+          "ok": true,
+          "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c03",
+          "quote": "Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state.",
+          "ok": true,
+          "text": "Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "quote": "Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state.",
+          "ok": true,
+          "text": "Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c02",
+          "quote": "Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues.",
+          "ok": true,
+          "text": "Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "quote": "In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent.",
+          "ok": true,
+          "text": "In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "core、primary、secondary mechanics 的層級關係",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1523,
+        "retrieve": 875,
+        "generate_answer": 9922
+      },
+      "latency_ms": 12333,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "a7f821c829bf",
+      "timestamp": "2026-11-09T09:22:44+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "喔，我現在比較懂了，謝謝。所以我的理解是：core mechanics 就是遊戲裡最好玩的那些機制，玩家最常在玩的、最有趣的部分，然後 primary 和 secondary 再把它們依照好不好玩分成兩類。這樣理解對嗎？",
+      "retrieval_query": "definition of core mechanics, primary mechanics and secondary mechanics hierarchy in game mechanics",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f17ba500-p004-c06",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.8099,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It is not rare to find in the literature notions like \"core mechanics\" (Järvinen, 2998, p. 255; Rollings and Adams, 2007, pp. 316-357), and in more casual settings, an implicit categorization like primary mechanics and secondary mechanics (Järvinen, 2008, p. 268). These qualifiers do not describe what concept of game mechanics the authors are adopting - if a rule based one, in which mechanics is a subset of rules, or one that advocates for an ontological differentiation of both. In this section, I briefly discuss how core mechanics, primary mechanics and secondary mechanics can be used as functional terms within the context of the definition I have introduced. These concepts are, as said, widely used in game design literature, thus it is important to define them according to this article's definition of game mechanics. Core mechanics, in the traditional sense, have been defined as \"the essential play activity players perform again and again in a game (...) however, in many games, the core mechanic is a compound activity composed of a suite of actions\" (Salen and Zimmerman, 2004, p. 316). Järvinen defined core mechanics as"
+        },
+        {
+          "chunk_id": "f17ba500-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7823,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In the case of simulations like Sim City, core mechanics are those that focus on reaching an equilibrium state; in games like EverQuest, core mechanics are those that allow players to reach a level cap, and further expand their agency by fine tuning their characters' abilities. At this stage, readers will most likely object that complex games like Grand Theft Auto IV have such a vast number of mechanics, and so many are used to make the game progress, that the very use of the core mechanics concept may be useless. It is a valid point - complexity requires a precise terminology. Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues. The concept of primary mechanics has been defined by Järvinen (2008, p. 268) as \"what the player does in relation to a game state during a standard turn or sequence\", differentiating then between submechanics, or actions available to the player \"as a consequence of the primary mechanic\" (ibid), and modifier mechanics, or actions the player does \"in a specific game state which occurs on some condition (...) specified in the rules\" (ibid)."
+        },
+        {
+          "chunk_id": "f17ba500-p004-c05",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7207,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "For designers and theorists, game mechanics are discrete units that can be created, analyzed and put in relation to others. But for any agent in a game, the mechanics is everything that affords agency in the game world. Mechanics is thus tied to agency in the game system. With this definition of game mechanics, I have intended to contribute to game studies by: Formalizing an ontological difference between rules and mechanics that can potentially lead to detailed game analysis, and Suggesting a mapping between game mechanics, input procedures, and player experience. This very formal definition still leaves some questions unanswered, especially with regards to well-known terminology such as core mechanics. In the next section, I present some further implications of this definition for the analysis of games. Interlude: Core, Primary and Secondary Mechanics Game design literature uses the \"game mechanics\" concept extensively, incorporating certain qualifiers to it. It is not rare to find in the literature notions like \"core mechanics\" (Järvinen, 2998, p. 255; Rollings and Adams, 2007, pp."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c03",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7032,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c06",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7028,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7026,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c01",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "這個理解不太正確。作者是用「功能」來定義 core mechanics：玩家反覆用來達成遊戲系統所獎勵之終點狀態的機制，文中沒有以「好不好玩」或「有趣程度」來區分。primary 與 secondary 都屬於 core mechanics 之下的次類，區分依據是能否直接用來解決挑戰、是否早期就容易取得且全程一致，而不是樂趣高低。",
+        "short_answer_chunk_ids": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "core mechanics 的定義依據",
+            "kind": "paper",
+            "text": "作者明確定義 core mechanics 是玩家反覆用來達成系統所獎勵之終點狀態的遊戲機制，並以《Shadow of the Colossus》的刺擊為例，因為玩家會重複執行它來完成遊戲。這個定義是從系統與目標的角度出發，文中並未提到樂趣或受歡迎程度。",
+            "chunk_ids": [
+              "f17ba500-p005-c01"
+            ]
+          },
+          {
+            "title": "primary 與 secondary 的區分方式",
+            "kind": "paper",
+            "text": "作者指出 primary mechanics 是能直接用來解決達成終點狀態之挑戰的核心機制，且早期就說明、容易取得、全程一致；secondary mechanics 則是幫助玩家前往終點的核心機制，只偶爾可用或需要搭配 primary mechanic 才能發揮作用。兩者的分別在於功能與可取得性，而非樂趣。",
+            "chunk_ids": [
+              "f17ba500-p005-c03",
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "這些分類不是固定的",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成僵硬的分類，次要機制在遊戲進程中可能變成主要機制，有些主要機制也可能在遊戲後段消失。作者把它們定位為分析工具，用來依據機制對遊戲進行的影響做初步分類。",
+            "chunk_ids": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f17ba500-p005-c01",
+            "quote": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c03",
+            "quote": "Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c04",
+            "quote": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c06",
+            "quote": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "core、primary、secondary mechanics 的定義依據與層級關係",
+        "follow_up_suggestions": [
+          "能否用文中的 GTA IV 例子說明 primary 與 secondary 的差別？",
+          "作者為什麼說 Orbital 中只有 primary mechanics？",
+          "core mechanics 在沒有明確終點狀態的遊戲（如 Sim City）中如何理解？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-9c609b8f6a",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:44+00:00",
+        "short_answer": "這個理解不太正確。作者是用「功能」來定義 core mechanics：玩家反覆用來達成遊戲系統所獎勵之終點狀態的機制，文中沒有以「好不好玩」或「有趣程度」來區分。primary 與 secondary 都屬於 core mechanics 之下的次類，區分依據是能否直接用來解決挑戰、是否早期就容易取得且全程一致，而不是樂趣高低。",
+        "short_answer_refs": [
+          "f17ba500-p005-c01",
+          "f17ba500-p005-c03",
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "core mechanics 的定義依據",
+            "kind": "paper",
+            "text": "作者明確定義 core mechanics 是玩家反覆用來達成系統所獎勵之終點狀態的遊戲機制，並以《Shadow of the Colossus》的刺擊為例，因為玩家會重複執行它來完成遊戲。這個定義是從系統與目標的角度出發，文中並未提到樂趣或受歡迎程度。",
+            "refs": [
+              "f17ba500-p005-c01"
+            ]
+          },
+          {
+            "title": "primary 與 secondary 的區分方式",
+            "kind": "paper",
+            "text": "作者指出 primary mechanics 是能直接用來解決達成終點狀態之挑戰的核心機制，且早期就說明、容易取得、全程一致；secondary mechanics 則是幫助玩家前往終點的核心機制，只偶爾可用或需要搭配 primary mechanic 才能發揮作用。兩者的分別在於功能與可取得性，而非樂趣。",
+            "refs": [
+              "f17ba500-p005-c03",
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "這些分類不是固定的",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成僵硬的分類，次要機制在遊戲進程中可能變成主要機制，有些主要機制也可能在遊戲後段消失。作者把它們定位為分析工具，用來依據機制對遊戲進行的影響做初步分類。",
+            "refs": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c01",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state.",
+            "verified": true,
+            "quotes": [
+              "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c03",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm.",
+            "verified": true,
+            "quotes": [
+              "Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c06",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode.",
+            "verified": true,
+            "quotes": [
+              "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "能否用文中的 GTA IV 例子說明 primary 與 secondary 的差別？",
+          "作者為什麼說 Orbital 中只有 primary mechanics？",
+          "core mechanics 在沒有明確終點狀態的遊戲（如 Sim City）中如何理解？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "definition of core mechanics, primary mechanics and secondary mechanics hierarchy in game mechanics",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f17ba500-p005-c01",
+          "quote": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state.",
+          "ok": true,
+          "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c03",
+          "quote": "Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience.",
+          "ok": true,
+          "text": "Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "quote": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+          "ok": true,
+          "text": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c06",
+          "quote": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game.",
+          "ok": true,
+          "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "core、primary、secondary mechanics 的定義依據與層級關係",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1988,
+        "retrieve": 783,
+        "generate_answer": 10733
+      },
+      "latency_ms": 13523,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "888d075d9b3a",
+      "timestamp": "2026-11-09T09:22:58+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，那我知道 core 不是看好不好玩了。那另外一個（secondary 那個）呢？可以舉一個遊戲的例子嗎？我平常玩的遊戲應該也有類似的東西，想看看是不是符合。",
+      "retrieval_query": "secondary mechanics definition example game core mechanics support player reaching goal state occasionally available combined with primary mechanics",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7527,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c02",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7237,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In the case of simulations like Sim City, core mechanics are those that focus on reaching an equilibrium state; in games like EverQuest, core mechanics are those that allow players to reach a level cap, and further expand their agency by fine tuning their characters' abilities. At this stage, readers will most likely object that complex games like Grand Theft Auto IV have such a vast number of mechanics, and so many are used to make the game progress, that the very use of the core mechanics concept may be useless. It is a valid point - complexity requires a precise terminology. Thus, I will use the concepts of primary (core) mechanics and secondary (core) mechanics to solve some of these issues. The concept of primary mechanics has been defined by Järvinen (2008, p. 268) as \"what the player does in relation to a game state during a standard turn or sequence\", differentiating then between submechanics, or actions available to the player \"as a consequence of the primary mechanic\" (ibid), and modifier mechanics, or actions the player does \"in a specific game state which occurs on some condition (...) specified in the rules\" (ibid)."
+        },
+        {
+          "chunk_id": "f17ba500-p004-c06",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7092,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It is not rare to find in the literature notions like \"core mechanics\" (Järvinen, 2998, p. 255; Rollings and Adams, 2007, pp. 316-357), and in more casual settings, an implicit categorization like primary mechanics and secondary mechanics (Järvinen, 2008, p. 268). These qualifiers do not describe what concept of game mechanics the authors are adopting - if a rule based one, in which mechanics is a subset of rules, or one that advocates for an ontological differentiation of both. In this section, I briefly discuss how core mechanics, primary mechanics and secondary mechanics can be used as functional terms within the context of the definition I have introduced. These concepts are, as said, widely used in game design literature, thus it is important to define them according to this article's definition of game mechanics. Core mechanics, in the traditional sense, have been defined as \"the essential play activity players perform again and again in a game (...) however, in many games, the core mechanic is a compound activity composed of a suite of actions\" (Salen and Zimmerman, 2004, p. 316). Järvinen defined core mechanics as"
+        },
+        {
+          "chunk_id": "f17ba500-p005-c03",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.7005,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Again, Järvinen's comprehensive approach is highly relevant, but its formal ties to games understood as goal-oriented systems with which (human) agents interact determine this classification of mechanics. In the following I will suggest an approach to the concepts closer to the approach taken in this article. Primary mechanics can be understood as core mechanics that can be directly applied to solving challenges that lead to the desired end state. Primary mechanics are readily available, explained in the early stages of the game, and consistent throughout the game experience. In Grand Theft Auto IV, primary mechanics are shooting, melee fighting, and driving: they are readily available 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 9/16 to the player, mapped to the most obvious and traditionconforming controller inputs and remain consistent throughout the game experience: shooting is always performed using the same button combination, and when players have control, they always have access to that mechanic, provided they have a firearm."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c01",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6978,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "From that systemic perspective, I define core mechanics as the game mechanics (repeatedly) used by agents to achieve a systemically rewarded end-game state. For instance, stabbing is a core mechanic of Shadow of the Colossus, since the player will perform it repeatedly to achieve the end state of the game, rewarded with the completion of the fictional framework of the game. In Orbital, the core mechanics are the only mechanics. Both games are examples of focused game design, in which player actions are limited, yet tuned to create emergent gameplay (Juul, 2005, pp. 67-83, Sweetster, 2008). Games like Sim City or EverQuest (Sony Online Entertainment, 1999) do not have an end state as such. However, there are desired states towards which players focus their efforts, be those reaching the cap character level or keeping the city budget in the black. These games have a specific set of game mechanics oriented to reaching those states, and as such it is possible to speak of core mechanics even in the case of games with no systemically determined end state."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c06",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": 0.6868,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "Secondary mechanics 也屬於 core mechanics，但它的角色是輔助玩家更容易走向遊戲的終點狀態，而不是直接用來解決主要挑戰。作者說它們只偶爾可用，或需要和 primary mechanic 搭配才會有作用。文中用 GTA IV 的掩護（cover）機制當例子。",
+        "short_answer_chunk_ids": [
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "作者對 secondary mechanics 的定義",
+            "kind": "paper",
+            "text": "作者說 secondary mechanics 是能讓玩家更容易朝終點狀態前進的 core mechanics。它們要嘛只偶爾可用，要嘛必須和 primary mechanic 組合才會有功能。",
+            "chunk_ids": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "GTA IV 掩護機制為什麼是次要的",
+            "kind": "paper",
+            "text": "文中說 GTA IV 的掩護機制不能單獨用來解決遊戲的主要挑戰，但熟練後能幫助玩家達成遊戲的終點狀態。相較之下，《戰爭機器》（Gears of War）的掩護機制被視為 primary，因為不用它，角色幾乎會立刻死亡。",
+            "chunk_ids": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "用自己常玩的遊戲來比對",
+            "kind": "example",
+            "text": "以下只是示意，不是論文內容：有些遊戲中，玩家可以在特定情境才使用的輔助動作（例如某種翻滾、攀爬或道具技能），它們不一定能單獨過關，但能幫助推進關卡。你可以問自己：這個動作是否只在特定時機才有用，或必須搭配主要的攻擊或移動才有效？如果是，它可能較接近 secondary 的特徵。",
+            "chunk_ids": []
+          },
+          {
+            "title": "判斷時要注意的界線",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成固定類別：secondary mechanics 有時會在遊戲進程中變成 primary，而某些 primary 也可能在遊戲後期消失。因此用它來分類時，最好看該機制在你所選遊戲的某個階段中的作用，而不是一次性貼標籤。",
+            "chunk_ids": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f17ba500-p005-c04",
+            "quote": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c04",
+            "quote": "The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game."
+          },
+          {
+            "chunk_id": "f17ba500-p005-c06",
+            "quote": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "secondary mechanics 的定義與遊戲例子（核心機制之下的次類）",
+        "follow_up_suggestions": [
+          "如果我想判斷自己遊戲中某個動作是 primary 還是 secondary，可以用哪些條件來檢查？",
+          "論文中 GTA IV 的 cover 與 Gears of War 的 cover 有什麼差別，為什麼一個是 primary？",
+          "Secondary mechanics 會在遊戲進程中變成 primary，文中有沒有舉例說明？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-c4e03d9cd0",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:22:58+00:00",
+        "short_answer": "Secondary mechanics 也屬於 core mechanics，但它的角色是輔助玩家更容易走向遊戲的終點狀態，而不是直接用來解決主要挑戰。作者說它們只偶爾可用，或需要和 primary mechanic 搭配才會有作用。文中用 GTA IV 的掩護（cover）機制當例子。",
+        "short_answer_refs": [
+          "f17ba500-p005-c04"
+        ],
+        "sections": [
+          {
+            "title": "作者對 secondary mechanics 的定義",
+            "kind": "paper",
+            "text": "作者說 secondary mechanics 是能讓玩家更容易朝終點狀態前進的 core mechanics。它們要嘛只偶爾可用，要嘛必須和 primary mechanic 組合才會有功能。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "GTA IV 掩護機制為什麼是次要的",
+            "kind": "paper",
+            "text": "文中說 GTA IV 的掩護機制不能單獨用來解決遊戲的主要挑戰，但熟練後能幫助玩家達成遊戲的終點狀態。相較之下，《戰爭機器》（Gears of War）的掩護機制被視為 primary，因為不用它，角色幾乎會立刻死亡。",
+            "refs": [
+              "f17ba500-p005-c04"
+            ]
+          },
+          {
+            "title": "用自己常玩的遊戲來比對",
+            "kind": "example",
+            "text": "以下只是示意，不是論文內容：有些遊戲中，玩家可以在特定情境才使用的輔助動作（例如某種翻滾、攀爬或道具技能），它們不一定能單獨過關，但能幫助推進關卡。你可以問自己：這個動作是否只在特定時機才有用，或必須搭配主要的攻擊或移動才有效？如果是，它可能較接近 secondary 的特徵。",
+            "refs": []
+          },
+          {
+            "title": "判斷時要注意的界線",
+            "kind": "limitation",
+            "text": "作者提醒這些詞不應被當成固定類別：secondary mechanics 有時會在遊戲進程中變成 primary，而某些 primary 也可能在遊戲後期消失。因此用它來分類時，最好看該機制在你所選遊戲的某個階段中的作用，而不是一次性貼標籤。",
+            "refs": [
+              "f17ba500-p005-c06"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p005-c04",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals.",
+            "verified": true,
+            "quotes": [
+              "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+              "The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p005-c06",
+            "kind": "paper",
+            "page": 5,
+            "page_label": "5",
+            "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode.",
+            "verified": true,
+            "quotes": [
+              "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "如果我想判斷自己遊戲中某個動作是 primary 還是 secondary，可以用哪些條件來檢查？",
+          "論文中 GTA IV 的 cover 與 Gears of War 的 cover 有什麼差別，為什麼一個是 primary？",
+          "Secondary mechanics 會在遊戲進程中變成 primary，文中有沒有舉例說明？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "secondary mechanics definition example game core mechanics support player reaching goal state occasionally available combined with primary mechanics",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "quote": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+          "ok": true,
+          "text": "Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "quote": "The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game.",
+          "ok": true,
+          "text": "The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p005-c06",
+          "quote": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game.",
+          "ok": true,
+          "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "secondary mechanics 的定義與遊戲例子（核心機制之下的次類）",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1299,
+        "retrieve": 630,
+        "generate_answer": 10715
+      },
+      "latency_ms": 12659,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "92e731f24786",
+      "timestamp": "2026-11-09T09:23:17+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "那我還想問一下，作者有沒有說他對 mechanics 的定義比 MDA 那篇的定義更好？我看到老師的閱讀清單裡也有 MDA，不知道兩篇是不是在講同一個東西。",
+      "retrieval_query": "Defining Game Mechanics author's definition compared with MDA framework definition of mechanics, critique or claimed improvement",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f17ba500-p002-c04",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7905,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The MDA Framework (Hunicke, Zubek, LeBlanc, 2004) provides some more detail on the formal nature of game mechanics: \"mechanics describes the particular components of the game, at the level of data representations and algorithms (...) mechanics are the various actions, behaviours, and control mechanisms afforded to the player within a game context\". The latter part of the definition provides a set of elements that will allow us to identify a mechanic. However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action); and the operations that the game system does in the background to calculate the success of player actions (as the effect of gravitational fields in Orbital - external to player agency, yet related with the player's actions). The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players."
+        },
+        {
+          "chunk_id": "f17ba500-p002-c05",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7461,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p."
+        },
+        {
+          "chunk_id": "f17ba500-p001-c04",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.7081,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "In this article, I propose a definition of game mechanics useful for the analysis of games and their formal constituents. This definition will allow for formalized analysis of game structures, and it will also open up for the possibility of connecting formal game analysis with research on controller designs and user experience. I define game mechanics, using concepts from object-oriented programming, as methods invoked by agents, designed for interaction with the game state. With this formalized definition, I intend to: Provide a tool to discover, describe, and interrelate game mechanics in any given game. Define mechanics also in relation to elements of the game system, game hardware and player experience, mapping mechanics to input procedures and player emotions. Even though I will be mentioning concepts like game rules, challenges, emotions and user experience, it is not my intention to enter the debate on those topics. Here, I use those concepts in a relational way: defining game mechanics requires mentioning and acknowledging rules, challenges and emotions."
+        },
+        {
+          "chunk_id": "f17ba500-p003-c00",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6974,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "to player agency and game rules. In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section. Defining Game Mechanics Let's start with a definition: game mechanics are methods invoked by agents, designed for interaction with the game state. The different components of this definition require further explanation: \"Methods invoked by agents\" defines this approach to game mechanics, as it formalizes the use of terminology taken from the object oriented programming paradigm (Weisfeld, 2000). In this appropriation of the terminology, object orientation provides a set of metaphors that describe the elements of systems and their interrelations. I do not want to imply that the analysis of the source code of a game will reveal that all game mechanics have been implemented as methods of classes or that object-oriented programming should be considered a default methodology for the actual production of computer games. Nor am I implying that the Object Oriented Framework should be extended to a formal analysis of all elements of the game."
+        },
+        {
+          "chunk_id": "f17ba500-p007-c02",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.6894,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Conclusion This article was born out of necessity: having an analytical vocabulary for defining game structures and systems that allowed a formal, precise, and scalable description of games as systems and how they interrelate with player practices. The result of this necessity is a formal definition of game mechanics that owes to object-oriented programming its formal phrasing, while inheriting from game studies the figure of players, or agents, as fundamental to understand how games are designed and played. This article has defined game mechanics as methods invoked by agents for interacting with the game world. This definition allows the study of the systemic structure of games in terms of actions afforded to agents to overcome challenges, but also the analysis of how actions are mapped onto input devices and how mechanics can be used to create specific emotional experiences in players. There are, however, many grey areas I do not have the space to focus on here. Perhaps the most significant is the ontological distinction between rules and mechanics. Game researchers have argued convincingly that mechanics could be understood as subsets of rules."
+        },
+        {
+          "chunk_id": "f17ba500-p001-c05",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6888,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Here, I use those concepts in a relational way: defining game mechanics requires mentioning and acknowledging rules, challenges and emotions. I do so in an instrumental way and leave for further research the implications of this definition for understanding other systemic components of games. Since both game researchers and game designers have covered the topic of game mechanics, I begin this article with an analytical summary of the major works on this topic, providing a general overview of these previous definitions of game mechanics and place my work within this tradition. The second part of this article presents the definition of game mechanics, detailing the elements that compose it. I then present a brief reflection on primary and secondary mechanics and how they can be derived from this definition. These concepts are put into practice in the third part, where I perform a comparative analysis of Shadow of the Colossus (Team Ico, 2005), Rez (United Game Artists, 2002), and Every Extend Extra (Q Entertainment, 2006), highlighting the use of this concept of mechanics in the research on game structure and user experience."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c04",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Interestingly, this use of the primary mechanics concept explains the design experiment of Orbital: players only have primary mechanics available to interact with the gameworld. Secondary mechanics, on the other hand, are core mechanics that ease the player's interaction with the game towards reaching the end state. Secondary mechanics are either available occasionally or require their combination with a primary mechanic in order to be functional. The cover mechanic in Grand Theft Auto IV is an example: it cannot be used exclusively to solve the main challenges of the game, but once mastered, it can prove of help to achieve the end state of the game. In comparison, the cover mechanic of Gears of War is primary, since not using it implies the almost immediate death of any game agent. Again, readers may claim that there are mechanics in a game beyond those tied to the goal/reward structure. And they are right - in many modern, complex computer games there are many mechanics available for player agency, and several of them play a role in achieving the goals."
+        },
+        {
+          "chunk_id": "f17ba500-p005-c06",
+          "kind": "paper",
+          "page": 5,
+          "page_label": "5",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "However, these terms should not be used as rigid categories: on occasions, secondary mechanics can turn into primary mechanics during the designed gameplay progression, and some primary mechanics may even disappear in the length of a game. These concepts should be used as analytical aids, as a first step into a formal categorization of mechanics depending on their impact on gameplay. One last question remains: within this formal, object oriented framework, it is not possible to describe systems like the driving mechanic in Grand Theft Auto IV: more precisely, driving would consist of braking, accelerating, steering and hand-breaking. All of these are, effectively, the methods invoked by agents in order to interact with the game. However, using this very detailed description is not always a useful approach. Thus, the concept of compound game mechanics can be of use: a compound game mechanic is a set of related game mechanics that function together within one delimited agent interaction mode."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "有。作者認為自己的定義比 MDA 更精確，也比文中回顧的其他定義更具包容性，理由是 MDA 對 mechanic 的描述在表述上不夠一致，難以用來描述和分析單一機制。不過這是作者的評價，不是已被驗證的結論。兩篇都在討論 mechanics，但 MDA 是涵蓋機制、動態與美學的框架，本文則專注於定義機制本身。",
+        "short_answer_chunk_ids": [
+          "f17ba500-p002-c05",
+          "f17ba500-p003-c00"
+        ],
+        "sections": [
+          {
+            "title": "作者如何批評 MDA 的定義",
+            "kind": "paper",
+            "text": "作者引用 MDA 對 mechanics 的描述，但認為該定義需要更精確的表述，並指出它在行為與背景運算等方面的界線不清楚。作者因此認為 MDA 的定義因表述不一致，無法用來描述和分析一個 mechanic。",
+            "chunk_ids": [
+              "f17ba500-p002-c04",
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "作者認為更精確的替代方案：Järvinen",
+            "kind": "paper",
+            "text": "作者指出 Järvinen（2008）的做法更精確，因為它把 mechanics 與玩家能動性及遊戲體驗聯繫起來，並以動詞描述 mechanics，例如 Gears of War 的 take cover。作者認為這比 MDA 更接近可分析的定義。",
+            "chunk_ids": [
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "兩篇是否在講同一件事",
+            "kind": "inference",
+            "text": "兩者的主題都是 mechanics，也都涉及形式元素與玩家操作之間的關係。差別在於 MDA 是一個更大的設計分析框架，而本文試圖提出可用來描述與歸類機制的形式定義，並借用物件導向程式設計的概念。因此閱讀 MDA 時可以把它當作背景，再比較本文如何修正其定義。",
+            "chunk_ids": [
+              "f17ba500-p002-c04",
+              "f17ba500-p003-c00"
+            ]
+          },
+          {
+            "title": "閱讀時要注意的界線",
+            "kind": "limitation",
+            "text": "「比 MDA 更好」是作者自己的判斷，目前的段落只能說明作者如何批評 MDA，無法確認 MDA 原文的完整論點。若要評估，建議讀 MDA 原文，並檢查作者的批評是否與其原意相符。",
+            "chunk_ids": [
+              "f17ba500-p002-c05"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f17ba500-p002-c05",
+            "quote": "Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition."
+          },
+          {
+            "chunk_id": "f17ba500-p003-c00",
+            "quote": "In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section."
+          },
+          {
+            "chunk_id": "f17ba500-p002-c05",
+            "quote": "A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences."
+          },
+          {
+            "chunk_id": "f17ba500-p002-c04",
+            "quote": "However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action)"
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "作者定義與 MDA 定義的比較",
+        "follow_up_suggestions": [
+          "作者具體指出 MDA 定義中哪些表述不一致？",
+          "本文的 object-oriented 定義如何避免 MDA 的問題？",
+          "MDA 原文中 mechanics、dynamics 與 aesthetics 各自是什麼？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-0a1d854976",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:23:17+00:00",
+        "short_answer": "有。作者認為自己的定義比 MDA 更精確，也比文中回顧的其他定義更具包容性，理由是 MDA 對 mechanic 的描述在表述上不夠一致，難以用來描述和分析單一機制。不過這是作者的評價，不是已被驗證的結論。兩篇都在討論 mechanics，但 MDA 是涵蓋機制、動態與美學的框架，本文則專注於定義機制本身。",
+        "short_answer_refs": [
+          "f17ba500-p002-c05",
+          "f17ba500-p003-c00"
+        ],
+        "sections": [
+          {
+            "title": "作者如何批評 MDA 的定義",
+            "kind": "paper",
+            "text": "作者引用 MDA 對 mechanics 的描述，但認為該定義需要更精確的表述，並指出它在行為與背景運算等方面的界線不清楚。作者因此認為 MDA 的定義因表述不一致，無法用來描述和分析一個 mechanic。",
+            "refs": [
+              "f17ba500-p002-c04",
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "作者認為更精確的替代方案：Järvinen",
+            "kind": "paper",
+            "text": "作者指出 Järvinen（2008）的做法更精確，因為它把 mechanics 與玩家能動性及遊戲體驗聯繫起來，並以動詞描述 mechanics，例如 Gears of War 的 take cover。作者認為這比 MDA 更接近可分析的定義。",
+            "refs": [
+              "f17ba500-p002-c05"
+            ]
+          },
+          {
+            "title": "兩篇是否在講同一件事",
+            "kind": "inference",
+            "text": "兩者的主題都是 mechanics，也都涉及形式元素與玩家操作之間的關係。差別在於 MDA 是一個更大的設計分析框架，而本文試圖提出可用來描述與歸類機制的形式定義，並借用物件導向程式設計的概念。因此閱讀 MDA 時可以把它當作背景，再比較本文如何修正其定義。",
+            "refs": [
+              "f17ba500-p002-c04",
+              "f17ba500-p003-c00"
+            ]
+          },
+          {
+            "title": "閱讀時要注意的界線",
+            "kind": "limitation",
+            "text": "「比 MDA 更好」是作者自己的判斷，目前的段落只能說明作者如何批評 MDA，無法確認 MDA 原文的完整論點。若要評估，建議讀 MDA 原文，並檢查作者的批評是否與其原意相符。",
+            "refs": [
+              "f17ba500-p002-c05"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p002-c05",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p.",
+            "verified": true,
+            "quotes": [
+              "Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition.",
+              "A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p003-c00",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "to player agency and game rules. In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section. Defining Game Mechanics Let's start with a definition: game mechanics are methods invoked by agents, designed for interaction with the game state. The different components of this definition require further explanation: \"Methods invoked by agents\" defines this approach to game mechanics, as it formalizes the use of terminology taken from the object oriented programming paradigm (Weisfeld, 2000). In this appropriation of the terminology, object orientation provides a set of metaphors that describe the elements of systems and their interrelations. I do not want to imply that the analysis of the source code of a game will reveal that all game mechanics have been implemented as methods of classes or that object-oriented programming should be considered a default methodology for the actual production of computer games. Nor am I implying that the Object Oriented Framework should be extended to a formal analysis of all elements of the game.",
+            "verified": true,
+            "quotes": [
+              "In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c04",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA Framework (Hunicke, Zubek, LeBlanc, 2004) provides some more detail on the formal nature of game mechanics: \"mechanics describes the particular components of the game, at the level of data representations and algorithms (...) mechanics are the various actions, behaviours, and control mechanisms afforded to the player within a game context\". The latter part of the definition provides a set of elements that will allow us to identify a mechanic. However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action); and the operations that the game system does in the background to calculate the success of player actions (as the effect of gravitational fields in Orbital - external to player agency, yet related with the player's actions). The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players.",
+            "verified": true,
+            "quotes": [
+              "However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action);"
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "作者具體指出 MDA 定義中哪些表述不一致？",
+          "本文的 object-oriented 定義如何避免 MDA 的問題？",
+          "MDA 原文中 mechanics、dynamics 與 aesthetics 各自是什麼？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Defining Game Mechanics author's definition compared with MDA framework definition of mechanics, critique or claimed improvement",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f17ba500-p002-c05",
+          "quote": "Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition.",
+          "ok": true,
+          "text": "Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p003-c00",
+          "quote": "In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section.",
+          "ok": true,
+          "text": "In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p002-c05",
+          "quote": "A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences.",
+          "ok": true,
+          "text": "A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p002-c04",
+          "quote": "However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action)",
+          "ok": true,
+          "text": "However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action);",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "作者定義與 MDA 定義的比較",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 3058,
+        "retrieve": 723,
+        "generate_answer": 13915
+      },
+      "latency_ms": 17709,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "41b8f5ead907",
+      "timestamp": "2026-11-09T09:23:40+00:00",
+      "session_id": "s-7cf95ab149fe",
+      "paper_id": "f17ba50063dfeb3d",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "那我還想問，文章裡 mechanics 跟 rules（規則）和 goals（目標）是什麼關係？我覺得機制應該就是規則，玩家要達成的目標也算是機制的一部分，所以這三個其實是同一件事吧？",
+      "retrieval_query": "mechanics rules goals relationship definition game mechanics distinction from rules and goals",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "f17ba500-p002-c07",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7354,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states. However, these definitions do not provide a single, dominant approach that encompasses all these aspects. All the previous definitions have attempted to provide pragmatic approaches to allow for a flexible understanding of game mechanics in games and how they relate"
+        },
+        {
+          "chunk_id": "f17ba500-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.731,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Implicit in this definition is an ontological difference between rules and mechanics. Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states. In this sense, rules are modeled after agency, while mechanics are modeled for agency. In this object oriented framework, rules could be considered general or particular properties of the game system and its agents. All objects in games have properties. These properties are often either rules or determined by rules. These rules are evaluated by a game loop, an algorithm that relates the current state of the game and the properties of the objects with a number of conditions that consequently can modify the game state. For example, the winning condition, the losing condition and the effects of action in the player's avatar health are calculated when running the game loop. This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics."
+        },
+        {
+          "chunk_id": "f17ba500-p007-c03",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.7178,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Perhaps the most significant is the ontological distinction between rules and mechanics. Game researchers have argued convincingly that mechanics could be understood as subsets of rules. However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games. Game studies history shows that there is no dominant definition of key concepts like rules or mechanics, and that those that attempted have yet to succeed. This article should not be read as the ultimate definition of game mechanics. This definition is 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 13/16 flawed, yet less so than some previous ones. My goal will be achieved if I have succeeded in communicating to the reader one simple notion: that it is possible and useful to understand game mechanics as different from game rules, and in that understanding, we can more clearly describe how games can be designed to affect players in unprecedented ways."
+        },
+        {
+          "chunk_id": "f17ba500-p002-c03",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6997,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "However, these approaches lack a deep explanation of the connections between rules and mechanics. These connections are fundamental for the formal analysis of games, as Björk and Holopainen (2005) stated in their argumentation for the development of Game Design Patterns. Other definitions, like Cook's (2005): \"game mechanics are rule based system/simulations that facilitate and encourage a user to explore and learn the properties of their possibility space through the use of feedback mechanisms\", while acknowledging the relations between players, rules and mechanics, fail to provide a sufficiently clear set of properties that allows the concept to be applied in a formal analysis of games. This definition is valuable since it incorporates the notion of feedback to the understanding of mechanics, but it falls short in explaining how we can identify a 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 3/16 mechanic, or a set of mechanics, and how it is based in the rule system."
+        },
+        {
+          "chunk_id": "f17ba500-p002-c01",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6965,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "11). Some formalist approaches makes a difference between the rules of the game and the actions afforded to players by those rules. This conceptual perspective can be tracked back to Avedon (1971) who suggests a formal structure of games in which there are \"specific operations, required courses of action, method of play,\" which he defines as the \"procedure for action\", as opposed to the \"rules governing action\", which are \"fixed principles that determine conduct and standards for behavior\" (p. 422). However, this formal distinction between rules and mechanics is not always applied in game mechanics research. Lundgren and Björk (2003) define game mechanics as \"any part of the rule system of a game that covers one, and only one, possible kind of interaction that takes place during the game, be it general or specific (...) mechanics are regarded as a way to summarize game rules\". In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics. Game mechanics would be low-level descriptions of game rules or clusters of game rules."
+        },
+        {
+          "chunk_id": "f17ba500-p004-c01",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.6805,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics. For example, in Shadow of the Colossus players have a game mechanic called \"climb\", but they are also determined by a property called \"stamina\", which is the algorithmic translation of a rule: \"players have x stamina units\". The climbing mechanic states that when invoked, stamina is lost at a certain ratio. A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore. The game loop checks the game state; if the player invokes the climb mechanic, those functions that determine the consequences and boundaries of the players' interaction are called, and the resulting changes in the game state are evaluated against the rules of the game. Then, the player will succeed or not in \"climbing\", depending on their \"stamina\". The second part of the definition claims that game mechanics are methods \"designed for interaction with the game state\". This implies that the task of game designers is to create mechanics that agents can use to interact with the game. These interactions modify the game state (Juul, 2005, 59-64)."
+        },
+        {
+          "chunk_id": "f17ba500-p002-c05",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p."
+        },
+        {
+          "chunk_id": "f17ba500-p003-c00",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "to player agency and game rules. In the following section I present a formal definition of game mechanics, together with the arguments that make it a more precise and inclusive approach than those reviewed in this section. Defining Game Mechanics Let's start with a definition: game mechanics are methods invoked by agents, designed for interaction with the game state. The different components of this definition require further explanation: \"Methods invoked by agents\" defines this approach to game mechanics, as it formalizes the use of terminology taken from the object oriented programming paradigm (Weisfeld, 2000). In this appropriation of the terminology, object orientation provides a set of metaphors that describe the elements of systems and their interrelations. I do not want to imply that the analysis of the source code of a game will reveal that all game mechanics have been implemented as methods of classes or that object-oriented programming should be considered a default methodology for the actual production of computer games. Nor am I implying that the Object Oriented Framework should be extended to a formal analysis of all elements of the game."
+        },
+        {
+          "chunk_id": "f17ba500-p002-c04",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "The MDA Framework (Hunicke, Zubek, LeBlanc, 2004) provides some more detail on the formal nature of game mechanics: \"mechanics describes the particular components of the game, at the level of data representations and algorithms (...) mechanics are the various actions, behaviours, and control mechanisms afforded to the player within a game context\". The latter part of the definition provides a set of elements that will allow us to identify a mechanic. However, this definition would require more precision in its formulation: for instance, behaviours afforded to the player can be both strategies suggested by the game design (the level layout in Gears of War suggests the behaviour or covering, yet it does not directly afford that action); and the operations that the game system does in the background to calculate the success of player actions (as the effect of gravitational fields in Orbital - external to player agency, yet related with the player's actions). The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "三者不是同一件事。作者主張 rules（規則）與 mechanics（機制）在本體上有區別：規則提供互動可發生的可能性空間並規範狀態轉換，機制則是玩家與遊戲狀態的實際互動。goals（目標）在文中是與 mechanics 並列的遊戲形式性質之一，文中並未說目標就是機制的一部分。",
+        "short_answer_chunk_ids": [
+          "f17ba500-p004-c00",
+          "f17ba500-p007-c03",
+          "f17ba500-p002-c07"
+        ],
+        "sections": [
+          {
+            "title": "作者如何區分規則與機制",
+            "kind": "paper",
+            "text": "作者認為 mechanics 與 rules 有本體上的差別：mechanics 關心與遊戲狀態的實際互動，rules 則規範互動得以發生的可能性空間，並管理狀態之間的轉換。作者進一步指出 rules 具有規範性，mechanics 則具有表演性。",
+            "chunk_ids": [
+              "f17ba500-p004-c00",
+              "f17ba500-p007-c03"
+            ]
+          },
+          {
+            "title": "Shadow of the Colossus 的攀爬例子",
+            "kind": "paper",
+            "text": "文中以 Shadow of the Colossus 為例：攀爬是一種 mechanic，而體力是由規則轉換而來的屬性。攀爬會consume體力，而規則規定體力低於某門檻時就無法再攀爬，因此規則會限制機制的效果與邊界。",
+            "chunk_ids": [
+              "f17ba500-p004-c01"
+            ]
+          },
+          {
+            "title": "目標在文中的位置與未明確之處",
+            "kind": "paper",
+            "text": "文中把 game goals 與 player actions、strategies、game states 並列為遊戲的形式性質，並未說目標屬於機制。Järvinen 則把機制描述為限制玩家計畫空間、以達成目標的手段；遊戲的勝利條件也是在 game loop 中依規則計算。目前檢索到的段落沒有完整說明 mechanics 與 goals 的所有關係，若要更精確需要再查看原文其他段落。",
+            "chunk_ids": [
+              "f17ba500-p002-c07",
+              "f17ba500-p002-c05",
+              "f17ba500-p004-c00"
+            ]
+          },
+          {
+            "title": "你的直覺從何而來",
+            "kind": "explanation",
+            "text": "你的想法有文獻依據：Lundgren 與 Björk 把 mechanics 定義為規則系統的一部分，因此認為不需要區分兩者。不過這是作者批評或與之對照的立場，作者認為區分 rules 與 mechanics 有助於分析電玩。",
+            "chunk_ids": [
+              "f17ba500-p002-c01",
+              "f17ba500-p007-c03"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "f17ba500-p004-c00",
+            "quote": "Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states."
+          },
+          {
+            "chunk_id": "f17ba500-p007-c03",
+            "quote": "However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games."
+          },
+          {
+            "chunk_id": "f17ba500-p004-c01",
+            "quote": "A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore."
+          },
+          {
+            "chunk_id": "f17ba500-p002-c07",
+            "quote": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states."
+          },
+          {
+            "chunk_id": "f17ba500-p002-c05",
+            "quote": "Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254)."
+          },
+          {
+            "chunk_id": "f17ba500-p002-c01",
+            "quote": "In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "機制、規則與目標的關係",
+        "follow_up_suggestions": [
+          "作者如何看待 Järvinen 的 mechanics 定義與本文定義的差異？",
+          "game loop 在文中是如何把規則與機制連結起來的？",
+          "如果玩家目標與遊戲規則衝突，文中會怎麼描述？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-3e917b72aa",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:23:40+00:00",
+        "short_answer": "三者不是同一件事。作者主張 rules（規則）與 mechanics（機制）在本體上有區別：規則提供互動可發生的可能性空間並規範狀態轉換，機制則是玩家與遊戲狀態的實際互動。goals（目標）在文中是與 mechanics 並列的遊戲形式性質之一，文中並未說目標就是機制的一部分。",
+        "short_answer_refs": [
+          "f17ba500-p004-c00",
+          "f17ba500-p007-c03",
+          "f17ba500-p002-c07"
+        ],
+        "sections": [
+          {
+            "title": "作者如何區分規則與機制",
+            "kind": "paper",
+            "text": "作者認為 mechanics 與 rules 有本體上的差別：mechanics 關心與遊戲狀態的實際互動，rules 則規範互動得以發生的可能性空間，並管理狀態之間的轉換。作者進一步指出 rules 具有規範性，mechanics 則具有表演性。",
+            "refs": [
+              "f17ba500-p004-c00",
+              "f17ba500-p007-c03"
+            ]
+          },
+          {
+            "title": "Shadow of the Colossus 的攀爬例子",
+            "kind": "paper",
+            "text": "文中以 Shadow of the Colossus 為例：攀爬是一種 mechanic，而體力是由規則轉換而來的屬性。攀爬會consume體力，而規則規定體力低於某門檻時就無法再攀爬，因此規則會限制機制的效果與邊界。",
+            "refs": [
+              "f17ba500-p004-c01"
+            ]
+          },
+          {
+            "title": "目標在文中的位置與未明確之處",
+            "kind": "paper",
+            "text": "文中把 game goals 與 player actions、strategies、game states 並列為遊戲的形式性質，並未說目標屬於機制。Järvinen 則把機制描述為限制玩家計畫空間、以達成目標的手段；遊戲的勝利條件也是在 game loop 中依規則計算。目前檢索到的段落沒有完整說明 mechanics 與 goals 的所有關係，若要更精確需要再查看原文其他段落。",
+            "refs": [
+              "f17ba500-p002-c07",
+              "f17ba500-p002-c05",
+              "f17ba500-p004-c00"
+            ]
+          },
+          {
+            "title": "你的直覺從何而來",
+            "kind": "explanation",
+            "text": "你的想法有文獻依據：Lundgren 與 Björk 把 mechanics 定義為規則系統的一部分，因此認為不需要區分兩者。不過這是作者批評或與之對照的立場，作者認為區分 rules 與 mechanics 有助於分析電玩。",
+            "refs": [
+              "f17ba500-p002-c01",
+              "f17ba500-p007-c03"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "f17ba500-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Implicit in this definition is an ontological difference between rules and mechanics. Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states. In this sense, rules are modeled after agency, while mechanics are modeled for agency. In this object oriented framework, rules could be considered general or particular properties of the game system and its agents. All objects in games have properties. These properties are often either rules or determined by rules. These rules are evaluated by a game loop, an algorithm that relates the current state of the game and the properties of the objects with a number of conditions that consequently can modify the game state. For example, the winning condition, the losing condition and the effects of action in the player's avatar health are calculated when running the game loop. This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics.",
+            "verified": true,
+            "quotes": [
+              "Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p007-c03",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "Perhaps the most significant is the ontological distinction between rules and mechanics. Game researchers have argued convincingly that mechanics could be understood as subsets of rules. However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games. Game studies history shows that there is no dominant definition of key concepts like rules or mechanics, and that those that attempted have yet to succeed. This article should not be read as the ultimate definition of game mechanics. This definition is 2026/9/5 15:03 Game Studies - Defining Game Mechanics https://gamestudies.org/0802/articles/sicart 13/16 flawed, yet less so than some previous ones. My goal will be achieved if I have succeeded in communicating to the reader one simple notion: that it is possible and useful to understand game mechanics as different from game rules, and in that understanding, we can more clearly describe how games can be designed to affect players in unprecedented ways.",
+            "verified": true,
+            "quotes": [
+              "However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c07",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states. However, these definitions do not provide a single, dominant approach that encompasses all these aspects. All the previous definitions have attempted to provide pragmatic approaches to allow for a flexible understanding of game mechanics in games and how they relate",
+            "verified": true,
+            "quotes": [
+              "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This algorithm relates rules with mechanics, exemplifying the applicability of an ontological distinction between rules and mechanics. For example, in Shadow of the Colossus players have a game mechanic called \"climb\", but they are also determined by a property called \"stamina\", which is the algorithmic translation of a rule: \"players have x stamina units\". The climbing mechanic states that when invoked, stamina is lost at a certain ratio. A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore. The game loop checks the game state; if the player invokes the climb mechanic, those functions that determine the consequences and boundaries of the players' interaction are called, and the resulting changes in the game state are evaluated against the rules of the game. Then, the player will succeed or not in \"climbing\", depending on their \"stamina\". The second part of the definition claims that game mechanics are methods \"designed for interaction with the game state\". This implies that the task of game designers is to create mechanics that agents can use to interact with the game. These interactions modify the game state (Juul, 2005, 59-64).",
+            "verified": true,
+            "quotes": [
+              "A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c05",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "The MDA framework provides insights into the relations between the formal, algorithmic elements of games and how they are presented to and manipulated by players. Nevertheless, it is a model that does not allow for the description and analysis of a mechanic due to a relative inconsistency in the formulation of the definition. A much more precise approach is taken by Järvinen (2008), who not only distinguishes rules from mechanics but also relates the latter with player agency, both in terms of psychological and gameplay experiences. Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254). In this sense, \"game mechanics are best described with verbs\" (p. 263), and so \"take cover\" would be a key mechanic in Gears of War, while the two dominant mechanics in Orbital would be \"attract\" and \"repel\". In relation to rules, Järvinen perceives mechanics as making \"a particular set of rules available to the player in the form of prescribed causal relations between game elements and their consequence to particular game states\" (p.",
+            "verified": true,
+            "quotes": [
+              "Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254)."
+            ]
+          },
+          {
+            "ref_id": "f17ba500-p002-c01",
+            "kind": "paper",
+            "page": 2,
+            "page_label": "2",
+            "text": "11). Some formalist approaches makes a difference between the rules of the game and the actions afforded to players by those rules. This conceptual perspective can be tracked back to Avedon (1971) who suggests a formal structure of games in which there are \"specific operations, required courses of action, method of play,\" which he defines as the \"procedure for action\", as opposed to the \"rules governing action\", which are \"fixed principles that determine conduct and standards for behavior\" (p. 422). However, this formal distinction between rules and mechanics is not always applied in game mechanics research. Lundgren and Björk (2003) define game mechanics as \"any part of the rule system of a game that covers one, and only one, possible kind of interaction that takes place during the game, be it general or specific (...) mechanics are regarded as a way to summarize game rules\". In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics. Game mechanics would be low-level descriptions of game rules or clusters of game rules.",
+            "verified": true,
+            "quotes": [
+              "In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "作者如何看待 Järvinen 的 mechanics 定義與本文定義的差異？",
+          "game loop 在文中是如何把規則與機制連結起來的？",
+          "如果玩家目標與遊戲規則衝突，文中會怎麼描述？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "mechanics rules goals relationship definition game mechanics distinction from rules and goals",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "f17ba500-p004-c00",
+          "quote": "Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states.",
+          "ok": true,
+          "text": "Game mechanics are concerned with the actual interaction with the game state, while rules provide the possibility space where that interaction is possible, regulating as well the transition between states.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p007-c03",
+          "quote": "However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games.",
+          "ok": true,
+          "text": "However, rules are normative, while mechanics are performative, and I have argued that this ontological distinction can be extremely beneficial for the analysis of computer games.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p004-c01",
+          "quote": "A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore.",
+          "ok": true,
+          "text": "A property/rule states that if stamina is below a certain threshold, climbing is not possible anymore.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p002-c07",
+          "quote": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states.",
+          "ok": true,
+          "text": "Game mechanics are used to describe how players interact with rules, and as more formal properties of a game such as game goals, player actions and strategies, and game states.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p002-c05",
+          "quote": "Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254).",
+          "ok": true,
+          "text": "Järvinen defines mechanics as \"means to guide the player into particular behaviour by constraining the space of possible plans to attain goals\" (p. 254).",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "f17ba500-p002-c01",
+          "quote": "In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics.",
+          "ok": true,
+          "text": "In this view, mechanics is a term that encompasses those rules that are applied when the player interacts with the game, and there is no need for a definitional distinction between rules and mechanics.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "機制、規則與目標的關係",
+      "answer_language": "中文（繁體）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1179,
+        "retrieve": 657,
+        "generate_answer": 19447
+      },
+      "latency_ms": 21299,
+      "error": null
+    }
+  ],
+  "scenario": {
+    "name": "mei-05",
+    "situation": "Core vs primary mechanics, cross-paper question",
+    "persona": "mei",
+    "paper_pdf": "../../test_papers/game-mechanics.pdf",
+    "reading_goal": "Get a general overview of this paper",
+    "research_context": "",
+    "language": "中文（繁體）",
+    "pipeline_version": "v1",
+    "moves": [
+      "Ask what the difference is between core mechanics and primary mechanics in this article.",
+      "State a misunderstanding: you think core mechanics are simply the most fun mechanics.",
+      "Refer to 'the other one' with a short reference and ask for an example from a game.",
+      "Ask whether the author says this definition is better than MDA's definition of mechanics.",
+      "Ask how mechanics relate to rules and goals according to the article."
+    ]
+  },
+  "persona_text": "# Persona: Mei\n\n**Who.** Mei is a third-year undergraduate from Taiwan taking a game design course, and a non-native\nEnglish speaker. A topic from the lecture caught her interest, so she is reading the teacher's extra\nreadings on her own.\n\n**What she wants.** To understand the main ideas well enough to explain them and connect them to the\nlecture. She has no research project. Reading goal: *Get a general overview of this paper*.\n\n**How she behaves.**\n- Writes in Traditional Chinese (繁體字). Interface language: 中文（繁體）.\n- Has limited background. Starts with broad questions (\"這篇在講什麼？\"), then asks for basic definitions.\n- Often restates an idea in her own words to check her understanding, and is sometimes wrong (e.g. mixes up\n  mechanics and dynamics, or treats a game mechanic as the same thing as a rule or a goal).\n- Says plainly when she still does not understand (\"還是不太懂\", \"可以換個方式解釋嗎？\").\n- Tends to accept answers and rarely opens the sources unless prompted.\n- Brings in examples from games she plays or from the lecture and asks whether they fit the paper.\n\n**Papers.** MDA: A Formal Approach to Game Design and Game Research; Game Studies – Defining Game Mechanics.\n",
+  "simulator": {
+    "model": "anthropic/claude-haiku-5.5",
+    "prompt": "You are role-playing a learner who is reading an academic paper with PaperLens, a conversational reading\ntool. Stay in character as the persona below for the whole conversation.\n\n<persona>\n{persona}\n</persona>\n\nSituation\n- Paper: {paper_title}\n- Reading goal chosen in PaperLens: {reading_goal}\n- Research context the learner typed into PaperLens: {research_context}\n\nYour task each turn\n- Write ONLY the learner's next chat message, as the persona would type it into a chat box.\n- Carry out the move given for this turn, adapted naturally to what PaperLens has just said. The move says\n  WHAT the learner does; you decide the exact wording in the persona's voice.\n- If the move asks you to state a misunderstanding, state it confidently as your own understanding; do not\n  hint that it is wrong.\n- If the move asks you to refer back to something, use a short reference (\"that\", \"the second one\",\n  \"你刚才说的那个\") instead of repeating the full term, exactly as a real learner would.\n- Use the persona's language and writing style. Keep the message short (usually 1-3 sentences).\n- Base what you say about the paper only on what PaperLens has told you so far; you have not read the paper\n  yourself beyond that.\n- Never mention that you are simulated, never describe the move, and never evaluate PaperLens.\n",
+    "log": [
+      {
+        "move": 1,
+        "type": "chat",
+        "instruction": "Ask what the difference is between core mechanics and primary mechanics in this article.",
+        "learner_message": "想請問一下，這篇文章裡的 core mechanics 和 primary mechanics 有什麼不同？我看到兩個詞好像都在講同一件事，所以有點搞混。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 2,
+        "type": "chat",
+        "instruction": "State a misunderstanding: you think core mechanics are simply the most fun mechanics.",
+        "learner_message": "喔，我現在比較懂了，謝謝。所以我的理解是：core mechanics 就是遊戲裡最好玩的那些機制，玩家最常在玩的、最有趣的部分，然後 primary 和 secondary 再把它們依照好不好玩分成兩類。這樣理解對嗎？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 3,
+        "type": "chat",
+        "instruction": "Refer to 'the other one' with a short reference and ask for an example from a game.",
+        "learner_message": "好，那我知道 core 不是看好不好玩了。那另外一個（secondary 那個）呢？可以舉一個遊戲的例子嗎？我平常玩的遊戲應該也有類似的東西，想看看是不是符合。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 4,
+        "type": "chat",
+        "instruction": "Ask whether the author says this definition is better than MDA's definition of mechanics.",
+        "learner_message": "那我還想問一下，作者有沒有說他對 mechanics 的定義比 MDA 那篇的定義更好？我看到老師的閱讀清單裡也有 MDA，不知道兩篇是不是在講同一個東西。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 5,
+        "type": "chat",
+        "instruction": "Ask how mechanics relate to rules and goals according to the article.",
+        "learner_message": "那我還想問，文章裡 mechanics 跟 rules（規則）和 goals（目標）是什麼關係？我覺得機制應該就是規則，玩家要達成的目標也算是機制的一部分，所以這三個其實是同一件事吧？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      }
+    ]
+  },
+  "run": 1,
+  "stopped_early": false,
+  "error": null
+}

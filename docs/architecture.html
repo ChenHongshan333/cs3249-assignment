@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PaperLens Architecture Figures</title>
+  <style>
+    :root { --ink: #1f211c; --muted: #61665d; }
+    body { margin: 0; padding: 24px 16px 48px; background: #f4f4f1; color: var(--ink); font-family: Cambria, Georgia, serif; }
+    header { max-width: 624px; margin: 0 auto 20px; }
+    h1 { margin: 0 0 6px; font-size: 20px; font-weight: 400; }
+    header p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    figure { max-width: 624px; margin: 0 auto 36px; }
+    /* 624 px = text width of a Google Doc page (6.5 in at 96 dpi): text shows at its real in-document size */
+    .page { background: #fff; box-shadow: 0 1px 4px rgb(0 0 0 / 12%); }
+    .page svg { display: block; width: 100%; height: auto; }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+    figcaption { color: var(--muted); font-size: 13px; font-style: italic; }
+    button { padding: 6px 12px; border: 1px solid #5f7d5a; border-radius: 8px; background: #fff; color: #46663f; font: 13px Cambria, Georgia, serif; cursor: pointer; }
+    button:hover { background: #edf1ea; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Architecture figures</h1>
+    <p>Each figure is 624&nbsp;px wide, the text width of a Google Doc page, so text appears at its real size in the report.
+      “Download PNG” exports a 3× image for inserting into the document.</p>
+  </header>
+  <figure>
+    <div class="page" id="fig1"></div>
+    <div class="bar"><figcaption>Figure 1. System overview</figcaption><button data-fig="fig1">Download PNG</button></div>
+  </figure>
+  <figure>
+    <div class="page" id="fig2"></div>
+    <div class="bar"><figcaption>Figure 2. One learner turn through the LangGraph workflow</figcaption><button data-fig="fig2">Download PNG</button></div>
+  </figure>
+
+<script>
+// ---------------------------------------------------------------- visual vocabulary (see legend in each figure)
+// colour = kind of component; solid border = our code, dashed border = external or optional;
+// bold = name, regular = what it does, italic grey = where in the code / what an arrow carries.
+const C = {
+  ink: '#1f211c', text2: '#454a42', muted: '#61665d', line: '#5c615a',
+  front: { fill: '#e8efe4', stroke: '#5f7d5a' },          // front end (our code)
+  back: { fill: '#fbf4e2', stroke: '#b8924a' },           // back end (our code)
+  llm: { fill: '#fbe6dc', stroke: '#c4673f' },            // external AI service / LLM step
+  data: { fill: '#e8eef3', stroke: '#6f879b' },           // data stores / data steps
+  plain: { fill: '#ffffff', stroke: '#8f9389' },
+  groupFront: { fill: '#f6f9f4', stroke: '#a9bba3' },
+  groupBack: { fill: '#fdfaf3', stroke: '#d8c49a' },
+};
+const FONT = 'Cambria, Georgia, serif';
+const SIZE = { title: 13, desc: 11.5, code: 10.5, label: 10.5, group: 12 };
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function textLines(cx, top, lines) {
+  // lines: [[kind, text]] with kind in title | desc | code; centred block starting at `top`
+  let y = top, out = '';
+  for (const [kind, t] of lines) {
+    y += kind === 'title' ? 14 : 14.5;
+    const style = kind === 'title' ? `font-weight="700" font-size="${SIZE.title}" fill="${C.ink}"`
+      : kind === 'desc' ? `font-size="${SIZE.desc}" fill="${C.text2}"`
+      : `font-style="italic" font-size="${SIZE.code}" fill="${C.muted}"`;
+    out += `<text x="${cx}" y="${y}" text-anchor="middle" ${style}>${esc(t)}</text>`;
+  }
+  return out;
+}
+const boxHeight = (n) => 12 + n * 14.5 + 2;
+
+function box(x, y, w, lines, tone, { dashed = false, h } = {}) {
+  const height = h ?? boxHeight(lines.length);
+  return `<rect x="${x}" y="${y}" width="${w}" height="${height}" rx="10" fill="${tone.fill}" stroke="${tone.stroke}"
+    stroke-width="1.6" ${dashed ? 'stroke-dasharray="6 4"' : ''}/>` + textLines(x + w / 2, y + 4, lines);
+}
+function pill(x, y, w, lines, tone) {
+  const height = boxHeight(lines.length);
+  return `<rect x="${x}" y="${y}" width="${w}" height="${height}" rx="${height / 2}" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.6"/>`
+    + textLines(x + w / 2, y + 4, lines);
+}
+function cylinder(x, y, w, h, lines, tone, { dashed = false } = {}) {
+  const ry = 7, d = dashed ? 'stroke-dasharray="6 4"' : '';
+  return `<path d="M${x},${y + ry} v${h - 2 * ry} a${w / 2},${ry} 0 0 0 ${w},0 v${-(h - 2 * ry)}" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.6" ${d}/>
+    <ellipse cx="${x + w / 2}" cy="${y + ry}" rx="${w / 2}" ry="${ry}" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.6" ${d}/>`
+    + textLines(x + w / 2, y + ry + 6, lines);
+}
+function group(x, y, w, h, title, subtitle, tone) {
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.4" stroke-dasharray="7 5"/>
+    <text x="${x + 14}" y="${y + 19}" font-size="${SIZE.group}"><tspan font-weight="700" fill="${C.ink}">${esc(title)}</tspan><tspan dx="6" font-style="italic" fill="${C.muted}">${esc(subtitle)}</tspan></text>`;
+}
+function edge(points, { dashed = false, bridge = false, arrow = true } = {}) {
+  const d = 'M' + points.map((p) => p.join(',')).join(' L');
+  const under = bridge ? `<path d="${d}" fill="none" stroke="#fff" stroke-width="7"/>` : '';
+  return under + `<path d="${d}" fill="none" stroke="${C.line}" stroke-width="1.4" ${dashed ? 'stroke-dasharray="5 4"' : ''}
+    ${arrow ? 'marker-end="url(#arrow)"' : ''} stroke-linejoin="round"/>`;
+}
+function label(x, y, t, anchor = 'middle') {
+  return `<text x="${x}" y="${y}" text-anchor="${anchor}" font-style="italic" font-size="${SIZE.label}" fill="${C.muted}">${esc(t)}</text>`;
+}
+function person(cx, cy, color) {
+  return `<circle cx="${cx}" cy="${cy - 8}" r="6" fill="${color}"/><path d="M${cx - 10},${cy + 11} a10,9 0 0 1 20,0 z" fill="${color}"/>`;
+}
+function legendItem(x, y, kind, tone, text, opts = {}) {
+  let sw = '';
+  if (kind === 'box') sw = `<rect x="${x}" y="${y - 10}" width="22" height="14" rx="4" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.4" ${opts.dashed ? 'stroke-dasharray="4 3"' : ''}/>`;
+  if (kind === 'cyl') sw = `<path d="M${x},${y - 7} v9 a11,3 0 0 0 22,0 v-9" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.3"/><ellipse cx="${x + 11}" cy="${y - 7}" rx="11" ry="3" fill="${tone.fill}" stroke="${tone.stroke}" stroke-width="1.3"/>`;
+  if (kind === 'line') sw = `<path d="M${x},${y - 3} h20" stroke="${C.line}" stroke-width="1.4" ${opts.dashed ? 'stroke-dasharray="5 4"' : ''} marker-end="url(#arrow)"/>`;
+  return sw + `<text x="${x + 30}" y="${y + 1}" font-size="11" fill="${C.text2}">${esc(text)}</text>`;
+}
+function svg(w, h, body) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" font-family="${FONT}">
+    <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="${C.line}"/></marker></defs>
+    <rect width="${w}" height="${h}" fill="#fff"/>${body}</svg>`;
+}
+
+// ---------------------------------------------------------------- Figure 1: system overview
+function figure1() {
+  let b = '';
+  b += group(12, 10, 600, 182, 'Browser', 'React + TypeScript', C.groupFront);
+  b += box(28, 42, 176, [['title', 'Conversation'], ['desc', 'answers, sources, judgment'], ['code', 'Conversation.tsx']], C.front);
+  b += box(224, 42, 176, [['title', 'PDF viewer'], ['desc', 'highlights the cited quote'], ['code', 'PdfViewer.tsx']], C.front);
+  b += box(420, 42, 176, [['title', 'Research-use note'], ['desc', 'editable, exports Markdown'], ['code', 'SessionNotes.tsx']], C.front);
+  b += edge([[116, 101], [116, 116], [508, 116], [508, 101]], { arrow: false });
+  b += edge([[312, 101], [312, 130]]);
+  b += box(242, 130, 140, [['title', 'api.ts'], ['code', 'REST client']], C.front);
+
+  b += edge([[312, 173], [312, 250]]);
+  b += label(320, 216, 'REST /api', 'start');
+
+  b += group(12, 228, 600, 250, 'Back end', 'FastAPI, Python', C.groupBack);
+  b += box(242, 250, 140, [['title', 'HTTP routes'], ['code', 'main.py']], C.back);
+  b += edge([[312, 293], [312, 316]]);
+  b += box(192, 316, 240, [['title', 'Service layer'], ['desc', 'one entry point for the UI and tests'], ['code', 'core.py']], C.back);
+  b += box(28, 323, 132, [['title', 'Test scripts'], ['code', 'run_conversation.py']], C.back);
+  b += edge([[160, 345], [192, 345]]);
+  b += edge([[312, 375], [312, 388], [168, 388], [168, 400]]);
+  b += edge([[312, 388], [456, 388], [456, 400]]);
+  b += box(36, 400, 264, [['title', 'Ingestion'], ['desc', 'extract, figures, chunk, embed, overview'], ['code', 'ingest.py']], C.back);
+  b += box(324, 400, 264, [['title', 'Turn workflow'], ['desc', 'LangGraph, see Figure 2'], ['code', 'graph.py']], C.back);
+
+  // external services and data stores
+  b += cylinder(56, 540, 160, 58, [['title', 'Chroma'], ['desc', 'passage vectors']], C.data);
+  b += box(232, 540, 160, [['title', 'OpenRouter'], ['desc', 'LLM and embeddings'], ['code', 'Claude Haiku 5.5']], C.llm, { dashed: true });
+  b += cylinder(408, 540, 160, 58, [['title', 'Local files'], ['desc', 'papers, sessions, run logs']], C.data);
+
+  b += edge([[136, 459], [136, 540]], { dashed: true });
+  b += label(130, 512, 'store passages', 'end');
+  b += edge([[252, 459], [292, 540]]);
+  b += edge([[380, 459], [334, 540]]);
+  b += label(366, 524, 'rewrite, answer', 'start');
+  b += edge([[336, 459], [336, 506], [180, 506], [180, 540]], { dashed: true, bridge: true });
+  b += label(222, 500, 'search this paper');
+  b += label(279, 530, 'embed, summarise', 'end');
+  b += edge([[432, 345], [600, 345], [600, 569], [568, 569]], { dashed: true });
+  b += label(516, 339, 'storage.py');
+
+  // legend
+  b += `<line x1="12" y1="616" x2="612" y2="616" stroke="#e3e5df"/>`;
+  b += legendItem(14, 640, 'box', C.front, 'Front end (our code)');
+  b += legendItem(166, 640, 'box', C.back, 'Back end (our code)');
+  b += legendItem(316, 640, 'box', C.llm, 'External AI service', { dashed: true });
+  b += legendItem(470, 640, 'cyl', C.data, 'Data store');
+  b += legendItem(14, 664, 'line', null, 'call');
+  b += legendItem(166, 664, 'line', null, 'read or write data', { dashed: true });
+  return svg(624, 676, b);
+}
+
+// ---------------------------------------------------------------- Figure 2: one learner turn
+function figure2() {
+  let b = '';
+  const X = 162, W = 300;
+  b += person(140, 36, C.front.stroke);
+  b += pill(X, 12, W, [['title', 'Learner message'], ['code', '“Why did they struggle with that?”']], C.plain);
+  b += edge([[312, 55], [312, 78]]);
+  b += box(X, 78, W, [['title', 'load_session'], ['desc', 'history, goal, research context, language']], C.data);
+  b += edge([[312, 121], [312, 144]]);
+  b += box(X, 144, W, [['title', 'rewrite_query'], ['desc', 'resolves “that”; decides local or whole paper']], C.llm);
+
+  // optional branch for whole-paper questions
+  b += edge([[462, 166], [544, 166], [544, 197]], { dashed: true });
+  b += label(550, 186, 'whole paper', 'start');
+  b += box(476, 197, 136, [['title', 'load_overview'], ['desc', 'sourced overview']], C.data, { dashed: true });
+  b += edge([[544, 240], [544, 272], [462, 272]], { dashed: true });
+
+  b += edge([[312, 187], [312, 250]]);
+  b += label(320, 223, 'local question', 'start');
+  b += box(X, 250, W, [['title', 'retrieve'], ['desc', 'top 6 in this paper + passages cited last turn']], C.data);
+  b += edge([[312, 293], [312, 316]]);
+  b += box(X, 316, W, [['title', 'generate_answer'], ['desc', 'layered answer, cited IDs, verbatim quotes']], C.llm);
+  b += edge([[312, 359], [312, 382]]);
+  b += box(X, 382, W, [['title', 'validate_citations'], ['desc', 'drops unknown IDs, checks quotes, adds pages']], C.back);
+  b += edge([[312, 425], [312, 448]]);
+  b += box(X, 448, W, [['title', 'save_session'], ['desc', 'session file and one JSONL log event']], C.data);
+  b += edge([[312, 491], [312, 514]]);
+  b += pill(X, 514, W, [['title', 'Answer shown'], ['code', 'click a source → quote highlighted on the PDF']], C.plain);
+
+  // example values from the run log (Table 4), aligned with their steps
+  const note = (y, lines) => lines.map((t, i) => label(150, y + i * 13, t, 'end')).join('');
+  b += note(162, ['“that” → “why non-expert', 'participants struggled …”']);
+  b += note(275, ['6 passages + 2 carried over']);
+  b += note(341, ['partial evidence, 3 quotes']);
+  b += note(407, ['3 of 3 quotes matched']);
+  b += note(473, ['13.8 s in total']);
+
+  // legend
+  b += `<line x1="12" y1="572" x2="612" y2="572" stroke="#e3e5df"/>`;
+  b += legendItem(14, 596, 'box', C.llm, 'Calls the LLM');
+  b += legendItem(150, 596, 'box', C.back, 'Rule-based logic');
+  b += legendItem(300, 596, 'box', C.data, 'Reads or writes data');
+  b += legendItem(460, 596, 'box', C.data, 'Whole-paper only', { dashed: true });
+  b += label(14, 620, 'Grey italics on the left: values from the run log of the example turn (Table 4).', 'start');
+  return svg(624, 632, b);
+}
+
+// ---------------------------------------------------------------- render + PNG export
+const figures = { fig1: figure1(), fig2: figure2() };
+for (const [id, markup] of Object.entries(figures)) document.getElementById(id).innerHTML = markup;
+
+document.querySelectorAll('button[data-fig]').forEach((button) => button.addEventListener('click', () => {
+  const svgEl = document.querySelector(`#${button.dataset.fig} svg`);
+  const scale = 3;
+  const width = svgEl.viewBox.baseVal.width, height = svgEl.viewBox.baseVal.height;
+  const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svgEl)], { type: 'image/svg+xml' }));
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = width * scale; canvas.height = height * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.drawImage(img, 0, 0, width, height);
+    URL.revokeObjectURL(url);
+    const link = document.createElement('a');
+    link.download = `paperlens-${button.dataset.fig === 'fig1' ? 'architecture' : 'turn-workflow'}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  };
+  img.src = url;
+}));
+</script>
+</body>
+</html>

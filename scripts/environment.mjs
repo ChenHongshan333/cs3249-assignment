@@ -82,7 +82,7 @@ export function npmCommand() {
 }
 
 export function missingDependencies() {
-  return ['vite', 'react', '@assistant-ui/react'].filter((name) => {
+  return ['vite', 'react', 'lucide-react'].filter((name) => {
     try {
       const entry = require.resolve(name);
       return !entry.startsWith(path.join(projectRoot, 'node_modules') + path.sep);

@@ -1,0 +1,17 @@
+{
+  "name": "mei-02",
+  "situation": "Kinds of fun, designer vs player perspective",
+  "persona": "mei",
+  "paper_pdf": "../../test_papers/mda.pdf",
+  "reading_goal": "Get a general overview of this paper",
+  "research_context": "",
+  "language": "中文（繁體）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what the paper says 'fun' is made of.",
+    "Refer to 'the second kind' with a short reference and ask for an example.",
+    "State a misunderstanding: you think players experience mechanics first and aesthetics last, the same as designers.",
+    "Ask how this connects to a lecture example where a game was boring even though it had many features.",
+    "Ask whether the authors give a concrete game as an example in the paper."
+  ]
+}

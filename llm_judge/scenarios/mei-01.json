@@ -1,0 +1,18 @@
+{
+  "name": "mei-01",
+  "situation": "Overview, MDA terms, wrong restatement, still confused",
+  "persona": "mei",
+  "paper_pdf": "../../test_papers/mda.pdf",
+  "reading_goal": "Get a general overview of this paper",
+  "research_context": "",
+  "language": "中文（繁體）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask in a broad way what this paper is about.",
+    "Ask what mechanics, dynamics and aesthetics each mean.",
+    "Restate it in your own words but mix up mechanics and dynamics (e.g. say dynamics are the rules written by the designer).",
+    "Say you still do not quite understand and ask for another way to explain it.",
+    "Bring an example from a game you play and ask which of the three parts it belongs to.",
+    "Refer to 'the third one' with a short reference and ask why the authors put it last."
+  ]
+}

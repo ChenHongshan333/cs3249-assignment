@@ -1,0 +1,178 @@
+/* A2 additions: real backend states (indexing status, verified sources, judgment, editable notes).
+   Uses the same tokens as theme.css so the A1 visual style is unchanged. */
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.icon-button:disabled { opacity: .35; cursor: not-allowed; }
+.url-field button:disabled { opacity: .45; cursor: not-allowed; }
+.primary-button {
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border: 0; border-radius: 8px;
+  background: var(--ink); color: var(--paper); font-size: 13px;
+}
+.primary-button:hover:not(:disabled) { background: var(--sage-ink); }
+.primary-button:disabled { opacity: .45; cursor: not-allowed; }
+.primary-button svg { width: 15px; height: 15px; }
+.text-button { padding: 4px 0; border: 0; background: transparent; color: var(--sage-ink); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.text-button:hover { color: var(--gold-ink); }
+.form-actions { display: flex; align-items: center; justify-content: flex-end; gap: 16px; margin-top: 14px; }
+.inline-error { margin: 8px 0; color: var(--danger); font-size: 13px; line-height: 1.4; }
+.inline-error.banner { width: min(760px, calc(100% - 84px)); margin: 14px 42px 0; padding: 9px 13px; border: 1px solid #e3c4c0; border-radius: 8px; background: #fbf1ef; }
+.muted-text { color: var(--muted); font-size: 14px; }
+
+.context-form > p { color: var(--text-2); font-size: 16px; line-height: 1.5; }
+.context-form textarea, .rationale-field textarea, .note-edit {
+  width: 100%; padding: 11px 13px; border: 1px solid var(--sage-dark); border-radius: 10px;
+  background: #fffdf8; font-size: 16px; line-height: 1.5; resize: vertical;
+}
+.choice-screen.context-form { width: min(820px, 100%); }
+.prompt-hint { margin: 18px 0 0; color: var(--muted); font-size: 13px; }
+.goal-overview .text-button { margin-top: 8px; }
+
+.indexing-status h1 { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.indexing-status h1 svg { width: 26px; height: 26px; flex: 0 0 auto; color: var(--sage-ink); }
+.status-error { width: min(680px, 100%); margin-top: 26px; padding: 16px 18px; border: 1px solid #e3c4c0; border-radius: 12px; background: #fbf1ef; }
+.status-error p { margin: 0; color: var(--danger); font-size: 14px; line-height: 1.5; }
+
+.cited-passage {
+  position: absolute; right: 14px; bottom: 14px; left: 14px; z-index: 8; max-height: 42%; overflow: auto;
+  padding: 12px 14px; border: 2px solid var(--gold); border-radius: 10px; background: rgb(255 253 248 / 97%);
+  box-shadow: 0 6px 20px rgb(31 33 28 / 18%); animation: source-flash .4s ease-out;
+}
+.cited-passage header { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--sage-ink); font: 12px/1.3 Arial, sans-serif; }
+.cited-passage header button { display: grid; width: 24px; height: 24px; padding: 3px; place-items: center; border: 0; background: transparent; color: var(--sage-ink); }
+.cited-passage small { display: block; margin-top: 4px; color: var(--muted); font: 10px/1.3 Arial, sans-serif; }
+.cited-passage p { margin: 9px 0 0; font-size: 13px; line-height: 1.5; white-space: pre-line; }
+
+.message-mode { display: block; margin-bottom: 4px; color: var(--gold-ink); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; }
+.message.user.failed { border-color: #e3c4c0; }
+.turn-error p { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 12px; color: var(--danger); font-size: 14px; }
+.turn-error p svg, .evidence-notice svg { width: 16px; height: 16px; flex: 0 0 auto; margin-top: 2px; }
+.ref-chips { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-left: 6px; vertical-align: 1px; }
+.ref-chip {
+  min-width: 22px; height: 22px; padding: 0 6px; border: 1px solid var(--gold); border-radius: 5px;
+  background: #fff8e8; color: var(--gold-ink); font: 12px/20px Arial, sans-serif;
+}
+.ref-chip.wide { height: auto; padding: 2px 7px; }
+.ref-chip:hover:not(:disabled) { background: var(--gold); color: #fff; }
+.ref-chip.unverified { border-style: dashed; border-color: #c9a39f; background: transparent; color: var(--danger); cursor: not-allowed; }
+.evidence-notice { display: flex; gap: 8px; margin: 14px 0 0; padding: 10px 13px; border-radius: 8px; background: #fbf1ef; color: var(--danger); font-size: 15px; line-height: 1.4; }
+.evidence-notice.subtle { background: #f6f1e4; color: var(--warn-ink); }
+.clarifying-question { margin: 14px 0 0; padding: 10px 13px; border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; background: #fbf6ea; font-size: 16px; }
+.clarifying-question small, .system-suggestion small { display: block; margin-bottom: 4px; color: var(--gold-ink); font-size: 11.5px; letter-spacing: .1em; }
+.system-suggestion { margin-top: 16px; padding: 12px 14px; border: 1px dashed var(--sage-dark); border-radius: 10px; background: #f3f5f0; }
+.system-suggestion p { margin: 0; font-size: 16px; line-height: 1.45; }
+.layer-title { display: flex; flex-direction: column; gap: 2px; }
+.kind-tag { color: var(--muted); font: normal 12px/1.25 Arial, sans-serif; letter-spacing: .03em; }
+.kind-tag.example, .kind-tag.inference { color: var(--gold-ink); }
+.kind-tag.paper { color: var(--sage-ink); }
+.source-list { display: grid; gap: 6px; margin-top: 16px; }
+.source-list > small { color: var(--gold-ink); font-size: 11.5px; letter-spacing: .1em; }
+.source-list .source-link { margin-top: 0; grid-template-columns: auto minmax(0, 1fr) auto; }
+.source-link strong { overflow: hidden; color: var(--text-2); text-overflow: ellipsis; white-space: nowrap; }
+.source-link.unverified { border-style: dashed; color: var(--danger); cursor: not-allowed; }
+
+.rationale-field { display: grid; gap: 7px; margin-top: 16px; font-size: 15px; color: var(--text-2); }
+.judgment-confirmation em { color: var(--text-2); font-size: 13px; }
+.judgment-step .text-button { margin-top: 10px; }
+
+.history-entry small:last-child { color: var(--muted); }
+.note-edit { display: block; margin-top: 10px; background: transparent; }
+.note-edit.selected-idea { border-left: 4px solid var(--sage-dark); background: #edf1ea; }
+.note-context .note-edit { margin-top: 0; }
+.note-evidence + .note-evidence { margin-top: 12px; }
+.note-evidence .ref-chips { margin: 6px 0 0; }
+.note-empty { margin-top: 30px; }
+.note-actions { margin-top: 22px; }
+.note-actions .muted-text { margin-right: auto; }
+
+/* Secondary action button (e.g. Download .md next to Save note) */
+.secondary-button {
+  display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 1px solid var(--sage-ink); border-radius: 8px;
+  background: transparent; color: var(--sage-ink); font-size: 13px;
+}
+.secondary-button:hover:not(:disabled) { background: var(--sage); color: var(--ink); }
+.secondary-button:disabled { opacity: .45; cursor: not-allowed; }
+.secondary-button svg { width: 15px; height: 15px; }
+.primary-button.danger { background: var(--danger); }
+.primary-button.danger:hover:not(:disabled) { background: #6f2e29; }
+
+/* Header popover menus (text size, downloads) */
+.menu-panel {
+  position: fixed; display: grid; width: min(300px, calc(100vw - 24px)); gap: 2px; padding: 12px;
+  border: 1px solid var(--sage-dark); border-radius: 14px; background: var(--paper); box-shadow: 0 8px 20px rgb(31 33 28 / 12%);
+}
+.menu-panel > small { margin: 2px 8px 8px; color: var(--gold-ink); font-size: 11px; letter-spacing: .1em; }
+.menu-panel > button {
+  display: grid; gap: 2px; width: 100%; padding: 10px 12px; border: 0; border-radius: 9px;
+  background: transparent; font-size: 15px; text-align: left;
+}
+.menu-panel > button small { color: var(--muted); font-size: 12px; }
+.menu-panel > button:hover:not(:disabled), .menu-panel > button:focus-visible { background: var(--sage); }
+.menu-panel > button.active { background: var(--sage-ink); color: #fff; }
+.menu-panel > button.active small { color: #e8eee5; }
+.menu-panel > button:disabled { opacity: .5; cursor: not-allowed; }
+/* Keep the right-most header tooltip inside the window */
+.header-actions .icon-button:last-child::after { right: 0; left: auto; transform: translate(0, -3px); }
+.header-actions .icon-button:last-child:hover::after, .header-actions .icon-button:last-child:focus-visible::after { transform: translate(0, 0); }
+
+/* PDF.js viewer (left pane) */
+.paper-viewer { position: relative; height: 100%; }
+.pdf-viewer { display: flex; height: 100%; flex-direction: column; background: #e4e4df; }
+.pdf-toolbar {
+  display: flex; flex: 0 0 auto; align-items: center; gap: 4px; padding: 6px 10px;
+  border-bottom: 1px solid #cfcfc8; background: var(--paper); color: var(--text-2); font: 13px/1 Arial, sans-serif;
+}
+.pdf-toolbar button, .pdf-toolbar a {
+  display: grid; min-width: 30px; height: 30px; padding: 0 6px; place-items: center; border: 0; border-radius: 7px;
+  background: transparent; color: var(--text-2); font: inherit; text-decoration: none;
+}
+.pdf-toolbar button:hover:not(:disabled), .pdf-toolbar a:hover { background: var(--sage); color: var(--ink); }
+.pdf-toolbar button:disabled { opacity: .4; cursor: not-allowed; }
+.pdf-toolbar svg { width: 18px; height: 18px; }
+.pdf-toolbar form { display: flex; align-items: center; gap: 5px; }
+.pdf-toolbar input { width: 38px; height: 26px; padding: 0 4px; border: 1px solid var(--sage-dark); border-radius: 6px; background: #fffdf8; text-align: center; }
+.pdf-zoom-label { min-width: 48px !important; }
+.pdf-zoom-label.active { color: var(--sage-ink) !important; font-weight: 700; }
+.pdf-toolbar-divider { width: 1px; height: 20px; margin: 0 4px; background: var(--divider); }
+.pdf-toolbar-spacer { flex: 1; }
+.pdf-scroll { position: relative; min-height: 0; flex: 1 1 auto; overflow: auto; }
+.pdf-pages { display: flex; width: max-content; min-width: 100%; flex-direction: column; align-items: center; }
+.pdf-page { position: relative; flex: 0 0 auto; background: #fff; box-shadow: 0 1px 4px rgb(31 33 28 / 18%); }
+.pdf-page canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.pdf-page .textLayer { z-index: 2; }
+.pdf-highlights { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.pdf-highlights span {
+  position: absolute; border-radius: 2px; background: rgb(255 205 70 / 55%); mix-blend-mode: multiply;
+  box-shadow: 0 0 0 1.5px rgb(200 150 40 / 55%);
+}
+.pdf-loading, .pdf-error { margin: 24px; color: var(--text-2); font-size: 14px; line-height: 1.5; }
+.pdf-error { color: var(--danger); }
+
+/* Cited-passage panel over the PDF */
+.cited-passage .highlight-status { display: block; margin-top: 6px; color: var(--sage-ink); font: 12px/1.4 Arial, sans-serif; }
+.cited-passage .highlight-status.searching { color: var(--muted); }
+.cited-passage .highlight-status.quote-approx, .cited-passage .highlight-status.passage-start { color: var(--warn-ink); }
+.cited-passage .highlight-status.not-found { color: var(--danger); }
+.cited-passage header .text-button { width: auto; height: auto; margin: 0 0 0 auto; padding: 2px 4px; color: var(--sage-ink); font: 12px Arial, sans-serif; text-decoration: underline; text-underline-offset: 3px; }
+.cited-passage header > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cited-passage.compact { padding: 8px 10px 8px 14px; }
+.cited-passage .highlight-status { display: flex; align-items: flex-start; gap: 6px; }
+.cited-passage .highlight-status svg { width: 14px; height: 14px; flex: 0 0 auto; margin-top: 1px; }
+.cited-pages { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.cited-pages button { padding: 5px 9px; border: 1px solid var(--sage-dark); border-radius: 999px; background: transparent; color: var(--sage-ink); font: 12px Arial, sans-serif; }
+.cited-pages button:hover { background: var(--sage); }
+.source-group { display: grid; gap: 6px; }
+.source-group + .source-group { margin-top: 10px; }
+.source-group > small { color: var(--gold-ink); font-size: 11.5px; letter-spacing: .1em; }
+
+/* Hidden-text notice (red-team fix, p7): the PDF had text invisible on the page that PaperLens removed at upload. */
+.paper-viewer { display: flex; flex-direction: column; }
+.paper-viewer > .pdf-viewer { flex: 1 1 auto; min-height: 0; height: auto; }
+.hidden-text-notice {
+  flex: 0 0 auto; max-height: 30%; overflow: auto; padding: 8px 12px; border-bottom: 1px solid #e3d3a8;
+  background: #fbf3dc; color: var(--warn-ink, #6b4e00); font: 13px/1.4 Arial, sans-serif;
+}
+.hidden-text-head { display: flex; align-items: center; gap: 8px; }
+.hidden-text-head svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.hidden-text-head span { flex: 1 1 auto; }
+.hidden-text-notice ul { margin: 6px 0 2px; padding-left: 22px; }
+.hidden-text-notice li { margin: 3px 0; color: var(--text-2, #333); }

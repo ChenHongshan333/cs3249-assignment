@@ -1,9 +1,9 @@
 {
   "name": "paperlens-high-fi",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "PaperLens high-fidelity interactive prototype for CS3249.",
+  "description": "PaperLens: a RAG-based learning CUI for reading academic papers (CS3249 A2).",
   "engines": {
     "node": "^18.13.0 || ^20.0.0 || >=22.0.0"
   },
@@ -13,12 +13,13 @@
     "start": "node scripts/start.mjs",
     "doctor": "node scripts/doctor.mjs",
     "build": "tsc --noEmit && vite build",
-    "test": "tsx --test tests/mock-service.test.ts scripts/tests/local-scripts.test.mjs scripts/tests/locator-paths.test.mjs"
+    "test": "tsx --test scripts/tests/local-scripts.test.mjs scripts/tests/locator-paths.test.mjs src/highlight.test.ts",
+    "test:backend": "node scripts/backend-tests.mjs",
+    "backend": "node scripts/backend.mjs"
   },
   "dependencies": {
-    "@assistant-ui/react": "0.14.26",
     "lucide-react": "1.45.0",
-    "radix-ui": "1.6.7",
+    "pdfjs-dist": "4.10.38",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },

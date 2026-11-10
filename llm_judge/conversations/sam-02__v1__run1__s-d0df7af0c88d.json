@@ -1,0 +1,2573 @@
+{
+  "exported_at": "2026-11-09T09:25:33+00:00",
+  "paper": {
+    "paper_id": "2e0d07894105eb23",
+    "filename": "hunyuan3d-2.pdf",
+    "title": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation",
+    "status": "ready",
+    "error": null,
+    "failed_stage": null,
+    "created_at": "2026-11-09T09:02:12+00:00",
+    "updated_at": "2026-11-09T09:02:57+00:00",
+    "page_count": 28,
+    "page_labels_differ": false,
+    "figure_count": 16,
+    "chunk_count": 96,
+    "overview_count": 17
+  },
+  "session": {
+    "session_id": "s-d0df7af0c88d",
+    "paper_id": "2e0d07894105eb23",
+    "paper_title": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation",
+    "created_at": "2026-11-09T09:23:47+00:00",
+    "reading_goal": "Explore potential use in my research",
+    "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+    "language": "中文（简体）",
+    "current_concept": "DiT 输入图像条件与预处理（背景去除与居中）",
+    "messages": [
+      {
+        "id": "u-a732b868dc",
+        "role": "user",
+        "mode": "chat",
+        "text": "我想先了解一下大概流程。Hunyuan3D 2.0 是怎么从一张输入图片生成 3D shape 的？能不能先简单讲讲这个 shape generation 的主要步骤，我后面再看细节。",
+        "created_at": "2026-11-09T09:24:05+00:00"
+      },
+      {
+        "id": "a-2d06751665",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:05+00:00",
+        "short_answer": "简单说，Hunyuan3D 2.0 的 shape 部分分两步：先用 Hunyuan3D-ShapeVAE 把 3D 网格压缩成潜空间中的一串连续 token；再用基于 flow 的扩散 Transformer（Hunyuan3D-DiT）在这个潜空间里，根据输入图片预测 token 序列，最后由 VAE 解码器把 token 解码成多边形网格。",
+        "short_answer_refs": [
+          "2e0d0789-p004-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "流程的三个主要环节",
+            "kind": "paper",
+            "text": "论文说 shape 生成模型由两部分组成：一是把 polygon mesh 压缩成潜空间连续 token 的自编码器，二是在该潜空间上训练、以用户图片为条件预测 token 序列的扩散模型；预测出的 token 再经 VAE 解码器还原为网格。论文同时指出，给定输入图片后，Hunyuan3D-DiT 先生成 bare mesh，之后才进入纹理生成阶段。",
+            "refs": [
+              "2e0d0789-p004-c01",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "用通俗的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先学一个“压缩字典”（ShapeVAE），能把一个 3D 形状压成少量潜变量并再还原；然后学一个“按图作画”的生成器（DiT），在这些潜变量中，根据输入图片生成合适的潜变量；最后用字典把潜变量还原成网格。这种做法借鉴了图像和视频生成中成功的潜扩散模型思路。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "论文中的关键设计",
+            "kind": "paper",
+            "text": "论文称 shape 生成采用潜扩散模型的架构，并说明这一设计受到潜扩散模型在图像和视频生成中成功应用的启发。在训练上，DiT 是在 ShapeVAE 的潜空间上，用 flow-matching 目标训练的 dual-single stream transformer。",
+            "refs": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "对你的研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，这条“单图 → 潜空间 token → 网格”的路线可以作为一个参考基线：它把形状生成与输入图片条件解耦，并且在潜空间里做扩散。你可以先思考：网络照片通常有遮挡、光照和背景干扰，而论文的 DiT 输入是用户提供的图片，这一点需要你自己判断是否适合你的数据。",
+            "refs": [
+              "2e0d0789-p004-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding.",
+            "verified": true,
+            "quotes": [
+              "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-ShapeVAE 是如何用 vector sets 和 importance sampling 压缩 3D 形状的？",
+          "Hunyuan3D-DiT 是如何把输入图片作为条件引入潜空间生成过程的？",
+          "这套方法对网络照片这类带噪声的输入有什么限制？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 shape generation pipeline from single input image: main steps, flow-based diffusion model, shape VAE, conditioning",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-560dd4c07e",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，流程我大概懂了。所以 Hunyuan3D-DiT 在同一步里就把颜色和纹理也一起生成了，对吧？那你刚才说的那三个环节，最后解码出来的网格已经是带贴图的了，我下一步直接拿来用就行？",
+        "created_at": "2026-11-09T09:24:20+00:00"
+      },
+      {
+        "id": "a-7c1c6a4a9b",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:20+00:00",
+        "short_answer": "不是。根据论文，Hunyuan3D-DiT 只生成无纹理的裸网格（bare mesh），颜色和纹理由单独的 Hunyuan3D-Paint 模型在第二阶段生成。所以你刚才理解的三个环节解码出来的是几何网格，还不是带贴图的模型。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c02",
+          "2e0d0789-p004-c01"
+        ],
+        "sections": [
+          {
+            "title": "两阶段流程的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段生成流程：先生成裸网格，再为该网格合成纹理贴图。作者认为这种策略有助于分开处理形状和纹理生成的难点。",
+            "refs": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "纹理阶段的输入与输出",
+            "kind": "paper",
+            "text": "论文中 Hunyuan3D-Paint 以生成网格的法线图和位置图作为几何条件，输出用于烘焙的多视角图像，再烘焙成高清纹理贴图。这说明纹理依赖已生成的几何。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，可以把 DiT 看作几何生成部分，把 Paint 看作可单独替换或补充的纹理部分。是否直接采用 Paint，或者改用其他纹理方法，需要你根据自己的数据和 AR 平台要求决定。",
+            "refs": []
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "我检索到的段落只说明输出是多边形网格和纹理贴图的两阶段流程，没有确认网格的拓扑、UV 展开、尺度或面数是否可以直接用于 AR 应用，需要进一步阅读技术细节或实际测试。",
+            "refs": [
+              "2e0d0789-p004-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding.",
+            "verified": true,
+            "quotes": [
+              "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何从多视角图像烘焙出纹理贴图的？",
+          "论文中 Hunyuan3D-DiT 生成的裸网格有哪些质量指标或限制？",
+          "如果我只需要几何，不需要纹理，Hunyuan3D 2.0 的 shape 部分能单独使用吗？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 shape generation outputs geometry only, separate texture synthesis stage Hunyuan3D-Paint multi-view diffusion",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-af8bc870e5",
+        "role": "user",
+        "mode": "chat",
+        "text": "我还是没太搞清楚这两部分的区别。你能换个方式解释一下吗？比如 Hunyuan3D-DiT 和 Hunyuan3D-Paint 分别负责什么，它们之间的输入输出是怎么衔接的？",
+        "created_at": "2026-11-09T09:24:41+00:00"
+      },
+      {
+        "id": "a-f0911f220c",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:41+00:00",
+        "short_answer": "可以这样理解：Hunyuan3D-DiT 只负责根据输入图片生成无纹理的几何网格（裸网格）；Hunyuan3D-Paint 则以这个网格的法线图和位置图为几何条件，并结合输入图片，生成多视角图像，再烘焙成纹理贴图。两者的衔接点就是 DiT 输出的网格。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "两阶段的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段流程：先生成裸网格，再为该网格合成纹理图。DiT 是几何生成模型，Paint 是纹理生成模型，这种分工用于解耦形状和纹理生成的难度。",
+            "refs": [
+              "2e0d0789-p003-c02",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "输入输出如何衔接",
+            "kind": "explanation",
+            "text": "DiT 的输入是一张图片，输出是裸网格。Paint 的输入包括 DiT 生成网格的法线图和位置图（几何条件），论文还提到它利用输入图片；输出是用于烘焙的多视角图像，最终得到高分辨率纹理贴图。下面的“渲染得到法线图和位置图”这一步是我的推断，论文原文没有逐步展开。",
+            "refs": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "由于纹理阶段可以作用于生成的网格，也可以作用于手工制作的网格，如果你的 AR 资产需要替换或保留某一部分（例如只用几何或只做纹理），这种模块化结构可能值得参考。是否采用、如何采用，需要你根据自己的数据和目标来判断。",
+            "refs": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "目前检索到的段落只说明了两阶段的分工和 Paint 的输入输出，没有详细说明法线图和位置图如何从网格渲染得到、多视角图像如何映射到 UV 贴图，以及 Paint 内部的具体结构。图 2 的文字中还出现了 Image Delighting 等步骤，但具体作用需要再查阅原文细节。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 如何从多视角图像得到最终的 UV 纹理贴图？",
+          "论文中法线图和位置图是怎样从生成的网格渲染出来的？",
+          "如果我想只替换纹理模块而保留自己的网格，论文中的接口是否支持？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 Hunyuan3D-DiT shape generation bare mesh input output Hunyuan3D-Paint texture synthesis pipeline two-stage",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-d0bd0bed04",
+        "role": "user",
+        "mode": "chat",
+        "text": "那我想问一下输入条件。论文里 DiT 的输入是单张干净的图片吗？还是有对背景或光照的要求？如果是网络上随便拍的照片，背景比较杂、有遮挡，这种情况会不会影响生成效果？你刚才提到的 Image Delighting 是不是就是为了处理光照的？",
+        "created_at": "2026-11-09T09:24:59+00:00"
+      },
+      {
+        "id": "a-25712c176e",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:59+00:00",
+        "short_answer": "根据目前检索到的段落，论文只说明 Hunyuan3D-DiT 以一张输入图片为条件生成裸网格，但没有说明它对图片的背景、光照或遮挡有什么具体要求。Image Delighting 确实是为光照和阴影服务的，但它属于纹理阶段（Hunyuan3D-Paint）的预处理，目的是防止光照被烘焙进贴图，并不是 DiT 的输入处理，也不直接处理杂乱背景或遮挡。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的输入条件：论文说了什么",
+            "kind": "paper",
+            "text": "论文只写到 Hunyuan3D-DiT 根据给定的输入图片生成高保真的裸网格，没有在这些段落里列出对单张图、背景干净程度或遮挡的要求。因此，“输入必须是单张干净图片”这一点在现有段落中无法确认。",
+            "refs": [
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "Image Delighting 解决的是纹理阶段的光照问题",
+            "kind": "paper",
+            "text": "论文指出，用户收集或 T2I 模型生成的参考图通常有明显且多变的光照和阴影，直接输入多视角生成框架会让光照和阴影被烘焙进纹理贴图。因此 Image Delighting 是在多视角生成之前对输入图做的处理，服务于纹理。这一段描述的是 Paint 部分，而不是 DiT 的输入。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片得到可用于 AR 的带贴图资产，可以把问题拆成两部分：几何形状（DiT 阶段）和贴图外观（Paint 阶段）。Delighting 对光照烘焙问题有直接参考价值，但对背景杂乱和遮挡，目前的段落没有给出答案，你需要在论文中继续查找 DiT 的图像条件编码和训练数据细节，或者自己做实验验证。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "目前无法确认的地方",
+            "kind": "limitation",
+            "text": "现有段落没有说明 DiT 训练时用的图片是否带背景、是否做过前景分割，也没有给出对遮挡情况的实验结果。因此不能推断杂乱背景或遮挡对几何生成质量的具体影响，只能说这些段落尚不足以回答。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你计划用的网络照片是否已经做过前景分割（去掉背景）？这会影响你该关注哪一部分的预处理。",
+        "follow_up_suggestions": [
+          "论文中 Hunyuan3D-DiT 是如何把输入图像编码成条件的？",
+          "Hunyuan3D 2.0 的训练数据是否包含带背景或遮挡的图片？",
+          "如果只用 Paint 阶段的 delighting，纹理在复杂光照下还会有哪些残留问题？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 DiT input image condition requirements background removal occlusion lighting Image Delighting preprocessing",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-5dd5b44fcb",
+        "role": "user",
+        "mode": "critical_review",
+        "text": "Critically review whether the idea or method we have been discussing is applicable to my research.",
+        "created_at": "2026-11-09T09:25:20+00:00"
+      },
+      {
+        "id": "a-660172aa41",
+        "role": "assistant",
+        "mode": "critical_review",
+        "created_at": "2026-11-09T09:25:20+00:00",
+        "short_answer": "论文中 Hunyuan3D-DiT 的图像条件预处理包括背景去除和居中（来自概览，非原文段落）；光照处理（delighting）属于纹理阶段。检索到的段落没有说明遮挡或杂乱背景对生成效果的影响。对你的网络照片场景，可以借鉴背景去除和居中的做法，但遮挡和杂乱背景需要你自己验证。",
+        "short_answer_refs": [
+          "ov-4",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的图像预处理：背景去除与居中",
+            "kind": "paper",
+            "text": "根据 PaperLens 对论文页面的概览，Hunyuan3D-DiT 以 DINOv2 Giant 在 518x518 分辨率下提取输入图像特征，并在此之前进行背景去除、居中和白色背景填充。这些是概览中的描述，原文段落未检索到，因此需要在原文中核对具体细节。",
+            "refs": [
+              "ov-4"
+            ]
+          },
+          {
+            "title": "两个预处理环节的分工",
+            "kind": "explanation",
+            "text": "论文中的光照处理是 Hunyuan3D-Paint 的前处理：输入图像若带有明显光照和阴影，直接输入多视角生成会把光影烘焙进贴图。因此 delighting 解决的是纹理阶段的光照问题，而 DiT 的背景去除和居中解决的是形状阶段的输入规范化问题，两者不是同一个模块。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "你的研究面对网络随拍照片，背景杂乱是主要难点之一。论文中的背景去除和居中可以作为你的预处理基线，先把主体从背景中分离出来，再送入形状生成模型。光照方面，Paint 阶段的 delighting 思路与 AR 中需要重新打光或与真实环境光匹配的目标有关，可以作为后续纹理处理的参考。",
+            "refs": [
+              "ov-4",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "论文证据的局限",
+            "kind": "limitation",
+            "text": "检索到的段落没有说明 DiT 对遮挡、杂乱背景或低质量分割的鲁棒性，也没有给出针对这些输入的实验。论文的用户研究评估的是 300 个结果的总体质量和图像条件遵循度，但没有报告按输入难度拆分的结果。另外，纹理阶段的训练依赖在均匀白光下渲染的 3D 数据，作者也提到要抑制渲染数据带来的风格偏差。",
+            "refs": [
+              "2e0d0789-p015-c00",
+              "2e0d0789-p008-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "ov-4",
+            "kind": "overview",
+            "page": 6,
+            "pages": [
+              6,
+              7
+            ],
+            "page_label": "6",
+            "text": "These pages describe the Hunyuan3D-DiT shape generation transformer, which uses double- and single-stream blocks to let shape latent tokens and image condition tokens interact, with timestep-only modulation and no positional embedding on the latent sequence. Image conditioning uses DINOv2 Giant features at 518x518 with background removal and centering, and training follows a flow matching objective with an affine conditional optimal transport path and Euler ODE sampling at inference. The pages then introduce Hunyuan3D-Paint, a generative texture map synthesis pipeline with image delighting as pre-processing, a reference-net and multi-task attention for multi-view consistency, and a geometry-aware greedy viewpoint selection strategy using 8 to 12 views. Details of the multi-view synthesis and texture baking stages are only referenced, not fully described on these pages.",
+            "verified": true
+          },
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p015-c00",
+            "kind": "paper",
+            "page": 15,
+            "page_label": "15",
+            "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+            "verified": true,
+            "quotes": [
+              "The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction"
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p008-c01",
+            "kind": "paper",
+            "page": 8,
+            "page_label": "8",
+            "text": "These functionalities are realized in Hunyuan3D-Paint according to a bunch of techniques containing a double-stream image conditioning reference-net, a multi-task attention mechanism, and a strategy for geometry and view conditioning. Double-stream Image Conditioning Reference-Net.In the aim of the image following, Hunyuan3D- Paint implements a reference-net conditioning approach [116], upon which we develop a series of alternative solutions. Specifically, rather than a noisy feature synchronized with the generation branch, we directly feed the original V AE feature of the reference image into the reference branch to maintain image details as much as possible. Since the feature is noiseless, we set the timestep of the reference branch to 0 to maintain the input image information faithfully. On the other hand, to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights (which serves as the base model for our multi-view generation).",
+            "verified": true,
+            "quotes": [
+              "to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights"
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-DiT 的背景去除具体是如何实现的，论文有没有说明分割方法？",
+          "论文的 delighting 模型是如何训练的，它能否处理网络照片中的阴影？",
+          "如果输入图片有部分遮挡，论文中的形状生成结果会受到什么影响？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+        },
+        "retrieval_query": "Hunyuan3D-DiT input image conditioning background removal lighting occlusion preprocessing limitations in-the-wild photos",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-f344c180fe",
+        "role": "user",
+        "mode": "judgment_feedback",
+        "text": "My verdict: Need more evidence\nMy rationale: 我不同意直接用 Use with adaptations，因为背景去除和居中只来自概览，原文段落我还没核对到。论文没有给出遮挡和杂乱背景下的鲁棒性证据，所以在看到原文实验或自己用网络照片测试之前，我还不能判断这条路线对我的 AR 资产是否可行。",
+        "created_at": "2026-11-09T09:25:33+00:00"
+      },
+      {
+        "id": "a-f0ef007194",
+        "role": "assistant",
+        "mode": "judgment_feedback",
+        "created_at": "2026-11-09T09:25:33+00:00",
+        "short_answer": "你选择「Need more evidence」，理由是背景去除与居中只来自概览、尚未找到原文段落，且论文没有遮挡和杂乱背景下的鲁棒性证据。就现有段落而言，这个判断是站得住的：检索到的原文确实没有直接验证遮挡或杂乱背景下的效果。",
+        "short_answer_refs": [
+          "2e0d0789-p007-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "原文能支持你的哪些部分",
+            "kind": "paper",
+            "text": "论文明确写到，Hunyuan3D-DiT 以输入图片为条件生成裸网格，而纹理阶段的 Image Delighting 针对的是光照和阴影被烘焙进贴图的问题。这与你关心的网络照片光照问题相关，但它属于纹理阶段，不能直接推出 DiT 对杂乱背景或遮挡的鲁棒性。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "你的理由正确地指出了缺少鲁棒性证据。需要注意的是，检索到的段落里也没有关于输入图片背景去除或居中的原文描述，所以即使之后在概览中确认，也仍需找到对应原文页面来核实。另外，纹理阶段的 delighting 与几何阶段的输入预处理是两件事，不要混为一谈。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "一个可以加强判断的检查",
+            "kind": "inference",
+            "text": "你可以先在论文中搜索背景去除、居中的原文描述，并查看是否有用户研究或对比实验涉及图像条件的遵循程度（如用户研究中的 Image Following 指标）。随后用十几张带遮挡和杂乱背景的网络照片做小规模测试，观察裸网格的完整性，这样能更直接地判断这条路线对 AR 资产是否可行。",
+            "refs": [
+              "2e0d0789-p015-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p015-c00",
+            "kind": "paper",
+            "page": 15,
+            "page_label": "15",
+            "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+            "verified": true,
+            "quotes": [
+              "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "论文中是否有关于输入图片背景去除的原文描述？",
+          "Image Following 的用户研究是如何设计的？",
+          "如何设计一个小规模测试来检验遮挡和杂乱背景的影响？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-DiT input image condition background removal and centering preprocessing, robustness to occlusion and cluttered background, evaluation",
+        "pipeline_version": "v1"
+      }
+    ],
+    "system_suggestion": {
+      "verdict": "Use with adaptations",
+      "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+    },
+    "judgment": {
+      "verdict": "Need more evidence",
+      "rationale": "我不同意直接用 Use with adaptations，因为背景去除和居中只来自概览，原文段落我还没核对到。论文没有给出遮挡和杂乱背景下的鲁棒性证据，所以在看到原文实验或自己用网络照片测试之前，我还不能判断这条路线对我的 AR 资产是否可行。",
+      "submitted_at": "2026-11-09T09:25:24+00:00",
+      "system_suggestion_at_time": {
+        "verdict": "Use with adaptations",
+        "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+      }
+    },
+    "note": null,
+    "updated_at": "2026-11-09T09:25:33+00:00",
+    "language_override": ""
+  },
+  "events": [
+    {
+      "event": "session_created",
+      "event_id": "a94b237f7f9e",
+      "timestamp": "2026-11-09T09:23:47+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "reading_goal": "Explore potential use in my research",
+      "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+      "language": "中文（简体）"
+    },
+    {
+      "event": "turn",
+      "event_id": "329befb9238d",
+      "timestamp": "2026-11-09T09:24:05+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "我想先了解一下大概流程。Hunyuan3D 2.0 是怎么从一张输入图片生成 3D shape 的？能不能先简单讲讲这个 shape generation 的主要步骤，我后面再看细节。",
+      "retrieval_query": "Hunyuan3D 2.0 shape generation pipeline from single input image: main steps, flow-based diffusion model, shape VAE, conditioning",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p004-c01",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7534,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7313,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.7061,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.7028,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+        },
+        {
+          "chunk_id": "2e0d0789-p018-c02",
+          "kind": "paper",
+          "page": 18,
+          "page_label": "18",
+          "similarity": 0.665,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generative models.The evolution of generative model paradigms has continually influenced shape generation research. Early works [98, 76, 106, 110] based on Variational Auto-encoder [41], generative adversarial networks (GANs) [ 29], normalizing flow [ 65], and auto-regressive modeling [31] demonstrated strong generative capabilities within several specific categories. The success of diffusion models [33] and their variants [58, 53] in text-conditioned image [74, 45] generation has spurred the popularity of diffusion-based shape generative models, with notable works [16, 119] achieving stable cross-category shape generation. Additionally, advancements in network architectures have propelled shape-generation research. The transition from early 3D Convolutional Neural Networks [30] to the now-common Transformer architectures [94, 67] has led to the development of classic shape generation networks, enhancing performance. Building on these advancements, Hunyuan3D 2.0 employs a flow-based scalable transformer, further improving the model’s shape generation capabilities. Large-scale Dataset.Large-scale datasets are the cornerstone of scaling laws."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6642,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "简单说，Hunyuan3D 2.0 的 shape 部分分两步：先用 Hunyuan3D-ShapeVAE 把 3D 网格压缩成潜空间中的一串连续 token；再用基于 flow 的扩散 Transformer（Hunyuan3D-DiT）在这个潜空间里，根据输入图片预测 token 序列，最后由 VAE 解码器把 token 解码成多边形网格。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p004-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "流程的三个主要环节",
+            "kind": "paper",
+            "text": "论文说 shape 生成模型由两部分组成：一是把 polygon mesh 压缩成潜空间连续 token 的自编码器，二是在该潜空间上训练、以用户图片为条件预测 token 序列的扩散模型；预测出的 token 再经 VAE 解码器还原为网格。论文同时指出，给定输入图片后，Hunyuan3D-DiT 先生成 bare mesh，之后才进入纹理生成阶段。",
+            "chunk_ids": [
+              "2e0d0789-p004-c01",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "用通俗的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先学一个“压缩字典”（ShapeVAE），能把一个 3D 形状压成少量潜变量并再还原；然后学一个“按图作画”的生成器（DiT），在这些潜变量中，根据输入图片生成合适的潜变量；最后用字典把潜变量还原成网格。这种做法借鉴了图像和视频生成中成功的潜扩散模型思路。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "论文中的关键设计",
+            "kind": "paper",
+            "text": "论文称 shape 生成采用潜扩散模型的架构，并说明这一设计受到潜扩散模型在图像和视频生成中成功应用的启发。在训练上，DiT 是在 ShapeVAE 的潜空间上，用 flow-matching 目标训练的 dual-single stream transformer。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "对你的研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，这条“单图 → 潜空间 token → 网格”的路线可以作为一个参考基线：它把形状生成与输入图片条件解耦，并且在潜空间里做扩散。你可以先思考：网络照片通常有遮挡、光照和背景干扰，而论文的 DiT 输入是用户提供的图片，这一点需要你自己判断是否适合你的数据。",
+            "chunk_ids": [
+              "2e0d0789-p004-c01"
+            ]
+          },
+          {
+            "title": "目前材料的局限",
+            "kind": "limitation",
+            "text": "这些段落只给出了整体结构，没有展开 token 采样、去噪步数、图像条件如何注入 DiT 等细节，也没有提供网络照片场景下的评测。因此关于具体实现和鲁棒性，还需要后续阅读对应章节和实验部分再确认。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p004-c01",
+            "quote": "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+          },
+          {
+            "chunk_id": "2e0d0789-p003-c04",
+            "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c00",
+            "quote": "Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation."
+          },
+          {
+            "chunk_id": "2e0d0789-p003-c02",
+            "quote": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "Hunyuan3D 2.0 的 shape generation 主要流程（单图到潜空间 token 再到网格）",
+        "follow_up_suggestions": [
+          "Hunyuan3D-ShapeVAE 是如何用 vector sets 和 importance sampling 压缩 3D 形状的？",
+          "Hunyuan3D-DiT 是如何把输入图片作为条件引入潜空间生成过程的？",
+          "这套方法对网络照片这类带噪声的输入有什么限制？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-2d06751665",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:05+00:00",
+        "short_answer": "简单说，Hunyuan3D 2.0 的 shape 部分分两步：先用 Hunyuan3D-ShapeVAE 把 3D 网格压缩成潜空间中的一串连续 token；再用基于 flow 的扩散 Transformer（Hunyuan3D-DiT）在这个潜空间里，根据输入图片预测 token 序列，最后由 VAE 解码器把 token 解码成多边形网格。",
+        "short_answer_refs": [
+          "2e0d0789-p004-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "流程的三个主要环节",
+            "kind": "paper",
+            "text": "论文说 shape 生成模型由两部分组成：一是把 polygon mesh 压缩成潜空间连续 token 的自编码器，二是在该潜空间上训练、以用户图片为条件预测 token 序列的扩散模型；预测出的 token 再经 VAE 解码器还原为网格。论文同时指出，给定输入图片后，Hunyuan3D-DiT 先生成 bare mesh，之后才进入纹理生成阶段。",
+            "refs": [
+              "2e0d0789-p004-c01",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "用通俗的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先学一个“压缩字典”（ShapeVAE），能把一个 3D 形状压成少量潜变量并再还原；然后学一个“按图作画”的生成器（DiT），在这些潜变量中，根据输入图片生成合适的潜变量；最后用字典把潜变量还原成网格。这种做法借鉴了图像和视频生成中成功的潜扩散模型思路。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "论文中的关键设计",
+            "kind": "paper",
+            "text": "论文称 shape 生成采用潜扩散模型的架构，并说明这一设计受到潜扩散模型在图像和视频生成中成功应用的启发。在训练上，DiT 是在 ShapeVAE 的潜空间上，用 flow-matching 目标训练的 dual-single stream transformer。",
+            "refs": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "对你的研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，这条“单图 → 潜空间 token → 网格”的路线可以作为一个参考基线：它把形状生成与输入图片条件解耦，并且在潜空间里做扩散。你可以先思考：网络照片通常有遮挡、光照和背景干扰，而论文的 DiT 输入是用户提供的图片，这一点需要你自己判断是否适合你的数据。",
+            "refs": [
+              "2e0d0789-p004-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding.",
+            "verified": true,
+            "quotes": [
+              "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-ShapeVAE 是如何用 vector sets 和 importance sampling 压缩 3D 形状的？",
+          "Hunyuan3D-DiT 是如何把输入图片作为条件引入潜空间生成过程的？",
+          "这套方法对网络照片这类带噪声的输入有什么限制？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 shape generation pipeline from single input image: main steps, flow-based diffusion model, shape VAE, conditioning",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p004-c01",
+          "quote": "The predicted tokens are further decoded into a polygon mesh with V AE decoder.",
+          "ok": true,
+          "text": "The predicted tokens are further decoded into a polygon mesh with V AE decoder.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "ok": true,
+          "text": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "quote": "Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation.",
+          "ok": true,
+          "text": "Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "quote": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+          "ok": true,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D 2.0 的 shape generation 主要流程（单图到潜空间 token 再到网格）",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2584,
+        "retrieve": 926,
+        "generate_answer": 12888
+      },
+      "latency_ms": 16409,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "8ad79ae0ce82",
+      "timestamp": "2026-11-09T09:24:20+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，流程我大概懂了。所以 Hunyuan3D-DiT 在同一步里就把颜色和纹理也一起生成了，对吧？那你刚才说的那三个环节，最后解码出来的网格已经是带贴图的了，我下一步直接拿来用就行？",
+      "retrieval_query": "Hunyuan3D 2.0 shape generation outputs geometry only, separate texture synthesis stage Hunyuan3D-Paint multi-view diffusion",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.7491,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.7441,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.733,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.7305,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation “Living out everyone’s imagination on creating and manipulating 3D assets.” —Hunyuan3D Team ∗ Abstract We present Hunyuan3D 2.0, an advanced large-scale 3D synthesis system for generating high-resolution textured 3D assets. This system includes two foundation components: a large-scale shape generation model – Hunyuan3D-DiT, and a largescale texture synthesis model – Hunyuan3D-Paint. The shape generative model, built on a scalable flow-based diffusion transformer, aims to create geometry that properly aligns with a given condition image, laying a solid foundation for downstream applications. The texture synthesis model, benefiting from strong geometric and diffusion priors, produces high-resolution and vibrant texture maps for either generated or hand-crafted meshes. Furthermore, we build Hunyuan3D-Studio – a versatile, user-friendly production platform that simplifies the re-creation process of 3D assets. It allows both professional and amateur users to manipulate or even animate their meshes efficiently."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.7003,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.6955,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c01",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "不是。根据论文，Hunyuan3D-DiT 只生成无纹理的裸网格（bare mesh），颜色和纹理由单独的 Hunyuan3D-Paint 模型在第二阶段生成。所以你刚才理解的三个环节解码出来的是几何网格，还不是带贴图的模型。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c02",
+          "2e0d0789-p004-c01"
+        ],
+        "sections": [
+          {
+            "title": "两阶段流程的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段生成流程：先生成裸网格，再为该网格合成纹理贴图。作者认为这种策略有助于分开处理形状和纹理生成的难点。",
+            "chunk_ids": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "纹理阶段的输入与输出",
+            "kind": "paper",
+            "text": "论文中 Hunyuan3D-Paint 以生成网格的法线图和位置图作为几何条件，输出用于烘焙的多视角图像，再烘焙成高清纹理贴图。这说明纹理依赖已生成的几何。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，可以把 DiT 看作几何生成部分，把 Paint 看作可单独替换或补充的纹理部分。是否直接采用 Paint，或者改用其他纹理方法，需要你根据自己的数据和 AR 平台要求决定。",
+            "chunk_ids": []
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "我检索到的段落只说明输出是多边形网格和纹理贴图的两阶段流程，没有确认网格的拓扑、UV 展开、尺度或面数是否可以直接用于 AR 应用，需要进一步阅读技术细节或实际测试。",
+            "chunk_ids": [
+              "2e0d0789-p004-c01"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c02",
+            "quote": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c01",
+            "quote": "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c00",
+            "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "Hunyuan3D 2.0 中 shape 生成与纹理生成的分工",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何从多视角图像烘焙出纹理贴图的？",
+          "论文中 Hunyuan3D-DiT 生成的裸网格有哪些质量指标或限制？",
+          "如果我只需要几何，不需要纹理，Hunyuan3D 2.0 的 shape 部分能单独使用吗？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-7c1c6a4a9b",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:20+00:00",
+        "short_answer": "不是。根据论文，Hunyuan3D-DiT 只生成无纹理的裸网格（bare mesh），颜色和纹理由单独的 Hunyuan3D-Paint 模型在第二阶段生成。所以你刚才理解的三个环节解码出来的是几何网格，还不是带贴图的模型。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c02",
+          "2e0d0789-p004-c01"
+        ],
+        "sections": [
+          {
+            "title": "两阶段流程的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段生成流程：先生成裸网格，再为该网格合成纹理贴图。作者认为这种策略有助于分开处理形状和纹理生成的难点。",
+            "refs": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "纹理阶段的输入与输出",
+            "kind": "paper",
+            "text": "论文中 Hunyuan3D-Paint 以生成网格的法线图和位置图作为几何条件，输出用于烘焙的多视角图像，再烘焙成高清纹理贴图。这说明纹理依赖已生成的几何。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片生成 AR 可用的 3D 资产，可以把 DiT 看作几何生成部分，把 Paint 看作可单独替换或补充的纹理部分。是否直接采用 Paint，或者改用其他纹理方法，需要你根据自己的数据和 AR 平台要求决定。",
+            "refs": []
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "我检索到的段落只说明输出是多边形网格和纹理贴图的两阶段流程，没有确认网格的拓扑、UV 展开、尺度或面数是否可以直接用于 AR 应用，需要进一步阅读技术细节或实际测试。",
+            "refs": [
+              "2e0d0789-p004-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c01",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding.",
+            "verified": true,
+            "quotes": [
+              "The predicted tokens are further decoded into a polygon mesh with V AE decoder."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何从多视角图像烘焙出纹理贴图的？",
+          "论文中 Hunyuan3D-DiT 生成的裸网格有哪些质量指标或限制？",
+          "如果我只需要几何，不需要纹理，Hunyuan3D 2.0 的 shape 部分能单独使用吗？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 shape generation outputs geometry only, separate texture synthesis stage Hunyuan3D-Paint multi-view diffusion",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "quote": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh.",
+          "ok": true,
+          "text": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c01",
+          "quote": "The predicted tokens are further decoded into a polygon mesh with V AE decoder.",
+          "ok": true,
+          "text": "The predicted tokens are further decoded into a polygon mesh with V AE decoder.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "ok": true,
+          "text": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D 2.0 中 shape 生成与纹理生成的分工",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2980,
+        "retrieve": 614,
+        "generate_answer": 10408
+      },
+      "latency_ms": 14024,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "70af0a5fed6c",
+      "timestamp": "2026-11-09T09:24:41+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "我还是没太搞清楚这两部分的区别。你能换个方式解释一下吗？比如 Hunyuan3D-DiT 和 Hunyuan3D-Paint 分别负责什么，它们之间的输入输出是怎么衔接的？",
+      "retrieval_query": "Hunyuan3D 2.0 Hunyuan3D-DiT shape generation bare mesh input output Hunyuan3D-Paint texture synthesis pipeline two-stage",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.8283,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.8211,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.811,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.7885,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.7662,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation “Living out everyone’s imagination on creating and manipulating 3D assets.” —Hunyuan3D Team ∗ Abstract We present Hunyuan3D 2.0, an advanced large-scale 3D synthesis system for generating high-resolution textured 3D assets. This system includes two foundation components: a large-scale shape generation model – Hunyuan3D-DiT, and a largescale texture synthesis model – Hunyuan3D-Paint. The shape generative model, built on a scalable flow-based diffusion transformer, aims to create geometry that properly aligns with a given condition image, laying a solid foundation for downstream applications. The texture synthesis model, benefiting from strong geometric and diffusion priors, produces high-resolution and vibrant texture maps for either generated or hand-crafted meshes. Furthermore, we build Hunyuan3D-Studio – a versatile, user-friendly production platform that simplifies the re-creation process of 3D assets. It allows both professional and amateur users to manipulate or even animate their meshes efficiently."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.7474,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c01",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "This design is driven by the successful applications of latent diffusion models in image and video generation. Specifically, our shape generation model consists of (1) an autoencoder – Hunyuan3D-ShapeV AE (Sec. 3.1) that compresses the shape of a 3D asset represented by polygon mesh into a sequence of continuous tokens in the latent space; (2) a flow-based diffusion model – Hunyuan3D-DiT (Sec. 3.2), trained on the latent space of ShapeV AE for predicting object token sequences from a user-provided image. The predicted tokens are further decoded into a polygon mesh with V AE decoder. The details of these models are illustrated below. 3.1 Hunyuan3D-ShapeV AE Hunyuan3D-ShapeV AE employs vector sets, a compact neural representation for 3D shapes proposed by 3DShape2VecSet [112], which has also been leveraged in the recent work Dora [11]. Followed by Michelangelo [119], we use a variational encoder-decoder transformer for shape compression and decoding."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "可以这样理解：Hunyuan3D-DiT 只负责根据输入图片生成无纹理的几何网格（裸网格）；Hunyuan3D-Paint 则以这个网格的法线图和位置图为几何条件，并结合输入图片，生成多视角图像，再烘焙成纹理贴图。两者的衔接点就是 DiT 输出的网格。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "两阶段的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段流程：先生成裸网格，再为该网格合成纹理图。DiT 是几何生成模型，Paint 是纹理生成模型，这种分工用于解耦形状和纹理生成的难度。",
+            "chunk_ids": [
+              "2e0d0789-p003-c02",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "输入输出如何衔接",
+            "kind": "explanation",
+            "text": "DiT 的输入是一张图片，输出是裸网格。Paint 的输入包括 DiT 生成网格的法线图和位置图（几何条件），论文还提到它利用输入图片；输出是用于烘焙的多视角图像，最终得到高分辨率纹理贴图。下面的“渲染得到法线图和位置图”这一步是我的推断，论文原文没有逐步展开。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "由于纹理阶段可以作用于生成的网格，也可以作用于手工制作的网格，如果你的 AR 资产需要替换或保留某一部分（例如只用几何或只做纹理），这种模块化结构可能值得参考。是否采用、如何采用，需要你根据自己的数据和目标来判断。",
+            "chunk_ids": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "目前检索到的段落只说明了两阶段的分工和 Paint 的输入输出，没有详细说明法线图和位置图如何从网格渲染得到、多视角图像如何映射到 UV 贴图，以及 Paint 内部的具体结构。图 2 的文字中还出现了 Image Delighting 等步骤，但具体作用需要再查阅原文细节。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c02",
+            "quote": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+          },
+          {
+            "chunk_id": "2e0d0789-p003-c04",
+            "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c00",
+            "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "Hunyuan3D-DiT 与 Hunyuan3D-Paint 的分工及输入输出衔接",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 如何从多视角图像得到最终的 UV 纹理贴图？",
+          "论文中法线图和位置图是怎样从生成的网格渲染出来的？",
+          "如果我想只替换纹理模块而保留自己的网格，论文中的接口是否支持？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-f0911f220c",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:41+00:00",
+        "short_answer": "可以这样理解：Hunyuan3D-DiT 只负责根据输入图片生成无纹理的几何网格（裸网格）；Hunyuan3D-Paint 则以这个网格的法线图和位置图为几何条件，并结合输入图片，生成多视角图像，再烘焙成纹理贴图。两者的衔接点就是 DiT 输出的网格。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "两阶段的分工",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D 2.0 采用两阶段流程：先生成裸网格，再为该网格合成纹理图。DiT 是几何生成模型，Paint 是纹理生成模型，这种分工用于解耦形状和纹理生成的难度。",
+            "refs": [
+              "2e0d0789-p003-c02",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "输入输出如何衔接",
+            "kind": "explanation",
+            "text": "DiT 的输入是一张图片，输出是裸网格。Paint 的输入包括 DiT 生成网格的法线图和位置图（几何条件），论文还提到它利用输入图片；输出是用于烘焙的多视角图像，最终得到高分辨率纹理贴图。下面的“渲染得到法线图和位置图”这一步是我的推断，论文原文没有逐步展开。",
+            "refs": [
+              "2e0d0789-p004-c00",
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "由于纹理阶段可以作用于生成的网格，也可以作用于手工制作的网格，如果你的 AR 资产需要替换或保留某一部分（例如只用几何或只做纹理），这种模块化结构可能值得参考。是否采用、如何采用，需要你根据自己的数据和目标来判断。",
+            "refs": [
+              "2e0d0789-p003-c02"
+            ]
+          },
+          {
+            "title": "目前还不确定的地方",
+            "kind": "limitation",
+            "text": "目前检索到的段落只说明了两阶段的分工和 Paint 的输入输出，没有详细说明法线图和位置图如何从网格渲染得到、多视角图像如何映射到 UV 贴图，以及 Paint 内部的具体结构。图 2 的文字中还出现了 Image Delighting 等步骤，但具体作用需要再查阅原文细节。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c02",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 如何从多视角图像得到最终的 UV 纹理贴图？",
+          "论文中法线图和位置图是怎样从生成的网格渲染出来的？",
+          "如果我想只替换纹理模块而保留自己的网格，论文中的接口是否支持？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 Hunyuan3D-DiT shape generation bare mesh input output Hunyuan3D-Paint texture synthesis pipeline two-stage",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "quote": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh.",
+          "ok": true,
+          "text": "Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "ok": true,
+          "text": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "ok": true,
+          "text": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D-DiT 与 Hunyuan3D-Paint 的分工及输入输出衔接",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1514,
+        "retrieve": 611,
+        "generate_answer": 16308
+      },
+      "latency_ms": 18446,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "a86ad361bb47",
+      "timestamp": "2026-11-09T09:24:59+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "那我想问一下输入条件。论文里 DiT 的输入是单张干净的图片吗？还是有对背景或光照的要求？如果是网络上随便拍的照片，背景比较杂、有遮挡，这种情况会不会影响生成效果？你刚才提到的 Image Delighting 是不是就是为了处理光照的？",
+      "retrieval_query": "Hunyuan3D 2.0 DiT input image condition requirements background removal occlusion lighting Image Delighting preprocessing",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p007-c00",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.6364,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-Paint Training & Inference Pipeline Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal PositionInputImage Delighted Image Multi-Task Attention Multiview Attention Generation Block Self Attention ReferenceAttention ResBlock Camera Embeddings ResBlock Self Attention Reference BlockTimestep=0 Other Views Latent Conv-In Conv-Out Conv-In Dense View Inference Viewpoint Selection Cross Attention ResBlock ··· InputMesh Figure 5: Overview of Hunyuan3D-Paint. We leverage an image delighting module to convert the input image to an unlit state to produce light-invariant texture maps. The system features a doublestream image conditioning reference-net, which provides faithfully conditional image features to the model. Furthermore, it facilitates the production of texture maps that conform closely to the input image. The multi-task attention module ensures that the model synthesizes multi-view consistent images. This module maintains the coherence of all generated images while adhering to the input. To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6076,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.5663,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p007-fig5",
+          "kind": "figure",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.5661,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 5 (PaperLens description of the image): Figure 5 is a architecture diagram titled Hunyuan3D-Paint with two panels. The left panel, Training & Inference Pipeline, shows the input image passing through an Image Delighting block to a Delighted Image, then a Conv-In into a Reference Branch, which feeds a Generation Branch via Multi-Task Attention; the Generation Branch also receives Normal and Position maps (chosen by Viewpoint Selection from the Input Mesh) through Conv-In and outputs through Conv-Out to a grid labeled Dense View Inference showing many rendered views of the character. The right panel, Multi-Task Attention, is a block diagram of ResBlock units with Multiview Attention, Self Attention, and Reference Attention inside a Generation Block, plus a Reference Block containing a ResBlock, Self Attention and Cross Attention, with Camera Embeddings and Other Views Latent as inputs. Several blocks carry snowflake icons marking frozen components and flame icons marking trainable ones. Not readable: Small labels such as the Normal and Position thumbnails and the arrow annotations are small and only roughly legible; the exact content of the dense view grid is not readable in detail.\nCaption (authors' words): Figure 5: Overview of Hunyuan3D-Paint. We leverage an image delighting module to convert the input image to an unlit state to produce light-invariant texture maps. The system features a doublestream image conditioning reference-net, which provides faithfully conditional image features to the model. "
+        },
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.5546,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data."
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5517,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "根据目前检索到的段落，论文只说明 Hunyuan3D-DiT 以一张输入图片为条件生成裸网格，但没有说明它对图片的背景、光照或遮挡有什么具体要求。Image Delighting 确实是为光照和阴影服务的，但它属于纹理阶段（Hunyuan3D-Paint）的预处理，目的是防止光照被烘焙进贴图，并不是 DiT 的输入处理，也不直接处理杂乱背景或遮挡。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的输入条件：论文说了什么",
+            "kind": "paper",
+            "text": "论文只写到 Hunyuan3D-DiT 根据给定的输入图片生成高保真的裸网格，没有在这些段落里列出对单张图、背景干净程度或遮挡的要求。因此，“输入必须是单张干净图片”这一点在现有段落中无法确认。",
+            "chunk_ids": [
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "Image Delighting 解决的是纹理阶段的光照问题",
+            "kind": "paper",
+            "text": "论文指出，用户收集或 T2I 模型生成的参考图通常有明显且多变的光照和阴影，直接输入多视角生成框架会让光照和阴影被烘焙进纹理贴图。因此 Image Delighting 是在多视角生成之前对输入图做的处理，服务于纹理。这一段描述的是 Paint 部分，而不是 DiT 的输入。",
+            "chunk_ids": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片得到可用于 AR 的带贴图资产，可以把问题拆成两部分：几何形状（DiT 阶段）和贴图外观（Paint 阶段）。Delighting 对光照烘焙问题有直接参考价值，但对背景杂乱和遮挡，目前的段落没有给出答案，你需要在论文中继续查找 DiT 的图像条件编码和训练数据细节，或者自己做实验验证。",
+            "chunk_ids": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "目前无法确认的地方",
+            "kind": "limitation",
+            "text": "现有段落没有说明 DiT 训练时用的图片是否带背景、是否做过前景分割，也没有给出对遮挡情况的实验结果。因此不能推断杂乱背景或遮挡对几何生成质量的具体影响，只能说这些段落尚不足以回答。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c04",
+            "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+          },
+          {
+            "chunk_id": "2e0d0789-p007-c01",
+            "quote": "The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "你计划用的网络照片是否已经做过前景分割（去掉背景）？这会影响你该关注哪一部分的预处理。",
+        "current_concept": "DiT 输入图像条件与预处理（背景、光照、遮挡）",
+        "follow_up_suggestions": [
+          "论文中 Hunyuan3D-DiT 是如何把输入图像编码成条件的？",
+          "Hunyuan3D 2.0 的训练数据是否包含带背景或遮挡的图片？",
+          "如果只用 Paint 阶段的 delighting，纹理在复杂光照下还会有哪些残留问题？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-25712c176e",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:24:59+00:00",
+        "short_answer": "根据目前检索到的段落，论文只说明 Hunyuan3D-DiT 以一张输入图片为条件生成裸网格，但没有说明它对图片的背景、光照或遮挡有什么具体要求。Image Delighting 确实是为光照和阴影服务的，但它属于纹理阶段（Hunyuan3D-Paint）的预处理，目的是防止光照被烘焙进贴图，并不是 DiT 的输入处理，也不直接处理杂乱背景或遮挡。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c04",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的输入条件：论文说了什么",
+            "kind": "paper",
+            "text": "论文只写到 Hunyuan3D-DiT 根据给定的输入图片生成高保真的裸网格，没有在这些段落里列出对单张图、背景干净程度或遮挡的要求。因此，“输入必须是单张干净图片”这一点在现有段落中无法确认。",
+            "refs": [
+              "2e0d0789-p003-c04"
+            ]
+          },
+          {
+            "title": "Image Delighting 解决的是纹理阶段的光照问题",
+            "kind": "paper",
+            "text": "论文指出，用户收集或 T2I 模型生成的参考图通常有明显且多变的光照和阴影，直接输入多视角生成框架会让光照和阴影被烘焙进纹理贴图。因此 Image Delighting 是在多视角生成之前对输入图做的处理，服务于纹理。这一段描述的是 Paint 部分，而不是 DiT 的输入。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "如果你的目标是从网络照片得到可用于 AR 的带贴图资产，可以把问题拆成两部分：几何形状（DiT 阶段）和贴图外观（Paint 阶段）。Delighting 对光照烘焙问题有直接参考价值，但对背景杂乱和遮挡，目前的段落没有给出答案，你需要在论文中继续查找 DiT 的图像条件编码和训练数据细节，或者自己做实验验证。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "目前无法确认的地方",
+            "kind": "limitation",
+            "text": "现有段落没有说明 DiT 训练时用的图片是否带背景、是否做过前景分割，也没有给出对遮挡情况的实验结果。因此不能推断杂乱背景或遮挡对几何生成质量的具体影响，只能说这些段落尚不足以回答。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你计划用的网络照片是否已经做过前景分割（去掉背景）？这会影响你该关注哪一部分的预处理。",
+        "follow_up_suggestions": [
+          "论文中 Hunyuan3D-DiT 是如何把输入图像编码成条件的？",
+          "Hunyuan3D 2.0 的训练数据是否包含带背景或遮挡的图片？",
+          "如果只用 Paint 阶段的 delighting，纹理在复杂光照下还会有哪些残留问题？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 DiT input image condition requirements background removal occlusion lighting Image Delighting preprocessing",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "ok": true,
+          "text": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "quote": "The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "ok": true,
+          "text": "The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "DiT 输入图像条件与预处理（背景、光照、遮挡）",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2483,
+        "retrieve": 610,
+        "generate_answer": 13458
+      },
+      "latency_ms": 16564,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "09e9e70cb715",
+      "timestamp": "2026-11-09T09:25:20+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "critical_review",
+      "user_message": "Critically review whether the idea or method we have been discussing is applicable to my research.",
+      "retrieval_query": "Hunyuan3D-DiT input image conditioning background removal lighting occlusion preprocessing limitations in-the-wild photos",
+      "scope": "overview",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p007-c00",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": 0.5981,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-Paint Training & Inference Pipeline Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal PositionInputImage Delighted Image Multi-Task Attention Multiview Attention Generation Block Self Attention ReferenceAttention ResBlock Camera Embeddings ResBlock Self Attention Reference BlockTimestep=0 Other Views Latent Conv-In Conv-Out Conv-In Dense View Inference Viewpoint Selection Cross Attention ResBlock ··· InputMesh Figure 5: Overview of Hunyuan3D-Paint. We leverage an image delighting module to convert the input image to an unlit state to produce light-invariant texture maps. The system features a doublestream image conditioning reference-net, which provides faithfully conditional image features to the model. Furthermore, it facilitates the production of texture maps that conform closely to the input image. The multi-task attention module ensures that the model synthesizes multi-view consistent images. This module maintains the coherence of all generated images while adhering to the input. To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.5896,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p008-c01",
+          "kind": "paper",
+          "page": 8,
+          "page_label": "8",
+          "similarity": 0.5663,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "These functionalities are realized in Hunyuan3D-Paint according to a bunch of techniques containing a double-stream image conditioning reference-net, a multi-task attention mechanism, and a strategy for geometry and view conditioning. Double-stream Image Conditioning Reference-Net.In the aim of the image following, Hunyuan3D- Paint implements a reference-net conditioning approach [116], upon which we develop a series of alternative solutions. Specifically, rather than a noisy feature synchronized with the generation branch, we directly feed the original V AE feature of the reference image into the reference branch to maintain image details as much as possible. Since the feature is noiseless, we set the timestep of the reference branch to 0 to maintain the input image information faithfully. On the other hand, to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights (which serves as the base model for our multi-view generation)."
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5651,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.5584,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c01",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.5544,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It allows both professional and amateur users to manipulate or even animate their meshes efficiently. We systematically evaluate our models, showing that Hunyuan3D 2.0 outperforms previous state-of-the-art models, including the open-source models and closed-source models in geometry details, condition alignment, texture quality, andetc. Hunyuan3D 2.0 is publicly released in order to fill the gaps in the open-source 3D community for large-scale foundation generative models. The code and pre-trained weights of our models are available at: https://github.com/Tencent/Hunyuan3D-2. ∗Hunyuan3D team contributors are listed in the end of report. arXiv:2501.12202v5 [cs.CV] 14 May 2026"
+        },
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data."
+        }
+      ],
+      "overview_ids": [
+        "ov-1",
+        "ov-2",
+        "ov-3",
+        "ov-4",
+        "ov-5",
+        "ov-6",
+        "ov-7",
+        "ov-8",
+        "ov-9",
+        "ov-10",
+        "ov-11",
+        "ov-12",
+        "ov-13",
+        "ov-14",
+        "ov-15",
+        "ov-16",
+        "ov-17"
+      ],
+      "raw_model_output": {
+        "short_answer": "论文中 Hunyuan3D-DiT 的图像条件预处理包括背景去除和居中（来自概览，非原文段落）；光照处理（delighting）属于纹理阶段。检索到的段落没有说明遮挡或杂乱背景对生成效果的影响。对你的网络照片场景，可以借鉴背景去除和居中的做法，但遮挡和杂乱背景需要你自己验证。",
+        "short_answer_chunk_ids": [
+          "ov-4",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的图像预处理：背景去除与居中",
+            "kind": "paper",
+            "text": "根据 PaperLens 对论文页面的概览，Hunyuan3D-DiT 以 DINOv2 Giant 在 518x518 分辨率下提取输入图像特征，并在此之前进行背景去除、居中和白色背景填充。这些是概览中的描述，原文段落未检索到，因此需要在原文中核对具体细节。",
+            "chunk_ids": [
+              "ov-4"
+            ]
+          },
+          {
+            "title": "两个预处理环节的分工",
+            "kind": "explanation",
+            "text": "论文中的光照处理是 Hunyuan3D-Paint 的前处理：输入图像若带有明显光照和阴影，直接输入多视角生成会把光影烘焙进贴图。因此 delighting 解决的是纹理阶段的光照问题，而 DiT 的背景去除和居中解决的是形状阶段的输入规范化问题，两者不是同一个模块。",
+            "chunk_ids": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "你的研究面对网络随拍照片，背景杂乱是主要难点之一。论文中的背景去除和居中可以作为你的预处理基线，先把主体从背景中分离出来，再送入形状生成模型。光照方面，Paint 阶段的 delighting 思路与 AR 中需要重新打光或与真实环境光匹配的目标有关，可以作为后续纹理处理的参考。",
+            "chunk_ids": [
+              "ov-4",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "论文证据的局限",
+            "kind": "limitation",
+            "text": "检索到的段落没有说明 DiT 对遮挡、杂乱背景或低质量分割的鲁棒性，也没有给出针对这些输入的实验。论文的用户研究评估的是 300 个结果的总体质量和图像条件遵循度，但没有报告按输入难度拆分的结果。另外，纹理阶段的训练依赖在均匀白光下渲染的 3D 数据，作者也提到要抑制渲染数据带来的风格偏差。",
+            "chunk_ids": [
+              "2e0d0789-p015-c00",
+              "2e0d0789-p008-c01"
+            ]
+          },
+          {
+            "title": "如果要在你的研究中使用，还需要什么证据",
+            "kind": "inference",
+            "text": "建议用真实网络照片（含遮挡、杂乱背景和复杂光照）测试论文的预处理流程，比较有无背景去除、有无 delighting 时的形状和纹理结果。还需要检查背景分割的误差如何传递到生成的网格上，并在 AR 场景中验证重建结果的尺度和朝向是否可用。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p007-c01",
+            "quote": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+          },
+          {
+            "chunk_id": "2e0d0789-p008-c01",
+            "quote": "to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights"
+          },
+          {
+            "chunk_id": "2e0d0789-p015-c00",
+            "quote": "The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction"
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "DiT 输入图像条件与预处理",
+        "follow_up_suggestions": [
+          "Hunyuan3D-DiT 的背景去除具体是如何实现的，论文有没有说明分割方法？",
+          "论文的 delighting 模型是如何训练的，它能否处理网络照片中的阴影？",
+          "如果输入图片有部分遮挡，论文中的形状生成结果会受到什么影响？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+        }
+      },
+      "assistant_message": {
+        "id": "a-660172aa41",
+        "role": "assistant",
+        "mode": "critical_review",
+        "created_at": "2026-11-09T09:25:20+00:00",
+        "short_answer": "论文中 Hunyuan3D-DiT 的图像条件预处理包括背景去除和居中（来自概览，非原文段落）；光照处理（delighting）属于纹理阶段。检索到的段落没有说明遮挡或杂乱背景对生成效果的影响。对你的网络照片场景，可以借鉴背景去除和居中的做法，但遮挡和杂乱背景需要你自己验证。",
+        "short_answer_refs": [
+          "ov-4",
+          "2e0d0789-p007-c01"
+        ],
+        "sections": [
+          {
+            "title": "DiT 的图像预处理：背景去除与居中",
+            "kind": "paper",
+            "text": "根据 PaperLens 对论文页面的概览，Hunyuan3D-DiT 以 DINOv2 Giant 在 518x518 分辨率下提取输入图像特征，并在此之前进行背景去除、居中和白色背景填充。这些是概览中的描述，原文段落未检索到，因此需要在原文中核对具体细节。",
+            "refs": [
+              "ov-4"
+            ]
+          },
+          {
+            "title": "两个预处理环节的分工",
+            "kind": "explanation",
+            "text": "论文中的光照处理是 Hunyuan3D-Paint 的前处理：输入图像若带有明显光照和阴影，直接输入多视角生成会把光影烘焙进贴图。因此 delighting 解决的是纹理阶段的光照问题，而 DiT 的背景去除和居中解决的是形状阶段的输入规范化问题，两者不是同一个模块。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "对你的 AR 研究的参考价值",
+            "kind": "research_use",
+            "text": "你的研究面对网络随拍照片，背景杂乱是主要难点之一。论文中的背景去除和居中可以作为你的预处理基线，先把主体从背景中分离出来，再送入形状生成模型。光照方面，Paint 阶段的 delighting 思路与 AR 中需要重新打光或与真实环境光匹配的目标有关，可以作为后续纹理处理的参考。",
+            "refs": [
+              "ov-4",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "论文证据的局限",
+            "kind": "limitation",
+            "text": "检索到的段落没有说明 DiT 对遮挡、杂乱背景或低质量分割的鲁棒性，也没有给出针对这些输入的实验。论文的用户研究评估的是 300 个结果的总体质量和图像条件遵循度，但没有报告按输入难度拆分的结果。另外，纹理阶段的训练依赖在均匀白光下渲染的 3D 数据，作者也提到要抑制渲染数据带来的风格偏差。",
+            "refs": [
+              "2e0d0789-p015-c00",
+              "2e0d0789-p008-c01"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "ov-4",
+            "kind": "overview",
+            "page": 6,
+            "pages": [
+              6,
+              7
+            ],
+            "page_label": "6",
+            "text": "These pages describe the Hunyuan3D-DiT shape generation transformer, which uses double- and single-stream blocks to let shape latent tokens and image condition tokens interact, with timestep-only modulation and no positional embedding on the latent sequence. Image conditioning uses DINOv2 Giant features at 518x518 with background removal and centering, and training follows a flow matching objective with an affine conditional optimal transport path and Euler ODE sampling at inference. The pages then introduce Hunyuan3D-Paint, a generative texture map synthesis pipeline with image delighting as pre-processing, a reference-net and multi-task attention for multi-view consistency, and a geometry-aware greedy viewpoint selection strategy using 8 to 12 views. Details of the multi-view synthesis and texture baking stages are only referenced, not fully described on these pages.",
+            "verified": true
+          },
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p015-c00",
+            "kind": "paper",
+            "page": 15,
+            "page_label": "15",
+            "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+            "verified": true,
+            "quotes": [
+              "The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction"
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p008-c01",
+            "kind": "paper",
+            "page": 8,
+            "page_label": "8",
+            "text": "These functionalities are realized in Hunyuan3D-Paint according to a bunch of techniques containing a double-stream image conditioning reference-net, a multi-task attention mechanism, and a strategy for geometry and view conditioning. Double-stream Image Conditioning Reference-Net.In the aim of the image following, Hunyuan3D- Paint implements a reference-net conditioning approach [116], upon which we develop a series of alternative solutions. Specifically, rather than a noisy feature synchronized with the generation branch, we directly feed the original V AE feature of the reference image into the reference branch to maintain image details as much as possible. Since the feature is noiseless, we set the timestep of the reference branch to 0 to maintain the input image information faithfully. On the other hand, to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights (which serves as the base model for our multi-view generation).",
+            "verified": true,
+            "quotes": [
+              "to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights"
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-DiT 的背景去除具体是如何实现的，论文有没有说明分割方法？",
+          "论文的 delighting 模型是如何训练的，它能否处理网络照片中的阴影？",
+          "如果输入图片有部分遮挡，论文中的形状生成结果会受到什么影响？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+        },
+        "retrieval_query": "Hunyuan3D-DiT input image conditioning background removal lighting occlusion preprocessing limitations in-the-wild photos",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "quote": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "ok": true,
+          "text": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p008-c01",
+          "quote": "to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights",
+          "ok": true,
+          "text": "to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "quote": "The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction",
+          "ok": true,
+          "text": "The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "DiT 输入图像条件与预处理",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2322,
+        "retrieve": 643,
+        "generate_answer": 18475
+      },
+      "latency_ms": 21457,
+      "error": null
+    },
+    {
+      "event": "judgment_recorded",
+      "event_id": "dd5529502592",
+      "timestamp": "2026-11-09T09:25:24+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "judgment": {
+        "verdict": "Need more evidence",
+        "rationale": "我不同意直接用 Use with adaptations，因为背景去除和居中只来自概览，原文段落我还没核对到。论文没有给出遮挡和杂乱背景下的鲁棒性证据，所以在看到原文实验或自己用网络照片测试之前，我还不能判断这条路线对我的 AR 资产是否可行。",
+        "submitted_at": "2026-11-09T09:25:24+00:00",
+        "system_suggestion_at_time": {
+          "verdict": "Use with adaptations",
+          "reason": "论文提供了背景去除和居中的预处理思路，可以作为你处理网络照片的起点；但遮挡和杂乱背景的鲁棒性在检索到的段落中没有证据，需要你用自己的数据验证并调整预处理。"
+        }
+      }
+    },
+    {
+      "event": "turn",
+      "event_id": "d6c17e0fd5f2",
+      "timestamp": "2026-11-09T09:25:33+00:00",
+      "session_id": "s-d0df7af0c88d",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "judgment_feedback",
+      "user_message": "My verdict: Need more evidence\nMy rationale: 我不同意直接用 Use with adaptations，因为背景去除和居中只来自概览，原文段落我还没核对到。论文没有给出遮挡和杂乱背景下的鲁棒性证据，所以在看到原文实验或自己用网络照片测试之前，我还不能判断这条路线对我的 AR 资产是否可行。",
+      "retrieval_query": "Hunyuan3D-DiT input image condition background removal and centering preprocessing, robustness to occlusion and cluttered background, evaluation",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6055,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c01",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5937,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions. Overall Satisfy 3D Assets Quality Image Following 0 10 20 30 40 50 60 70 80Percentage (%) User Study Method trellis Model 1 Model 2 Model 3 Hunyuan3D 2.0 Figure 10: The results of user study."
+        },
+        {
+          "chunk_id": "2e0d0789-p010-c02",
+          "kind": "paper",
+          "page": 10,
+          "page_label": "10",
+          "similarity": 0.5786,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT is compared with several state-of-the-art baselines. Open-source baselines are Michelangelo [119], Craftsman 1.5 [49], and Trellis [101]. Closed-source baselines are Shape Model 1, Shape Model 2, and Shape Model 3. Metrics.We employ the Intersection of Union (IoU) to measure the reconstruction performance. Specifically, we compute randomly sampled volume points IoU (V-IoU) and near-surface region IoU (S-IoU) to reflect the reconstruction performance comprehensively. To evaluate shape generative performance, we employ ULIP [ 105] and Uni3D [ 122] to compute the similarity between the generated mesh and input images (ULIP-I and Uni3D-I) and the similarity between the generated mesh and images prompt synthesizing by the vision language model [13] (ULIP-T and Uni3D-T). Shape Reconstruction Comparisons.The Numerical comparison of shape reconstruction is shown in Tab. 1. According to the table, Hunyuan3D-ShapeV AE overwhelms all baselines. Comparisons among Hunyuan3D-ShapeV AE, 3DShape2VecSet, and Michelangelo demonstrate the effectiveness of the importance sampling strategies. Fig."
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5785,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        },
+        {
+          "chunk_id": "2e0d0789-p010-c00",
+          "kind": "paper",
+          "page": 10,
+          "page_label": "10",
+          "similarity": 0.5776,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "3DShape2VecSet [112] Michelangelo [119] Direct3D [99] Hunyuan3D-ShapeV AE (Ours) V-IoU(↑) 87.88% 84.93% 88.43 %93.6% S-IoU(↑) 80.66% 76.27% 81.55 %89.16% Table 1: Numerical comparisons. We evaluate the reconstruction performance of Hunyuan3D- ShapeV AE and baselines based on volume IoU (V-IoU) and Surface (S-IoU). The results indicate Hunyuan3D-ShapeV AE overwhelms all baselines in the reconstruction performance. advanced T2I models and corresponding conditional generation modules, such as ControlNet [115] and IP-Adapter [ 108], to generate input images that align with geometric shapes based on userprovided text or image prompts. Benefitting from this paradigm, we are capable of texturing any specified geometry with arbitrary images, whether they are matched or mismatched. An application of using different images to texture the same geometry, dubbed as re-skinning, is illustrated in Fig. 9. 5 Evaluations To thoroughly evaluate the performance ofHunyuan3D 2.0, we conducted experiments from three perspectives: (1) 3D Shape Generation (including Shape Reconstruction and Shape Generation), (2) Texture map synthesis, and (3) Textured 3D assets generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.5725,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "kind": "paper",
+          "page": 7,
+          "page_label": "7",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data."
+        },
+        {
+          "chunk_id": "2e0d0789-p008-c01",
+          "kind": "paper",
+          "page": 8,
+          "page_label": "8",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "These functionalities are realized in Hunyuan3D-Paint according to a bunch of techniques containing a double-stream image conditioning reference-net, a multi-task attention mechanism, and a strategy for geometry and view conditioning. Double-stream Image Conditioning Reference-Net.In the aim of the image following, Hunyuan3D- Paint implements a reference-net conditioning approach [116], upon which we develop a series of alternative solutions. Specifically, rather than a noisy feature synchronized with the generation branch, we directly feed the original V AE feature of the reference image into the reference branch to maintain image details as much as possible. Since the feature is noiseless, we set the timestep of the reference branch to 0 to maintain the input image information faithfully. On the other hand, to regularize potential style bias introduced by the 3D rendering dataset, we abandon the shared-weight reference-net as in [88, 78] and freeze the weights of the original SD2.1 weights (which serves as the base model for our multi-view generation)."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "你选择「Need more evidence」，理由是背景去除与居中只来自概览、尚未找到原文段落，且论文没有遮挡和杂乱背景下的鲁棒性证据。就现有段落而言，这个判断是站得住的：检索到的原文确实没有直接验证遮挡或杂乱背景下的效果。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p007-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "原文能支持你的哪些部分",
+            "kind": "paper",
+            "text": "论文明确写到，Hunyuan3D-DiT 以输入图片为条件生成裸网格，而纹理阶段的 Image Delighting 针对的是光照和阴影被烘焙进贴图的问题。这与你关心的网络照片光照问题相关，但它属于纹理阶段，不能直接推出 DiT 对杂乱背景或遮挡的鲁棒性。",
+            "chunk_ids": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "你的理由正确地指出了缺少鲁棒性证据。需要注意的是，检索到的段落里也没有关于输入图片背景去除或居中的原文描述，所以即使之后在概览中确认，也仍需找到对应原文页面来核实。另外，纹理阶段的 delighting 与几何阶段的输入预处理是两件事，不要混为一谈。",
+            "chunk_ids": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "一个可以加强判断的检查",
+            "kind": "inference",
+            "text": "你可以先在论文中搜索背景去除、居中的原文描述，并查看是否有用户研究或对比实验涉及图像条件的遵循程度（如用户研究中的 Image Following 指标）。随后用十几张带遮挡和杂乱背景的网络照片做小规模测试，观察裸网格的完整性，这样能更直接地判断这条路线对 AR 资产是否可行。",
+            "chunk_ids": [
+              "2e0d0789-p015-c00"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c04",
+            "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+          },
+          {
+            "chunk_id": "2e0d0789-p007-c01",
+            "quote": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+          },
+          {
+            "chunk_id": "2e0d0789-p015-c00",
+            "quote": "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "DiT 输入图像条件与预处理（背景去除与居中）",
+        "follow_up_suggestions": [
+          "论文中是否有关于输入图片背景去除的原文描述？",
+          "Image Following 的用户研究是如何设计的？",
+          "如何设计一个小规模测试来检验遮挡和杂乱背景的影响？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-f0ef007194",
+        "role": "assistant",
+        "mode": "judgment_feedback",
+        "created_at": "2026-11-09T09:25:33+00:00",
+        "short_answer": "你选择「Need more evidence」，理由是背景去除与居中只来自概览、尚未找到原文段落，且论文没有遮挡和杂乱背景下的鲁棒性证据。就现有段落而言，这个判断是站得住的：检索到的原文确实没有直接验证遮挡或杂乱背景下的效果。",
+        "short_answer_refs": [
+          "2e0d0789-p007-c01",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "原文能支持你的哪些部分",
+            "kind": "paper",
+            "text": "论文明确写到，Hunyuan3D-DiT 以输入图片为条件生成裸网格，而纹理阶段的 Image Delighting 针对的是光照和阴影被烘焙进贴图的问题。这与你关心的网络照片光照问题相关，但它属于纹理阶段，不能直接推出 DiT 对杂乱背景或遮挡的鲁棒性。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "你的理由正确地指出了缺少鲁棒性证据。需要注意的是，检索到的段落里也没有关于输入图片背景去除或居中的原文描述，所以即使之后在概览中确认，也仍需找到对应原文页面来核实。另外，纹理阶段的 delighting 与几何阶段的输入预处理是两件事，不要混为一谈。",
+            "refs": [
+              "2e0d0789-p007-c01"
+            ]
+          },
+          {
+            "title": "一个可以加强判断的检查",
+            "kind": "inference",
+            "text": "你可以先在论文中搜索背景去除、居中的原文描述，并查看是否有用户研究或对比实验涉及图像条件的遵循程度（如用户研究中的 Image Following 指标）。随后用十几张带遮挡和杂乱背景的网络照片做小规模测试，观察裸网格的完整性，这样能更直接地判断这条路线对 AR 资产是否可行。",
+            "refs": [
+              "2e0d0789-p015-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p007-c01",
+            "kind": "paper",
+            "page": 7,
+            "page_label": "7",
+            "text": "To achieve these objectives, we employ a three-stage framework, including a pre-processing stage (Sec. 4.1), a multi-view image synthesis stage (Sec. 4.2, Hunyuan3D-Paint), and a texture baking stage based on dense multi-view inference (Sec. 4.3). Other details related to model training and textand image-to-texture pipeline are provided in Sec. 4.4. Fig. 5 illustrates the complete pipeline of our texture map synthesis method. 4.1 Pre-processing Image Delighting Module.The reference image typically exhibits pronounced and varied illumination and shadow, whether collected by the user or generated by T2I models. Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps. To address this issue, we leverage a delighting procedure on the input image via an image-to-image approach [6] before multi-view generation. Specifically, to train such an image delighting model, we collect a large-scale 3D dataset and render it under the illumination of a random HDRI environmental map and an even white light to form the corresponding pair-wise image data.",
+            "verified": true,
+            "quotes": [
+              "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p015-c00",
+            "kind": "paper",
+            "page": 15,
+            "page_label": "15",
+            "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+            "verified": true,
+            "quotes": [
+              "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "论文中是否有关于输入图片背景去除的原文描述？",
+          "Image Following 的用户研究是如何设计的？",
+          "如何设计一个小规模测试来检验遮挡和杂乱背景的影响？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-DiT input image condition background removal and centering preprocessing, robustness to occlusion and cluttered background, evaluation",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "ok": true,
+          "text": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p007-c01",
+          "quote": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "ok": true,
+          "text": "Directly inputting such images into the multi-view generation framework can cause illumination and shadows to be baked into the texture maps.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "quote": "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+          "ok": true,
+          "text": "The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "DiT 输入图像条件与预处理（背景去除与居中）",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2467,
+        "retrieve": 767,
+        "generate_answer": 5745
+      },
+      "latency_ms": 8991,
+      "error": null
+    }
+  ],
+  "scenario": {
+    "name": "sam-02",
+    "situation": "Misunderstanding of shape vs texture, repair",
+    "persona": "sam",
+    "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+    "reading_goal": "Explore potential use in my research",
+    "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+    "language": "中文（简体）",
+    "pipeline_version": "v1",
+    "moves": [
+      "Ask how the shape is generated from an input image.",
+      "State a misunderstanding as your own: you think the shape model (Hunyuan3D-DiT) also produces the final colours/textures in the same step.",
+      "Say you still do not quite understand the difference between the two parts and ask for a different explanation.",
+      "Ask whether the input has to be a single clean image, and what that means for web photos with cluttered backgrounds.",
+      {
+        "type": "critical_review"
+      },
+      {
+        "type": "judgment",
+        "instruction": "Choose a verdict that differs from PaperLens's suggestion, with your own reason."
+      }
+    ]
+  },
+  "persona_text": "# Persona: Sam\n\n**Who.** Sam is a non-native-English-speaking PhD student in computer vision. He reads academic English but\nprefers concise Chinese explanations that keep the English terminology (e.g. \"diffusion model\", \"VAE\",\n\"multi-view\").\n\n**What he wants.** To decide whether ideas or methods from a paper can inform his own research:\ngenerating AR-ready 3D assets from photos that are publicly available on the web. Reading goal:\n*Explore potential use in my research*.\n\n**How he behaves.**\n- Writes in Simplified Chinese mixed with English technical terms. Interface language: 中文（简体）.\n- Sets a specific goal, begins with an overview, then asks focused questions about how the paper's key\n  components connect, and about its logic, novelty, assumptions and limitations.\n- Uses short references to earlier answers (\"那第二个阶段呢\", \"this part\", \"你刚才说的那个\").\n- Challenges answers that sound vague or too confident (\"论文里真的这么说吗？还是你推测的？\").\n- Checks the source selectively, mainly for numbers and claims that matter to his study.\n- Relates the paper to his own setting: unconstrained web photos (varying lighting, occlusion, background,\n  low resolution) and AR constraints (mesh size, PBR textures, real-time rendering).\n- Expects a critical reading partner, not a summariser, examiner or unquestioning assistant.\n\n**Paper.** Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation\n(arXiv 2501.12202).\n",
+  "simulator": {
+    "model": "anthropic/claude-haiku-5.5",
+    "prompt": "You are role-playing a learner who is reading an academic paper with PaperLens, a conversational reading\ntool. Stay in character as the persona below for the whole conversation.\n\n<persona>\n{persona}\n</persona>\n\nSituation\n- Paper: {paper_title}\n- Reading goal chosen in PaperLens: {reading_goal}\n- Research context the learner typed into PaperLens: {research_context}\n\nYour task each turn\n- Write ONLY the learner's next chat message, as the persona would type it into a chat box.\n- Carry out the move given for this turn, adapted naturally to what PaperLens has just said. The move says\n  WHAT the learner does; you decide the exact wording in the persona's voice.\n- If the move asks you to state a misunderstanding, state it confidently as your own understanding; do not\n  hint that it is wrong.\n- If the move asks you to refer back to something, use a short reference (\"that\", \"the second one\",\n  \"你刚才说的那个\") instead of repeating the full term, exactly as a real learner would.\n- Use the persona's language and writing style. Keep the message short (usually 1-3 sentences).\n- Base what you say about the paper only on what PaperLens has told you so far; you have not read the paper\n  yourself beyond that.\n- Never mention that you are simulated, never describe the move, and never evaluate PaperLens.\n",
+    "log": [
+      {
+        "move": 1,
+        "type": "chat",
+        "instruction": "Ask how the shape is generated from an input image.",
+        "learner_message": "我想先了解一下大概流程。Hunyuan3D 2.0 是怎么从一张输入图片生成 3D shape 的？能不能先简单讲讲这个 shape generation 的主要步骤，我后面再看细节。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 2,
+        "type": "chat",
+        "instruction": "State a misunderstanding as your own: you think the shape model (Hunyuan3D-DiT) also produces the final colours/textures in the same step.",
+        "learner_message": "好，流程我大概懂了。所以 Hunyuan3D-DiT 在同一步里就把颜色和纹理也一起生成了，对吧？那你刚才说的那三个环节，最后解码出来的网格已经是带贴图的了，我下一步直接拿来用就行？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 3,
+        "type": "chat",
+        "instruction": "Say you still do not quite understand the difference between the two parts and ask for a different explanation.",
+        "learner_message": "我还是没太搞清楚这两部分的区别。你能换个方式解释一下吗？比如 Hunyuan3D-DiT 和 Hunyuan3D-Paint 分别负责什么，它们之间的输入输出是怎么衔接的？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 4,
+        "type": "chat",
+        "instruction": "Ask whether the input has to be a single clean image, and what that means for web photos with cluttered backgrounds.",
+        "learner_message": "那我想问一下输入条件。论文里 DiT 的输入是单张干净的图片吗？还是有对背景或光照的要求？如果是网络上随便拍的照片，背景比较杂、有遮挡，这种情况会不会影响生成效果？你刚才提到的 Image Delighting 是不是就是为了处理光照的？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 5,
+        "type": "critical_review"
+      },
+      {
+        "move": 6,
+        "type": "judgment",
+        "instruction": "Choose a verdict that differs from PaperLens's suggestion, with your own reason.",
+        "verdict": "Need more evidence",
+        "rationale": "我不同意直接用 Use with adaptations，因为背景去除和居中只来自概览，原文段落我还没核对到。论文没有给出遮挡和杂乱背景下的鲁棒性证据，所以在看到原文实验或自己用网络照片测试之前，我还不能判断这条路线对我的 AR 资产是否可行。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      }
+    ]
+  },
+  "run": 1,
+  "stopped_early": false,
+  "error": null
+}

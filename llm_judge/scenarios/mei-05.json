@@ -1,0 +1,17 @@
+{
+  "name": "mei-05",
+  "situation": "Core vs primary mechanics, cross-paper question",
+  "persona": "mei",
+  "paper_pdf": "../../test_papers/game-mechanics.pdf",
+  "reading_goal": "Get a general overview of this paper",
+  "research_context": "",
+  "language": "中文（繁體）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask what the difference is between core mechanics and primary mechanics in this article.",
+    "State a misunderstanding: you think core mechanics are simply the most fun mechanics.",
+    "Refer to 'the other one' with a short reference and ask for an example from a game.",
+    "Ask whether the author says this definition is better than MDA's definition of mechanics.",
+    "Ask how mechanics relate to rules and goals according to the article."
+  ]
+}

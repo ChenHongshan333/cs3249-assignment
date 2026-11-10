@@ -1,0 +1,23 @@
+{
+  "name": "sam-05",
+  "situation": "Change of focus, short reference to a step",
+  "persona": "sam",
+  "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+  "language": "中文（简体）",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask about how the shape model represents and encodes 3D shapes.",
+    "Change your focus: say that for your project texture and lighting matter more than geometry, and ask what the paper does about lighting in the input image.",
+    "Refer to that preprocessing/lighting step with a short reference and ask why it is needed.",
+    "Ask whether that step would be enough for web photos with strong shadows, and ask PaperLens to say what is evidence from the paper and what is its guess.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose 'Need more evidence' unless the conversation clearly convinced you otherwise, with your own reason."
+    }
+  ]
+}

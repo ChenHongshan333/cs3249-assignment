@@ -1,0 +1,23 @@
+{
+  "name": "kenji-03",
+  "situation": "Correcting PaperLens, baseline analogy",
+  "persona": "kenji",
+  "paper_pdf": "../../test_papers/johnny.pdf",
+  "reading_goal": "Explore potential use in my research",
+  "research_context": "I am a PhD student in NLP moving into HCI. My project studies how non-expert users write prompts for LLM-based tools, and I plan to run a user study.",
+  "language": "English",
+  "pipeline_version": "v1",
+  "moves": [
+    "Ask why participants struggled to generalize from examples, according to the paper.",
+    "Correct PaperLens: say you were asking about the participants' behaviour, not the system's behaviour, and ask again.",
+    "Make a wrong analogy: ask whether the design probe is a kind of baseline model.",
+    "Ask whether the evidence for these findings is strong, e.g. sample size.",
+    {
+      "type": "critical_review"
+    },
+    {
+      "type": "judgment",
+      "instruction": "Choose the verdict you find most reasonable, with your own reason."
+    }
+  ]
+}

@@ -1,0 +1,2286 @@
+{
+  "exported_at": "2026-11-09T09:26:17+00:00",
+  "paper": {
+    "paper_id": "2e0d07894105eb23",
+    "filename": "hunyuan3d-2.pdf",
+    "title": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation",
+    "status": "ready",
+    "error": null,
+    "failed_stage": null,
+    "created_at": "2026-11-09T09:02:12+00:00",
+    "updated_at": "2026-11-09T09:02:57+00:00",
+    "page_count": 28,
+    "page_labels_differ": false,
+    "figure_count": 16,
+    "chunk_count": 96,
+    "overview_count": 17
+  },
+  "session": {
+    "session_id": "s-ba381aeb1a9e",
+    "paper_id": "2e0d07894105eb23",
+    "paper_title": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation",
+    "created_at": "2026-11-09T09:24:54+00:00",
+    "reading_goal": "Explore potential use in my research",
+    "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+    "language": "中文（简体）",
+    "current_concept": "Hunyuan3D 2.0 输入假设与真实网络照片泛化、面数与AR适用性证据缺口",
+    "messages": [
+      {
+        "id": "u-e7fd0ad30a",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，那我先大概了解一下整体。现在想问纹理部分：Hunyuan3D-Paint 到底是怎么生成纹理的？它是直接在 3D 上生成颜色，还是从多视角图像推出来的？可以用中文简单解释一下，关键术语保留英文就行。",
+        "created_at": "2026-11-09T09:25:13+00:00"
+      },
+      {
+        "id": "a-15766266d3",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:13+00:00",
+        "short_answer": "根据论文，Hunyuan3D-Paint 不是直接在 3D 表面上逐点生成颜色，而是先以网格的 normal maps 和 position maps 为几何条件，生成多视角图像（multi-view images），再把这些图像 baking 成高分辨率的 texture map。论文摘要级别的段落没有详细说明 baking 的具体算法，所以这一部分只能确认整体流程。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "论文描述的整体流程",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 由一个以 mesh 为条件的多视角生成流程，加上用于预处理并把多视角图像 baking 成高分辨率纹理贴图的若干技术组成。图 2 的说明进一步指出，它以生成网格的 normal maps 和 position maps 作为输入，输出用于 texture baking 的多视角图像。",
+            "refs": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "为什么要先做多视角图像",
+            "kind": "paper",
+            "text": "论文指出，training-free 的图像扩散模型存在 viewpoint bias 和多视角不一致的问题，因此发展了 multi-view image diffusion，并利用 objaverse 等大规模 3D 数据集来缓解这些问题。论文还举例说 Zero123++ 把六张多视角图像拼接成一张大图做 self-attention，MVDiffusion 则使用 correspondence-aware attention。",
+            "refs": [
+              "2e0d0789-p019-c03"
+            ]
+          },
+          {
+            "title": "用简单的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先从几何形状算出“每个像素在表面上的位置”和“朝向”这类信息，再让模型画出从多个角度看到的同一物体，最后把这些视角的图像按照几何关系“贴”回 3D 模型的 UV 贴图上。直接在 3D 上生成颜色很难保证各视角一致，所以用多视角图像作为中间步骤。这是我对论文流程的解释，论文原文没有逐句这样表述。",
+            "refs": []
+          },
+          {
+            "title": "对你 AR 3D 资产研究的潜在用途",
+            "kind": "research_use",
+            "text": "从你的研究方向看，这种“先多视角生成、再烘焙到纹理”的思路，可能适合把网络照片转成带纹理的 3D 资产，因为它能利用图像扩散模型的先验。不过，论文面向的是由 image 生成的 mesh，你需要判断公开照片中的遮挡、光照和相机信息是否能满足它的输入假设。这一点需要你结合自己的数据再评估。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true,
+            "quotes": [
+              "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p019-c03",
+            "kind": "paper",
+            "page": 19,
+            "page_label": "19",
+            "text": "Carefully adhering to these details can significantly improve the quality of the generated textures. Based on these advantages, Hunyuan3D-Paint is designed with a detailed preserving image injection module according to the philosophy of aligning the reference image not only semantically but also following the details as closely as possible. Multi-view Images Generation.Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]. Most works force the multi-view generated latents to communicate with each other by manipulating the self-attention layers with 3D-aware masks [ 36, 48, 88, 60, 95, 79, 78, 55]. For example, Zero123++ [78] first treats the multi-view attention as a self-attention on a large image, which is the spatial concatenation of six multi-view images. MVDiffusion [89] applies a correspondence-aware attention (CAA) to inform the model to focus only on the correlation among the spatially-close pixels.",
+            "verified": true,
+            "quotes": [
+              "Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何把多视角图像 baking 到 UV texture map 上的？",
+          "论文中 normal maps 和 position maps 具体是怎样从网格计算出来的？",
+          "Hunyuan3D-Paint 处理光照（delighting）的模块是怎么设计的？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-Paint texture generation multi-view images projection UV texture map diffusion",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-14495d2f14",
+        "role": "user",
+        "mode": "chat",
+        "text": "不好意思我刚才问得不清楚。我想问的是 Hunyuan3D-Paint 输出的东西能不能直接用在 AR renderer 里，比如有没有 PBR 相关的 material maps（metallic、roughness 之类），而不只是一张 texture map 的分辨率。论文里有没有提到这一点？",
+        "created_at": "2026-11-09T09:25:29+00:00"
+      },
+      {
+        "id": "a-cb1c733333",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:29+00:00",
+        "short_answer": "目前检索到的段落没有提到 metallic、roughness 等 PBR material maps。论文明确描述的输出是经过 baking 得到的高分辨率 texture map，并称生成的纹理 seamless 且 lighting-invariant。因此，现有材料无法确认 Hunyuan3D-Paint 能直接输出可用于 AR renderer 的 PBR 材质。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p013-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文实际描述的输出",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 的流程是把多视角图像 baking 成高分辨率 texture map，并称所有生成的 texture map 都是 seamless 且 lighting-invariant。这些描述只说明颜色纹理的质量和形式，没有说明输出包含哪些材质通道。",
+            "refs": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p013-c02"
+            ]
+          },
+          {
+            "title": "PBR 材质图的证据缺口",
+            "kind": "limitation",
+            "text": "在已检索的段落中，没有 metallic、roughness、normal 或 albedo 等材质通道的输出说明，也没有提到 PBR 渲染的验证。因此不能判断这些通道是否存在；需要检查论文的其他章节、附录或项目说明，或直接查看代码与模型输出。",
+            "refs": []
+          },
+          {
+            "title": "对 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "论文中 lighting-invariant 的描述可能意味着纹理中烘焙的光照较少，这对 AR 中的重新打光有参考价值，但这只是推断，不能等同于 PBR 材质。如果你的 AR renderer 需要 metallic 和 roughness，通常还需要额外的材质估计或分解步骤，论文目前的材料没有覆盖这一部分。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true,
+            "quotes": [
+              "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p013-c02",
+            "kind": "paper",
+            "page": 13,
+            "page_label": "13",
+            "text": "The visual comparison refers to Fig. 8. The fish and rabbit show that our model produces the most condition-following results. And the football demonstrates the ability of Hunyuan3D-Paint to produce clear texture maps. The texture map of the castle and bear contains rich texture patterns, showcasing that our model can produce intricate details. Applications.All generated texture maps are seamless and lighting-invariant. Moreover, Hunyuan3D- Paint is flexible to produce various texture maps for bare mesh or hand-crafted mesh according to different prompts. As shown in the Fig. 9, our model produces different texture maps for a mesh with seamless and intricate details. 5.3 Textured 3D Assets Generation In this section, we evaluate the generated textured 3D assets for reflecting the end-to-end generation capabilities of Hunyuan3D 2.0. Baselines.We compare Hunyuan3D 2.0 against leading models in the field, including open-source model Trellis [101] and closed-source models Model 1, Model 2, and Model 3. Metrics.We mainly measure the generative quality of textured 3D assets by their renderings. Similar to Sec.",
+            "verified": true,
+            "quotes": [
+              "All generated texture maps are seamless and lighting-invariant."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          }
+        ],
+        "evidence_status": "insufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你的 AR renderer 用的是哪个引擎或格式（例如 Unity、Blender、glTF 的 PBR 规范）？这会影响需要哪些材质通道。",
+        "follow_up_suggestions": [
+          "论文的附录或项目页是否说明了输出的材质通道？",
+          "如何从生成的 texture map 估计 albedo、metallic 和 roughness？",
+          "论文中的 lighting-invariant 具体是如何实现的？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-Paint PBR material maps metallic roughness albedo texture output rendering",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-0f03aa81a2",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，那我看一下 Figure 1。你能简单说一下 Figure 1 展示的是什么吗？是 texture 的结果，还是整个流程？",
+        "created_at": "2026-11-09T09:25:42+00:00"
+      },
+      {
+        "id": "a-f23cc92d89",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:42+00:00",
+        "short_answer": "Figure 1 是 Hunyuan3D 2.0 整个系统的总览，不只展示 texture 结果。根据 PaperLens 对图像的描述，它包含四个面板：形状生成（Hunyuan3D-DiT）、纹理合成（Hunyuan3D-Paint）、低多边形/草图/动画等工具（Hunyuan3D-Studio）以及低多边形网格示例。其中只有右上角的纹理面板直接对应 texture 结果。",
+        "short_answer_refs": [
+          "2e0d0789-p002-fig1"
+        ],
+        "sections": [
+          {
+            "title": "作者对 Figure 1 的说明",
+            "kind": "paper",
+            "text": "论文中 Figure 1 的图注只写明它是 Hunyuan3D 2.0 系统的总体展示（An overall of Hunyuan3D 2.0 system）。图注本身没有逐一解释每个面板，因此各面板的具体含义需要结合正文来理解。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "四个面板分别展示什么",
+            "kind": "explanation",
+            "text": "根据 PaperLens 对图像的描述（不是作者原文）：左上是 Hunyuan3D-DiT 生成的形状，展示多种 3D 形状；右上是 Hunyuan3D-Paint 生成的纹理，展示八个带纹理的物体；左下是低多边形灰色网格模型；右下是由草图生成并带动画的卡通角色。由于图中部分小字无法可靠辨认，具体标签细节应以原图为准。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你关注的是从照片生成可用于 AR 的 3D 资产，Figure 1 右上角的纹理面板与你的需求最相关，但它只能说明 texture 的视觉效果，并不能说明输出是否包含 PBR 材质图。你可以把它当作系统结构的参考，而把 texture 的技术细节和材质输出的判断交给正文和后续章节去确认。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p002-fig1",
+            "kind": "figure",
+            "page": 2,
+            "page_label": "2",
+            "text": "Figure 1 (PaperLens description of the image): Figure 1 is a four-panel collage of example renderings presenting the components of the Hunyuan3D 2.0 system. The top-left panel, labeled Hunyuan3D-DiT for Generated Shape Generation, shows a blue-tinted plastic-kit style sheet containing many 3D shapes such as a horse, a church, robots, a plane, a car and a train, with a 'High Resolution' tag. The top-right panel, labeled Hunyuan3D-Paint for Generated Texture Synthesis, is a grid of eight colorful textured objects (a dragon, a car, a turtle, a castle, a frog-like creature, flowers and a treasure chest among others) on varied backgrounds. The bottom-left panel is a dark-background scene of low-poly gray mesh models, including a blimp, a rock-like shape and cacti, with wireframe edges visible. The bottom-right panel, labeled Hunyuan3D-Studio for Low Poly, Sketch to 3D, Animation, shows a sketch on an easel beside rendered cartoon boy characters in several poses. Not readable: Small text inside the top-left sheet (such as the 'LDM' and 'HY3D' labels on the parts) is not reliably legible.\nCaption (authors' words): Figure 1: An overall of Hunyuan3D 2.0 system.",
+            "verified": true,
+            "label": "Figure 1",
+            "caption": "Figure 1: An overall of Hunyuan3D 2.0 system.",
+            "quotes": [
+              "Figure 1: An overall of Hunyuan3D 2.0 system."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": false,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Figure 2 中的 Hunyuan3D-Paint 具体流程是怎样的？",
+          "论文中 texture 结果的评估指标有哪些？",
+          "Hunyuan3D-Paint 的输出是否适合直接放入 AR 渲染器？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 Figure 1 textured 3D asset generation results pipeline overview",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-36ff8f5b45",
+        "role": "user",
+        "mode": "chat",
+        "text": "好，Figure 1 大概清楚了。那我更关心几何和纹理加起来的规模：论文里有没有说生成的 mesh 面数大概多少？手机上做实时 AR 渲染会不会太重？你是看到了具体数字，还是你推测的？",
+        "created_at": "2026-11-09T09:25:56+00:00"
+      },
+      {
+        "id": "a-2caa9ccf9d",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:56+00:00",
+        "short_answer": "我在检索到的段落中没有看到 Hunyuan3D 2.0 生成的 dense mesh 具体面数，所以无法确认它在手机上做实时 AR 渲染是否太重。论文只提到低多边形模块可以把 dense mesh 转成低多边形网格，并说明简化后每个模型“只有几十个三角形”。关于手机端开销的判断是我的推测，不是论文的数据。",
+        "short_answer_refs": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文提到的低多边形化结果",
+            "kind": "paper",
+            "text": "论文说明团队建立了低多边形风格化模块，把 Hunyuan3D 2.0 生成的 dense mesh 转换为 low-polygon mesh，并称其可以显著降低计算成本。论文还提到，几何编辑后每个 3D 模型可以只用“几十个三角形”表示，但这里没有给出 dense mesh 的面数。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "面数证据的缺口",
+            "kind": "limitation",
+            "text": "目前检索到的段落没有给出生成 mesh 的面数范围、纹理分辨率与显存或渲染耗时之间的关系，也没有移动端的性能测试。另外，段落写的是 Fig. 1 的右上角提到低多边形，而我对 Figure 1 的描述里低多边形示例位于左下角，因此这一位置信息需要以原图为准。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "对手机实时 AR 的推测",
+            "kind": "inference",
+            "text": "基于常识，高分辨率的 dense mesh 加上高分辨率 texture map 通常会比低多边形模型更占用内存和渲染预算，所以直接放到手机 AR 中可能需要简化。这一判断是我的推理，论文中没有对此做验证。",
+            "refs": []
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你的研究需要在手机上实时显示，可以把论文的低多边形化步骤看作生成后处理的一个候选环节，并在 face count 与纹理保真度之间做对比实验。论文强调 KD-tree 用于保留纹理，这对你评估简化后的纹理质量可能有参考价值。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你的 AR 目标平台（例如某类手机或 WebAR）以及可接受的面数预算大概是多少？这样我可以更具体地比较论文的低多边形结果与你的需求。",
+        "follow_up_suggestions": [
+          "论文的低多边形化模块具体如何在几何编辑中合并顶点？",
+          "Hunyuan3D-Paint 生成的 texture map 分辨率是多少，它对移动端显存有什么影响？",
+          "如果要做 LOD，论文的方法可以怎样改造成多级细节？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 generated mesh face count number of triangles polygons real-time rendering efficiency",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-cc24f09ff8",
+        "role": "user",
+        "mode": "critical_review",
+        "text": "Critically review whether the idea or method we have been discussing is applicable to my research.",
+        "created_at": "2026-11-09T09:26:05+00:00"
+      },
+      {
+        "id": "a-7b8b134244",
+        "role": "assistant",
+        "mode": "critical_review",
+        "created_at": "2026-11-09T09:26:05+00:00",
+        "short_answer": "就目前检索到的段落看，Hunyuan3D 2.0 的低多边形化模块（Low-polygon Stylization）对你的 AR 资产管线有一定参考价值：它明确把稠密网格转为低面数网格，并通过 KD-tree 保留纹理。但论文没有给出面数、PBR 材质或移动端实时渲染的数据，因此暂时不能直接用于手机端 AR，需要补充实测证据。",
+        "short_answer_refs": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "低多边形化对你研究的可借鉴之处",
+            "kind": "research_use",
+            "text": "你的目标是从公开照片生成可用于 AR 的 3D 资产，论文中的低多边形化模块提供了一个“先生成稠密网格、再简化并转移纹理”的思路。这可以作为你管线中后处理环节的参考，例如在生成后加入面数控制与纹理迁移步骤。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "论文提供的证据",
+            "kind": "paper",
+            "text": "论文称低多边形模块使用传统的顶点合并方法来降低面数，并称每个模型经几何编辑后“can be represented by only dozens of triangles”。同时作者构建 KD-tree 来保留纹理图案。这些是作者的陈述，论文中未见系统的面数统计或与 AR 渲染性能的对比。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "局限与未知",
+            "kind": "limitation",
+            "text": "段落中没有给出稠密网格的具体面数、低多边形网格的统计分布、纹理分辨率与 PBR 材质图，也没有移动端帧率或内存数据。“几十个三角形”的说法是作者的描述，需要在你的数据上验证是否保留了足够的几何细节。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "采用前需要的补充证据",
+            "kind": "inference",
+            "text": "如果要在你的研究中依赖这一思路，建议自行测量简化前后的面数、纹理转移误差以及在目标手机设备上的渲染开销，并考虑是否需要额外生成 metallic/roughness 等材质图。这些是基于论文缺口的推断，而非论文结论。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+              "Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "低多边形化模块的纹理转移具体如何实现？",
+          "如果需要 PBR 材质，Hunyuan3D-Paint 之外还有哪些可行的补充方法？",
+          "在手机端 AR 中，面数之外还需要关注哪些性能指标？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+        },
+        "retrieval_query": "Hunyuan3D 2.0 dense mesh face count low-poly conversion real-time rendering limitations",
+        "pipeline_version": "v1"
+      },
+      {
+        "id": "u-639b5bbc87",
+        "role": "user",
+        "mode": "judgment_feedback",
+        "text": "My verdict: Need more evidence\nMy rationale: 论文目前只给出 texture map 和 low-polygon 的定性描述，没有 dense mesh 的面数、PBR 材质通道（metallic、roughness）或移动端 AR 渲染的实测数据，这些正是我判断能否用在 AR 管线里的关键。另外论文的输入假设是 image 生成的 mesh，而我的场景是 unconstrained 的网络照片（遮挡、光照、低分辨率），这一点论文里没有验证，所以我需要更多证据后再决定是否采用。",
+        "created_at": "2026-11-09T09:26:17+00:00"
+      },
+      {
+        "id": "a-278cc2bd6c",
+        "role": "assistant",
+        "mode": "judgment_feedback",
+        "created_at": "2026-11-09T09:26:17+00:00",
+        "short_answer": "你的裁定是「Need more evidence」，你的理由与检索到的段落基本一致：论文目前只描述了 texture map 与 low-polygon 的做法，没有给出面数、PBR 材质通道或移动端 AR 的数据，也没有验证网络照片这类非受控输入。因此我同意现有证据不足以支持直接采用，这一判断由你作出。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p017-c02",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "论文支持你理由的部分",
+            "kind": "paper",
+            "text": "论文描述的输出是用于 baking 高分辨率 texture map 的多视角图像，且 low-polygon 模块把稠密网格转为低面数网格，每个模型可由“dozens of triangles”表示。这些是定性描述，与你提到的 texture map 与 low-polygon 的说明一致，但没有给出数量化的面数或移动端性能。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "关于输入假设的一点说明",
+            "kind": "paper",
+            "text": "检索到的段落显示 Hunyuan3D 2.0 的输入是单张图像（given an input image），并以 image 条件对齐评估生成结果。但这些段落没有讨论遮挡、光照变化或低分辨率的网络照片，因此你关于“论文未验证 unconstrained 输入”的说法在检索到的材料中成立，只能说未找到，不能说论文完全未涉及。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p003-c03"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "论文对 texture 的描述包括 lighting-invariant 等说法，但这与 AR 中需要的光照一致性并不等同；PBR 通道的缺失也意味着即使纹理质量好，也可能需要额外的材质估计步骤。这些在你的理由中尚未提及，可作为补充考虑的方面。",
+            "refs": []
+          },
+          {
+            "title": "可以加强决定的一个检查",
+            "kind": "inference",
+            "text": "一个具体的检查是：用若干张真实网络照片（含遮挡与低分辨率）作为输入，统计生成网格的面数与贴图导出结果，并在目标 AR 渲染器中测试加载与帧率。这可以直接回答你关心的两个未知数。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true
+          },
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "论文中 low-polygon 模块的 KD-tree 纹理保留具体如何工作？",
+          "论文是否报告了任何与渲染或运行时间相关的数据？",
+          "论文的评估是否包含遮挡或低分辨率输入的案例？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 limitations generalization to in-the-wild unconstrained images occlusion lighting low resolution input mesh face count PBR material",
+        "pipeline_version": "v1"
+      }
+    ],
+    "system_suggestion": {
+      "verdict": "Use with adaptations",
+      "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+    },
+    "judgment": {
+      "verdict": "Need more evidence",
+      "rationale": "论文目前只给出 texture map 和 low-polygon 的定性描述，没有 dense mesh 的面数、PBR 材质通道（metallic、roughness）或移动端 AR 渲染的实测数据，这些正是我判断能否用在 AR 管线里的关键。另外论文的输入假设是 image 生成的 mesh，而我的场景是 unconstrained 的网络照片（遮挡、光照、低分辨率），这一点论文里没有验证，所以我需要更多证据后再决定是否采用。",
+      "submitted_at": "2026-11-09T09:26:09+00:00",
+      "system_suggestion_at_time": {
+        "verdict": "Use with adaptations",
+        "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+      }
+    },
+    "note": null,
+    "updated_at": "2026-11-09T09:26:17+00:00",
+    "language_override": ""
+  },
+  "events": [
+    {
+      "event": "session_created",
+      "event_id": "66c9548faf26",
+      "timestamp": "2026-11-09T09:24:54+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "reading_goal": "Explore potential use in my research",
+      "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+      "language": "中文（简体）"
+    },
+    {
+      "event": "turn",
+      "event_id": "6a4fd7946eee",
+      "timestamp": "2026-11-09T09:25:13+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，那我先大概了解一下整体。现在想问纹理部分：Hunyuan3D-Paint 到底是怎么生成纹理的？它是直接在 3D 上生成颜色，还是从多视角图像推出来的？可以用中文简单解释一下，关键术语保留英文就行。",
+      "retrieval_query": "Hunyuan3D-Paint texture generation multi-view images projection UV texture map diffusion",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p019-c03",
+          "kind": "paper",
+          "page": 19,
+          "page_label": "19",
+          "similarity": 0.6984,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Carefully adhering to these details can significantly improve the quality of the generated textures. Based on these advantages, Hunyuan3D-Paint is designed with a detailed preserving image injection module according to the philosophy of aligning the reference image not only semantically but also following the details as closely as possible. Multi-view Images Generation.Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]. Most works force the multi-view generated latents to communicate with each other by manipulating the self-attention layers with 3D-aware masks [ 36, 48, 88, 60, 95, 79, 78, 55]. For example, Zero123++ [78] first treats the multi-view attention as a self-attention on a large image, which is the spatial concatenation of six multi-view images. MVDiffusion [89] applies a correspondence-aware attention (CAA) to inform the model to focus only on the correlation among the spatially-close pixels."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6701,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6699,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation “Living out everyone’s imagination on creating and manipulating 3D assets.” —Hunyuan3D Team ∗ Abstract We present Hunyuan3D 2.0, an advanced large-scale 3D synthesis system for generating high-resolution textured 3D assets. This system includes two foundation components: a large-scale shape generation model – Hunyuan3D-DiT, and a largescale texture synthesis model – Hunyuan3D-Paint. The shape generative model, built on a scalable flow-based diffusion transformer, aims to create geometry that properly aligns with a given condition image, laying a solid foundation for downstream applications. The texture synthesis model, benefiting from strong geometric and diffusion priors, produces high-resolution and vibrant texture maps for either generated or hand-crafted meshes. Furthermore, we build Hunyuan3D-Studio – a versatile, user-friendly production platform that simplifies the re-creation process of 3D assets. It allows both professional and amateur users to manipulate or even animate their meshes efficiently."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.6523,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p009-c04",
+          "kind": "paper",
+          "page": 9,
+          "page_label": "9",
+          "similarity": 0.6504,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Multi-view images are rendered under the illumination of an even white light to accommodate our delighting model. Specifically, we render the reference image with a random azimuth and a fixed range of elevation from -20 to 20 degrees. This variation disrupts the consistency between the reference and generated images, thereby increasing the robustness of our texture generation framework. We directly train on 512 × 512 resolution with a total of 80,000 steps, a batch size of 48, and a learning rate of 5×10 −5. We use 1000 warm-up steps and the \"trailing\" scheduler proposed by ZSNR. General Text- and Image-to-Texture.It is worth noting that Hunyuan3D-Paint not only generates high-quality texture maps for generated meshes but also supports arbitrary texture generation guided by any text or image input provided by the user for any geometric model. To achieve this, we leverage"
+        },
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6403,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "根据论文，Hunyuan3D-Paint 不是直接在 3D 表面上逐点生成颜色，而是先以网格的 normal maps 和 position maps 为几何条件，生成多视角图像（multi-view images），再把这些图像 baking 成高分辨率的 texture map。论文摘要级别的段落没有详细说明 baking 的具体算法，所以这一部分只能确认整体流程。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "论文描述的整体流程",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 由一个以 mesh 为条件的多视角生成流程，加上用于预处理并把多视角图像 baking 成高分辨率纹理贴图的若干技术组成。图 2 的说明进一步指出，它以生成网格的 normal maps 和 position maps 作为输入，输出用于 texture baking 的多视角图像。",
+            "chunk_ids": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "为什么要先做多视角图像",
+            "kind": "paper",
+            "text": "论文指出，training-free 的图像扩散模型存在 viewpoint bias 和多视角不一致的问题，因此发展了 multi-view image diffusion，并利用 objaverse 等大规模 3D 数据集来缓解这些问题。论文还举例说 Zero123++ 把六张多视角图像拼接成一张大图做 self-attention，MVDiffusion 则使用 correspondence-aware attention。",
+            "chunk_ids": [
+              "2e0d0789-p019-c03"
+            ]
+          },
+          {
+            "title": "用简单的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先从几何形状算出“每个像素在表面上的位置”和“朝向”这类信息，再让模型画出从多个角度看到的同一物体，最后把这些视角的图像按照几何关系“贴”回 3D 模型的 UV 贴图上。直接在 3D 上生成颜色很难保证各视角一致，所以用多视角图像作为中间步骤。这是我对论文流程的解释，论文原文没有逐句这样表述。",
+            "chunk_ids": []
+          },
+          {
+            "title": "对你 AR 3D 资产研究的潜在用途",
+            "kind": "research_use",
+            "text": "从你的研究方向看，这种“先多视角生成、再烘焙到纹理”的思路，可能适合把网络照片转成带纹理的 3D 资产，因为它能利用图像扩散模型的先验。不过，论文面向的是由 image 生成的 mesh，你需要判断公开照片中的遮挡、光照和相机信息是否能满足它的输入假设。这一点需要你结合自己的数据再评估。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c03",
+            "quote": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c00",
+            "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+          },
+          {
+            "chunk_id": "2e0d0789-p019-c03",
+            "quote": "Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "Hunyuan3D-Paint 纹理生成方式",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何把多视角图像 baking 到 UV texture map 上的？",
+          "论文中 normal maps 和 position maps 具体是怎样从网格计算出来的？",
+          "Hunyuan3D-Paint 处理光照（delighting）的模块是怎么设计的？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-15766266d3",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:13+00:00",
+        "short_answer": "根据论文，Hunyuan3D-Paint 不是直接在 3D 表面上逐点生成颜色，而是先以网格的 normal maps 和 position maps 为几何条件，生成多视角图像（multi-view images），再把这些图像 baking 成高分辨率的 texture map。论文摘要级别的段落没有详细说明 baking 的具体算法，所以这一部分只能确认整体流程。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p004-c00"
+        ],
+        "sections": [
+          {
+            "title": "论文描述的整体流程",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 由一个以 mesh 为条件的多视角生成流程，加上用于预处理并把多视角图像 baking 成高分辨率纹理贴图的若干技术组成。图 2 的说明进一步指出，它以生成网格的 normal maps 和 position maps 作为输入，输出用于 texture baking 的多视角图像。",
+            "refs": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p004-c00"
+            ]
+          },
+          {
+            "title": "为什么要先做多视角图像",
+            "kind": "paper",
+            "text": "论文指出，training-free 的图像扩散模型存在 viewpoint bias 和多视角不一致的问题，因此发展了 multi-view image diffusion，并利用 objaverse 等大规模 3D 数据集来缓解这些问题。论文还举例说 Zero123++ 把六张多视角图像拼接成一张大图做 self-attention，MVDiffusion 则使用 correspondence-aware attention。",
+            "refs": [
+              "2e0d0789-p019-c03"
+            ]
+          },
+          {
+            "title": "用简单的话理解这条流程",
+            "kind": "explanation",
+            "text": "可以把它理解为：先从几何形状算出“每个像素在表面上的位置”和“朝向”这类信息，再让模型画出从多个角度看到的同一物体，最后把这些视角的图像按照几何关系“贴”回 3D 模型的 UV 贴图上。直接在 3D 上生成颜色很难保证各视角一致，所以用多视角图像作为中间步骤。这是我对论文流程的解释，论文原文没有逐句这样表述。",
+            "refs": []
+          },
+          {
+            "title": "对你 AR 3D 资产研究的潜在用途",
+            "kind": "research_use",
+            "text": "从你的研究方向看，这种“先多视角生成、再烘焙到纹理”的思路，可能适合把网络照片转成带纹理的 3D 资产，因为它能利用图像扩散模型的先验。不过，论文面向的是由 image 生成的 mesh，你需要判断公开照片中的遮挡、光照和相机信息是否能满足它的输入假设。这一点需要你结合自己的数据再评估。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true,
+            "quotes": [
+              "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p019-c03",
+            "kind": "paper",
+            "page": 19,
+            "page_label": "19",
+            "text": "Carefully adhering to these details can significantly improve the quality of the generated textures. Based on these advantages, Hunyuan3D-Paint is designed with a detailed preserving image injection module according to the philosophy of aligning the reference image not only semantically but also following the details as closely as possible. Multi-view Images Generation.Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]. Most works force the multi-view generated latents to communicate with each other by manipulating the self-attention layers with 3D-aware masks [ 36, 48, 88, 60, 95, 79, 78, 55]. For example, Zero123++ [78] first treats the multi-view attention as a self-attention on a large image, which is the spatial concatenation of six multi-view images. MVDiffusion [89] applies a correspondence-aware attention (CAA) to inform the model to focus only on the correlation among the spatially-close pixels.",
+            "verified": true,
+            "quotes": [
+              "Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Hunyuan3D-Paint 是如何把多视角图像 baking 到 UV texture map 上的？",
+          "论文中 normal maps 和 position maps 具体是怎样从网格计算出来的？",
+          "Hunyuan3D-Paint 处理光照（delighting）的模块是怎么设计的？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-Paint texture generation multi-view images projection UV texture map diffusion",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "quote": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps.",
+          "ok": true,
+          "text": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "ok": true,
+          "text": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p019-c03",
+          "quote": "Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19].",
+          "ok": true,
+          "text": "Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19].",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D-Paint 纹理生成方式",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2146,
+        "retrieve": 830,
+        "generate_answer": 13256
+      },
+      "latency_ms": 16244,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "7a1a704edd97",
+      "timestamp": "2026-11-09T09:25:29+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "不好意思我刚才问得不清楚。我想问的是 Hunyuan3D-Paint 输出的东西能不能直接用在 AR renderer 里，比如有没有 PBR 相关的 material maps（metallic、roughness 之类），而不只是一张 texture map 的分辨率。论文里有没有提到这一点？",
+      "retrieval_query": "Hunyuan3D-Paint PBR material maps metallic roughness albedo texture output rendering",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5581,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        },
+        {
+          "chunk_id": "2e0d0789-p013-c00",
+          "kind": "paper",
+          "page": 13,
+          "page_label": "13",
+          "similarity": 0.5553,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "CMMD(↓) FID CLIP (↓) CLIP-score(↑) LPIPS(↓) TEXTure [73] 3.047 35.75 0.8499 0.0076 Text2Tex [9] 2.811 31.72 0.8680 0.0071 SyncMVD [59] 2.584 29.93 0.8751 0.0063 Paint3D [111] 2.810 30.29 0.8724 0.0063 TexPainter [113] 2.483 28.83 0.8789 0.0062 Hunyuan3D-Paint (Ours)2.318 26.44 0.8893 0.0059 Table 3: Numerical comparisons. We compare Hunyuan3D-Paint with baselines on various metrics, and the results indicate that our model could produce the most condition-conforming texture maps. 5.2 Texture Map Synthesis As texture maps directly influence the visual appeal of textured 3D assets, we conduct comprehensive text-conditioned texture map synthesis experiments to validate the performance of Hunyuan3D-Paint. Baselines.We compare Hunyuan3D-Paint with the following texture generation methods, including TEXTure [73], Text2Tex [9], SyncMVD [59], Paint3D [111], and TexPainter [113]. All the baselines leverage geometric and diffusion priors to facilitate the overall generation quality of texture maps. Metrics.We apply several frequently used image-level metrics to enable a fair comparison of texture map generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p013-c02",
+          "kind": "paper",
+          "page": 13,
+          "page_label": "13",
+          "similarity": 0.5489,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The visual comparison refers to Fig. 8. The fish and rabbit show that our model produces the most condition-following results. And the football demonstrates the ability of Hunyuan3D-Paint to produce clear texture maps. The texture map of the castle and bear contains rich texture patterns, showcasing that our model can produce intricate details. Applications.All generated texture maps are seamless and lighting-invariant. Moreover, Hunyuan3D- Paint is flexible to produce various texture maps for bare mesh or hand-crafted mesh according to different prompts. As shown in the Fig. 9, our model produces different texture maps for a mesh with seamless and intricate details. 5.3 Textured 3D Assets Generation In this section, we evaluate the generated textured 3D assets for reflecting the end-to-end generation capabilities of Hunyuan3D 2.0. Baselines.We compare Hunyuan3D 2.0 against leading models in the field, including open-source model Trellis [101] and closed-source models Model 1, Model 2, and Model 3. Metrics.We mainly measure the generative quality of textured 3D assets by their renderings. Similar to Sec."
+        },
+        {
+          "chunk_id": "2e0d0789-p016-c00",
+          "kind": "paper",
+          "page": 16,
+          "page_label": "16",
+          "similarity": 0.5293,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Trellis Model1 Model2 Model3 Ours Figure 11: Visual comparisons. The first case reflects that Hunyuan3D 2.0 could synthesize detailed surface bumps and correct texture maps. The second penguin showcases our model’s ability to handle complex actions. The last mountain demonstrates that Hunyuan3D-DiT could produce intricate structures, and Hunyuan3D-Paint can synthesize vivid texture maps. (Better viewed by zooming in.)"
+        },
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.5257,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p013-tab3",
+          "kind": "figure",
+          "page": 13,
+          "page_label": "13",
+          "similarity": 0.5158,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Table 3 (PaperLens description of the image): Table 3 is a numerical comparison table with methods as rows and four metrics as columns: CMMD (lower is better), FID_CLIP (lower is better), CLIP-score (higher is better), and LPIPS (lower is better). The rows list six methods: TEXTure [73], Text2Tex [9], SyncMVD [59], Paint3D [111], TexPainter [113], and Hunyuan3D-Paint (Ours), with the Hunyuan3D-Paint row in bold. For CMMD, values range from 3.047 (TEXTure) down to 2.318 (Hunyuan3D-Paint), and for FID_CLIP from 35.75 down to 26.44 for Hunyuan3D-Paint. CLIP-score values rise from 0.8499 (TEXTure) to 0.8893 for Hunyuan3D-Paint, and LPIPS values fall from 0.0076 to 0.0059 for Hunyuan3D-Paint. Underlined values mark the second-best results in several columns, including TexPainter's 2.483 CMMD, 28.83 FID_CLIP, 0.8789 CLIP-score and 0.0062 LPIPS. Not readable: Arrow symbols in the column headers are small and may be hard to distinguish at this resolution.\nCaption (authors' words): Table 3: Numerical comparisons. We compare Hunyuan3D-Paint with baselines on various metrics, and the results indicate that our model could produce the most condition-conforming texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p019-c03",
+          "kind": "paper",
+          "page": 19,
+          "page_label": "19",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Carefully adhering to these details can significantly improve the quality of the generated textures. Based on these advantages, Hunyuan3D-Paint is designed with a detailed preserving image injection module according to the philosophy of aligning the reference image not only semantically but also following the details as closely as possible. Multi-view Images Generation.Due to the viewpoint bias and multi-view inconsistency inherent in training-free image diffusion models, multi-view image diffusion was developed to alleviate these issues by utilizing large-scale 3D datasets, such as objaverse and objaverse-xl [20, 19]. Most works force the multi-view generated latents to communicate with each other by manipulating the self-attention layers with 3D-aware masks [ 36, 48, 88, 60, 95, 79, 78, 55]. For example, Zero123++ [78] first treats the multi-view attention as a self-attention on a large image, which is the spatial concatenation of six multi-view images. MVDiffusion [89] applies a correspondence-aware attention (CAA) to inform the model to focus only on the correlation among the spatially-close pixels."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "目前检索到的段落没有提到 metallic、roughness 等 PBR material maps。论文明确描述的输出是经过 baking 得到的高分辨率 texture map，并称生成的纹理 seamless 且 lighting-invariant。因此，现有材料无法确认 Hunyuan3D-Paint 能直接输出可用于 AR renderer 的 PBR 材质。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p013-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文实际描述的输出",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 的流程是把多视角图像 baking 成高分辨率 texture map，并称所有生成的 texture map 都是 seamless 且 lighting-invariant。这些描述只说明颜色纹理的质量和形式，没有说明输出包含哪些材质通道。",
+            "chunk_ids": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p013-c02"
+            ]
+          },
+          {
+            "title": "PBR 材质图的证据缺口",
+            "kind": "limitation",
+            "text": "在已检索的段落中，没有 metallic、roughness、normal 或 albedo 等材质通道的输出说明，也没有提到 PBR 渲染的验证。因此不能判断这些通道是否存在；需要检查论文的其他章节、附录或项目说明，或直接查看代码与模型输出。",
+            "chunk_ids": []
+          },
+          {
+            "title": "对 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "论文中 lighting-invariant 的描述可能意味着纹理中烘焙的光照较少，这对 AR 中的重新打光有参考价值，但这只是推断，不能等同于 PBR 材质。如果你的 AR renderer 需要 metallic 和 roughness，通常还需要额外的材质估计或分解步骤，论文目前的材料没有覆盖这一部分。",
+            "chunk_ids": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c03",
+            "quote": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+          },
+          {
+            "chunk_id": "2e0d0789-p013-c02",
+            "quote": "All generated texture maps are seamless and lighting-invariant."
+          },
+          {
+            "chunk_id": "2e0d0789-p004-c00",
+            "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+          }
+        ],
+        "evidence_status": "insufficient",
+        "clarifying_question": "你的 AR renderer 用的是哪个引擎或格式（例如 Unity、Blender、glTF 的 PBR 规范）？这会影响需要哪些材质通道。",
+        "current_concept": "Hunyuan3D-Paint 的输出形式与 PBR 材质图的可用性",
+        "follow_up_suggestions": [
+          "论文的附录或项目页是否说明了输出的材质通道？",
+          "如何从生成的 texture map 估计 albedo、metallic 和 roughness？",
+          "论文中的 lighting-invariant 具体是如何实现的？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-cb1c733333",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:29+00:00",
+        "short_answer": "目前检索到的段落没有提到 metallic、roughness 等 PBR material maps。论文明确描述的输出是经过 baking 得到的高分辨率 texture map，并称生成的纹理 seamless 且 lighting-invariant。因此，现有材料无法确认 Hunyuan3D-Paint 能直接输出可用于 AR renderer 的 PBR 材质。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p013-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文实际描述的输出",
+            "kind": "paper",
+            "text": "论文说 Hunyuan3D-Paint 的流程是把多视角图像 baking 成高分辨率 texture map，并称所有生成的 texture map 都是 seamless 且 lighting-invariant。这些描述只说明颜色纹理的质量和形式，没有说明输出包含哪些材质通道。",
+            "refs": [
+              "2e0d0789-p003-c03",
+              "2e0d0789-p013-c02"
+            ]
+          },
+          {
+            "title": "PBR 材质图的证据缺口",
+            "kind": "limitation",
+            "text": "在已检索的段落中，没有 metallic、roughness、normal 或 albedo 等材质通道的输出说明，也没有提到 PBR 渲染的验证。因此不能判断这些通道是否存在；需要检查论文的其他章节、附录或项目说明，或直接查看代码与模型输出。",
+            "refs": []
+          },
+          {
+            "title": "对 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "论文中 lighting-invariant 的描述可能意味着纹理中烘焙的光照较少，这对 AR 中的重新打光有参考价值，但这只是推断，不能等同于 PBR 材质。如果你的 AR renderer 需要 metallic 和 roughness，通常还需要额外的材质估计或分解步骤，论文目前的材料没有覆盖这一部分。",
+            "refs": [
+              "2e0d0789-p004-c00"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true,
+            "quotes": [
+              "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p013-c02",
+            "kind": "paper",
+            "page": 13,
+            "page_label": "13",
+            "text": "The visual comparison refers to Fig. 8. The fish and rabbit show that our model produces the most condition-following results. And the football demonstrates the ability of Hunyuan3D-Paint to produce clear texture maps. The texture map of the castle and bear contains rich texture patterns, showcasing that our model can produce intricate details. Applications.All generated texture maps are seamless and lighting-invariant. Moreover, Hunyuan3D- Paint is flexible to produce various texture maps for bare mesh or hand-crafted mesh according to different prompts. As shown in the Fig. 9, our model produces different texture maps for a mesh with seamless and intricate details. 5.3 Textured 3D Assets Generation In this section, we evaluate the generated textured 3D assets for reflecting the end-to-end generation capabilities of Hunyuan3D 2.0. Baselines.We compare Hunyuan3D 2.0 against leading models in the field, including open-source model Trellis [101] and closed-source models Model 1, Model 2, and Model 3. Metrics.We mainly measure the generative quality of textured 3D assets by their renderings. Similar to Sec.",
+            "verified": true,
+            "quotes": [
+              "All generated texture maps are seamless and lighting-invariant."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p004-c00",
+            "kind": "paper",
+            "page": 4,
+            "page_label": "4",
+            "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation.",
+            "verified": true,
+            "quotes": [
+              "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking."
+            ]
+          }
+        ],
+        "evidence_status": "insufficient",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你的 AR renderer 用的是哪个引擎或格式（例如 Unity、Blender、glTF 的 PBR 规范）？这会影响需要哪些材质通道。",
+        "follow_up_suggestions": [
+          "论文的附录或项目页是否说明了输出的材质通道？",
+          "如何从生成的 texture map 估计 albedo、metallic 和 roughness？",
+          "论文中的 lighting-invariant 具体是如何实现的？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D-Paint PBR material maps metallic roughness albedo texture output rendering",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "quote": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps.",
+          "ok": true,
+          "text": "Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p013-c02",
+          "quote": "All generated texture maps are seamless and lighting-invariant.",
+          "ok": true,
+          "text": "All generated texture maps are seamless and lighting-invariant.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "quote": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "ok": true,
+          "text": "Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D-Paint 的输出形式与 PBR 材质图的可用性",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2023,
+        "retrieve": 603,
+        "generate_answer": 12279
+      },
+      "latency_ms": 14918,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "b445c8462886",
+      "timestamp": "2026-11-09T09:25:42+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，那我看一下 Figure 1。你能简单说一下 Figure 1 展示的是什么吗？是 texture 的结果，还是整个流程？",
+      "retrieval_query": "Hunyuan3D 2.0 Figure 1 textured 3D asset generation results pipeline overview",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.7482,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c02",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.7384,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "To this end, we presentHunyuan3D 2.0, a 3D asset creation system with two strong open-sourced 3D foundation models:Hunyuan3D-DiTfor generative shape creation andHunyuan3D-Paintfor generative texture synthesis. Hunyuan3D 2.0 features a two-stage generation pipeline, starting with the creation of a bare mesh, followed by the synthesis of a texture map for that mesh. This strategy is effective for decoupling the difficulties of shape and texture generation [ 34, 107, 46, 47] and also provides flexibility for texturing either generated or handcrafted meshes. With this architecture, our shape creation model – Hunyuan3D-DiT, is designed as a large-scale flow-based diffusion model. As a prerequisite, we first train an autoencoder – Hunyuan3D-ShapeV AE using advanced techniques such as mesh surface importance sampling and variational token length to capture fine-grained details on the meshes. Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective."
+        },
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.733,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.7155,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation “Living out everyone’s imagination on creating and manipulating 3D assets.” —Hunyuan3D Team ∗ Abstract We present Hunyuan3D 2.0, an advanced large-scale 3D synthesis system for generating high-resolution textured 3D assets. This system includes two foundation components: a large-scale shape generation model – Hunyuan3D-DiT, and a largescale texture synthesis model – Hunyuan3D-Paint. The shape generative model, built on a scalable flow-based diffusion transformer, aims to create geometry that properly aligns with a given condition image, laying a solid foundation for downstream applications. The texture synthesis model, benefiting from strong geometric and diffusion priors, produces high-resolution and vibrant texture maps for either generated or hand-crafted meshes. Furthermore, we build Hunyuan3D-Studio – a versatile, user-friendly production platform that simplifies the re-creation process of 3D assets. It allows both professional and amateur users to manipulate or even animate their meshes efficiently."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6996,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings."
+        },
+        {
+          "chunk_id": "2e0d0789-p013-c02",
+          "kind": "paper",
+          "page": 13,
+          "page_label": "13",
+          "similarity": 0.6986,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The visual comparison refers to Fig. 8. The fish and rabbit show that our model produces the most condition-following results. And the football demonstrates the ability of Hunyuan3D-Paint to produce clear texture maps. The texture map of the castle and bear contains rich texture patterns, showcasing that our model can produce intricate details. Applications.All generated texture maps are seamless and lighting-invariant. Moreover, Hunyuan3D- Paint is flexible to produce various texture maps for bare mesh or hand-crafted mesh according to different prompts. As shown in the Fig. 9, our model produces different texture maps for a mesh with seamless and intricate details. 5.3 Textured 3D Assets Generation In this section, we evaluate the generated textured 3D assets for reflecting the end-to-end generation capabilities of Hunyuan3D 2.0. Baselines.We compare Hunyuan3D 2.0 against leading models in the field, including open-source model Trellis [101] and closed-source models Model 1, Model 2, and Model 3. Metrics.We mainly measure the generative quality of textured 3D assets by their renderings. Similar to Sec."
+        },
+        {
+          "chunk_id": "2e0d0789-p002-fig1",
+          "kind": "figure",
+          "page": 2,
+          "page_label": "2",
+          "similarity": null,
+          "carried_over": false,
+          "named_by_learner": true,
+          "text": "Figure 1 (PaperLens description of the image): Figure 1 is a four-panel collage of example renderings presenting the components of the Hunyuan3D 2.0 system. The top-left panel, labeled Hunyuan3D-DiT for Generated Shape Generation, shows a blue-tinted plastic-kit style sheet containing many 3D shapes such as a horse, a church, robots, a plane, a car and a train, with a 'High Resolution' tag. The top-right panel, labeled Hunyuan3D-Paint for Generated Texture Synthesis, is a grid of eight colorful textured objects (a dragon, a car, a turtle, a castle, a frog-like creature, flowers and a treasure chest among others) on varied backgrounds. The bottom-left panel is a dark-background scene of low-poly gray mesh models, including a blimp, a rock-like shape and cacti, with wireframe edges visible. The bottom-right panel, labeled Hunyuan3D-Studio for Low Poly, Sketch to 3D, Animation, shows a sketch on an easel beside rendered cartoon boy characters in several poses. Not readable: Small text inside the top-left sheet (such as the 'LDM' and 'HY3D' labels on the parts) is not reliably legible.\nCaption (authors' words): Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "Figure 1 是 Hunyuan3D 2.0 整个系统的总览，不只展示 texture 结果。根据 PaperLens 对图像的描述，它包含四个面板：形状生成（Hunyuan3D-DiT）、纹理合成（Hunyuan3D-Paint）、低多边形/草图/动画等工具（Hunyuan3D-Studio）以及低多边形网格示例。其中只有右上角的纹理面板直接对应 texture 结果。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p002-fig1"
+        ],
+        "sections": [
+          {
+            "title": "作者对 Figure 1 的说明",
+            "kind": "paper",
+            "text": "论文中 Figure 1 的图注只写明它是 Hunyuan3D 2.0 系统的总体展示（An overall of Hunyuan3D 2.0 system）。图注本身没有逐一解释每个面板，因此各面板的具体含义需要结合正文来理解。",
+            "chunk_ids": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "四个面板分别展示什么",
+            "kind": "explanation",
+            "text": "根据 PaperLens 对图像的描述（不是作者原文）：左上是 Hunyuan3D-DiT 生成的形状，展示多种 3D 形状；右上是 Hunyuan3D-Paint 生成的纹理，展示八个带纹理的物体；左下是低多边形灰色网格模型；右下是由草图生成并带动画的卡通角色。由于图中部分小字无法可靠辨认，具体标签细节应以原图为准。",
+            "chunk_ids": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你关注的是从照片生成可用于 AR 的 3D 资产，Figure 1 右上角的纹理面板与你的需求最相关，但它只能说明 texture 的视觉效果，并不能说明输出是否包含 PBR 材质图。你可以把它当作系统结构的参考，而把 texture 的技术细节和材质输出的判断交给正文和后续章节去确认。",
+            "chunk_ids": [
+              "2e0d0789-p002-fig1"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p002-fig1",
+            "quote": "Figure 1: An overall of Hunyuan3D 2.0 system."
+          }
+        ],
+        "evidence_status": "sufficient",
+        "clarifying_question": "",
+        "current_concept": "Figure 1 系统总览",
+        "follow_up_suggestions": [
+          "Figure 2 中的 Hunyuan3D-Paint 具体流程是怎样的？",
+          "论文中 texture 结果的评估指标有哪些？",
+          "Hunyuan3D-Paint 的输出是否适合直接放入 AR 渲染器？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-f23cc92d89",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:42+00:00",
+        "short_answer": "Figure 1 是 Hunyuan3D 2.0 整个系统的总览，不只展示 texture 结果。根据 PaperLens 对图像的描述，它包含四个面板：形状生成（Hunyuan3D-DiT）、纹理合成（Hunyuan3D-Paint）、低多边形/草图/动画等工具（Hunyuan3D-Studio）以及低多边形网格示例。其中只有右上角的纹理面板直接对应 texture 结果。",
+        "short_answer_refs": [
+          "2e0d0789-p002-fig1"
+        ],
+        "sections": [
+          {
+            "title": "作者对 Figure 1 的说明",
+            "kind": "paper",
+            "text": "论文中 Figure 1 的图注只写明它是 Hunyuan3D 2.0 系统的总体展示（An overall of Hunyuan3D 2.0 system）。图注本身没有逐一解释每个面板，因此各面板的具体含义需要结合正文来理解。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "四个面板分别展示什么",
+            "kind": "explanation",
+            "text": "根据 PaperLens 对图像的描述（不是作者原文）：左上是 Hunyuan3D-DiT 生成的形状，展示多种 3D 形状；右上是 Hunyuan3D-Paint 生成的纹理，展示八个带纹理的物体；左下是低多边形灰色网格模型；右下是由草图生成并带动画的卡通角色。由于图中部分小字无法可靠辨认，具体标签细节应以原图为准。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你关注的是从照片生成可用于 AR 的 3D 资产，Figure 1 右上角的纹理面板与你的需求最相关，但它只能说明 texture 的视觉效果，并不能说明输出是否包含 PBR 材质图。你可以把它当作系统结构的参考，而把 texture 的技术细节和材质输出的判断交给正文和后续章节去确认。",
+            "refs": [
+              "2e0d0789-p002-fig1"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p002-fig1",
+            "kind": "figure",
+            "page": 2,
+            "page_label": "2",
+            "text": "Figure 1 (PaperLens description of the image): Figure 1 is a four-panel collage of example renderings presenting the components of the Hunyuan3D 2.0 system. The top-left panel, labeled Hunyuan3D-DiT for Generated Shape Generation, shows a blue-tinted plastic-kit style sheet containing many 3D shapes such as a horse, a church, robots, a plane, a car and a train, with a 'High Resolution' tag. The top-right panel, labeled Hunyuan3D-Paint for Generated Texture Synthesis, is a grid of eight colorful textured objects (a dragon, a car, a turtle, a castle, a frog-like creature, flowers and a treasure chest among others) on varied backgrounds. The bottom-left panel is a dark-background scene of low-poly gray mesh models, including a blimp, a rock-like shape and cacti, with wireframe edges visible. The bottom-right panel, labeled Hunyuan3D-Studio for Low Poly, Sketch to 3D, Animation, shows a sketch on an easel beside rendered cartoon boy characters in several poses. Not readable: Small text inside the top-left sheet (such as the 'LDM' and 'HY3D' labels on the parts) is not reliably legible.\nCaption (authors' words): Figure 1: An overall of Hunyuan3D 2.0 system.",
+            "verified": true,
+            "label": "Figure 1",
+            "caption": "Figure 1: An overall of Hunyuan3D 2.0 system.",
+            "quotes": [
+              "Figure 1: An overall of Hunyuan3D 2.0 system."
+            ]
+          }
+        ],
+        "evidence_status": "sufficient",
+        "has_verified_paper_source": false,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "Figure 2 中的 Hunyuan3D-Paint 具体流程是怎样的？",
+          "论文中 texture 结果的评估指标有哪些？",
+          "Hunyuan3D-Paint 的输出是否适合直接放入 AR 渲染器？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 Figure 1 textured 3D asset generation results pipeline overview",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p002-fig1",
+          "quote": "Figure 1: An overall of Hunyuan3D 2.0 system.",
+          "ok": true,
+          "text": "Figure 1: An overall of Hunyuan3D 2.0 system.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Figure 1 系统总览",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1296,
+        "retrieve": 957,
+        "generate_answer": 8664
+      },
+      "latency_ms": 10929,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "add70a157d11",
+      "timestamp": "2026-11-09T09:25:56+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "chat",
+      "user_message": "好，Figure 1 大概清楚了。那我更关心几何和纹理加起来的规模：论文里有没有说生成的 mesh 面数大概多少？手机上做实时 AR 渲染会不会太重？你是看到了具体数字，还是你推测的？",
+      "retrieval_query": "Hunyuan3D 2.0 generated mesh face count number of triangles polygons real-time rendering efficiency",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.6369,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6306,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c01",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6236,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It allows both professional and amateur users to manipulate or even animate their meshes efficiently. We systematically evaluate our models, showing that Hunyuan3D 2.0 outperforms previous state-of-the-art models, including the open-source models and closed-source models in geometry details, condition alignment, texture quality, andetc. Hunyuan3D 2.0 is publicly released in order to fill the gaps in the open-source 3D community for large-scale foundation generative models. The code and pre-trained weights of our models are available at: https://github.com/Tencent/Hunyuan3D-2. ∗Hunyuan3D team contributors are listed in the end of report. arXiv:2501.12202v5 [cs.CV] 14 May 2026"
+        },
+        {
+          "chunk_id": "2e0d0789-p016-c00",
+          "kind": "paper",
+          "page": 16,
+          "page_label": "16",
+          "similarity": 0.6085,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Trellis Model1 Model2 Model3 Ours Figure 11: Visual comparisons. The first case reflects that Hunyuan3D 2.0 could synthesize detailed surface bumps and correct texture maps. The second penguin showcases our model’s ability to handle complex actions. The last mountain demonstrates that Hunyuan3D-DiT could produce intricate structures, and Hunyuan3D-Paint can synthesize vivid texture maps. (Better viewed by zooming in.)"
+        },
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "kind": "paper",
+          "page": 17,
+          "page_label": "17",
+          "similarity": 0.6013,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.5998,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings."
+        },
+        {
+          "chunk_id": "2e0d0789-p002-fig1",
+          "kind": "figure",
+          "page": 2,
+          "page_label": "2",
+          "similarity": null,
+          "carried_over": false,
+          "named_by_learner": true,
+          "text": "Figure 1 (PaperLens description of the image): Figure 1 is a four-panel collage of example renderings presenting the components of the Hunyuan3D 2.0 system. The top-left panel, labeled Hunyuan3D-DiT for Generated Shape Generation, shows a blue-tinted plastic-kit style sheet containing many 3D shapes such as a horse, a church, robots, a plane, a car and a train, with a 'High Resolution' tag. The top-right panel, labeled Hunyuan3D-Paint for Generated Texture Synthesis, is a grid of eight colorful textured objects (a dragon, a car, a turtle, a castle, a frog-like creature, flowers and a treasure chest among others) on varied backgrounds. The bottom-left panel is a dark-background scene of low-poly gray mesh models, including a blimp, a rock-like shape and cacti, with wireframe edges visible. The bottom-right panel, labeled Hunyuan3D-Studio for Low Poly, Sketch to 3D, Animation, shows a sketch on an easel beside rendered cartoon boy characters in several poses. Not readable: Small text inside the top-left sheet (such as the 'LDM' and 'HY3D' labels on the parts) is not reliably legible.\nCaption (authors' words): Figure 1: An overall of Hunyuan3D 2.0 system."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "我在检索到的段落中没有看到 Hunyuan3D 2.0 生成的 dense mesh 具体面数，所以无法确认它在手机上做实时 AR 渲染是否太重。论文只提到低多边形模块可以把 dense mesh 转成低多边形网格，并说明简化后每个模型“只有几十个三角形”。关于手机端开销的判断是我的推测，不是论文的数据。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文提到的低多边形化结果",
+            "kind": "paper",
+            "text": "论文说明团队建立了低多边形风格化模块，把 Hunyuan3D 2.0 生成的 dense mesh 转换为 low-polygon mesh，并称其可以显著降低计算成本。论文还提到，几何编辑后每个 3D 模型可以只用“几十个三角形”表示，但这里没有给出 dense mesh 的面数。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "面数证据的缺口",
+            "kind": "limitation",
+            "text": "目前检索到的段落没有给出生成 mesh 的面数范围、纹理分辨率与显存或渲染耗时之间的关系，也没有移动端的性能测试。另外，段落写的是 Fig. 1 的右上角提到低多边形，而我对 Figure 1 的描述里低多边形示例位于左下角，因此这一位置信息需要以原图为准。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "对手机实时 AR 的推测",
+            "kind": "inference",
+            "text": "基于常识，高分辨率的 dense mesh 加上高分辨率 texture map 通常会比低多边形模型更占用内存和渲染预算，所以直接放到手机 AR 中可能需要简化。这一判断是我的推理，论文中没有对此做验证。",
+            "chunk_ids": []
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你的研究需要在手机上实时显示，可以把论文的低多边形化步骤看作生成后处理的一个候选环节，并在 face count 与纹理保真度之间做对比实验。论文强调 KD-tree 用于保留纹理，这对你评估简化后的纹理质量可能有参考价值。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p017-c02",
+            "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "你的 AR 目标平台（例如某类手机或 WebAR）以及可接受的面数预算大概是多少？这样我可以更具体地比较论文的低多边形结果与你的需求。",
+        "current_concept": "生成网格面数与实时渲染开销",
+        "follow_up_suggestions": [
+          "论文的低多边形化模块具体如何在几何编辑中合并顶点？",
+          "Hunyuan3D-Paint 生成的 texture map 分辨率是多少，它对移动端显存有什么影响？",
+          "如果要做 LOD，论文的方法可以怎样改造成多级细节？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-2caa9ccf9d",
+        "role": "assistant",
+        "mode": "chat",
+        "created_at": "2026-11-09T09:25:56+00:00",
+        "short_answer": "我在检索到的段落中没有看到 Hunyuan3D 2.0 生成的 dense mesh 具体面数，所以无法确认它在手机上做实时 AR 渲染是否太重。论文只提到低多边形模块可以把 dense mesh 转成低多边形网格，并说明简化后每个模型“只有几十个三角形”。关于手机端开销的判断是我的推测，不是论文的数据。",
+        "short_answer_refs": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "论文提到的低多边形化结果",
+            "kind": "paper",
+            "text": "论文说明团队建立了低多边形风格化模块，把 Hunyuan3D 2.0 生成的 dense mesh 转换为 low-polygon mesh，并称其可以显著降低计算成本。论文还提到，几何编辑后每个 3D 模型可以只用“几十个三角形”表示，但这里没有给出 dense mesh 的面数。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "面数证据的缺口",
+            "kind": "limitation",
+            "text": "目前检索到的段落没有给出生成 mesh 的面数范围、纹理分辨率与显存或渲染耗时之间的关系，也没有移动端的性能测试。另外，段落写的是 Fig. 1 的右上角提到低多边形，而我对 Figure 1 的描述里低多边形示例位于左下角，因此这一位置信息需要以原图为准。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "对手机实时 AR 的推测",
+            "kind": "inference",
+            "text": "基于常识，高分辨率的 dense mesh 加上高分辨率 texture map 通常会比低多边形模型更占用内存和渲染预算，所以直接放到手机 AR 中可能需要简化。这一判断是我的推理，论文中没有对此做验证。",
+            "refs": []
+          },
+          {
+            "title": "对你 AR 研究的潜在用途",
+            "kind": "research_use",
+            "text": "如果你的研究需要在手机上实时显示，可以把论文的低多边形化步骤看作生成后处理的一个候选环节，并在 face count 与纹理保真度之间做对比实验。论文强调 KD-tree 用于保留纹理，这对你评估简化后的纹理质量可能有参考价值。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "你的 AR 目标平台（例如某类手机或 WebAR）以及可接受的面数预算大概是多少？这样我可以更具体地比较论文的低多边形结果与你的需求。",
+        "follow_up_suggestions": [
+          "论文的低多边形化模块具体如何在几何编辑中合并顶点？",
+          "Hunyuan3D-Paint 生成的 texture map 分辨率是多少，它对移动端显存有什么影响？",
+          "如果要做 LOD，论文的方法可以怎样改造成多级细节？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 generated mesh face count number of triangles polygons real-time rendering efficiency",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "ok": true,
+          "text": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "生成网格面数与实时渲染开销",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1198,
+        "retrieve": 760,
+        "generate_answer": 10194
+      },
+      "latency_ms": 12162,
+      "error": null
+    },
+    {
+      "event": "turn",
+      "event_id": "e5f6c702335a",
+      "timestamp": "2026-11-09T09:26:05+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "critical_review",
+      "user_message": "Critically review whether the idea or method we have been discussing is applicable to my research.",
+      "retrieval_query": "Hunyuan3D 2.0 dense mesh face count low-poly conversion real-time rendering limitations",
+      "scope": "overview",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "kind": "paper",
+          "page": 17,
+          "page_label": "17",
+          "similarity": 0.6517,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c00",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6024,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation “Living out everyone’s imagination on creating and manipulating 3D assets.” —Hunyuan3D Team ∗ Abstract We present Hunyuan3D 2.0, an advanced large-scale 3D synthesis system for generating high-resolution textured 3D assets. This system includes two foundation components: a large-scale shape generation model – Hunyuan3D-DiT, and a largescale texture synthesis model – Hunyuan3D-Paint. The shape generative model, built on a scalable flow-based diffusion transformer, aims to create geometry that properly aligns with a given condition image, laying a solid foundation for downstream applications. The texture synthesis model, benefiting from strong geometric and diffusion priors, produces high-resolution and vibrant texture maps for either generated or hand-crafted meshes. Furthermore, we build Hunyuan3D-Studio – a versatile, user-friendly production platform that simplifies the re-creation process of 3D assets. It allows both professional and amateur users to manipulate or even animate their meshes efficiently."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.5985,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p002-c00",
+          "kind": "paper",
+          "page": 2,
+          "page_label": "2",
+          "similarity": 0.5972,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Hunyuan3D-DiT Generated Shape Generation Hunyuan3D-Studio Low Poly, Sketch to 3D, Animation... Hunyuan3D-Paint Generated Texture Synthesis Figure 1: An overall of Hunyuan3D 2.0 system."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c01",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.593,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It allows both professional and amateur users to manipulate or even animate their meshes efficiently. We systematically evaluate our models, showing that Hunyuan3D 2.0 outperforms previous state-of-the-art models, including the open-source models and closed-source models in geometry details, condition alignment, texture quality, andetc. Hunyuan3D 2.0 is publicly released in order to fill the gaps in the open-source 3D community for large-scale foundation generative models. The code and pre-trained weights of our models are available at: https://github.com/Tencent/Hunyuan3D-2. ∗Hunyuan3D team contributors are listed in the end of report. arXiv:2501.12202v5 [cs.CV] 14 May 2026"
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.5772,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        }
+      ],
+      "overview_ids": [
+        "ov-1",
+        "ov-2",
+        "ov-3",
+        "ov-4",
+        "ov-5",
+        "ov-6",
+        "ov-7",
+        "ov-8",
+        "ov-9",
+        "ov-10",
+        "ov-11",
+        "ov-12",
+        "ov-13",
+        "ov-14",
+        "ov-15",
+        "ov-16",
+        "ov-17"
+      ],
+      "raw_model_output": {
+        "short_answer": "就目前检索到的段落看，Hunyuan3D 2.0 的低多边形化模块（Low-polygon Stylization）对你的 AR 资产管线有一定参考价值：它明确把稠密网格转为低面数网格，并通过 KD-tree 保留纹理。但论文没有给出面数、PBR 材质或移动端实时渲染的数据，因此暂时不能直接用于手机端 AR，需要补充实测证据。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "低多边形化对你研究的可借鉴之处",
+            "kind": "research_use",
+            "text": "你的目标是从公开照片生成可用于 AR 的 3D 资产，论文中的低多边形化模块提供了一个“先生成稠密网格、再简化并转移纹理”的思路。这可以作为你管线中后处理环节的参考，例如在生成后加入面数控制与纹理迁移步骤。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "论文提供的证据",
+            "kind": "paper",
+            "text": "论文称低多边形模块使用传统的顶点合并方法来降低面数，并称每个模型经几何编辑后“can be represented by only dozens of triangles”。同时作者构建 KD-tree 来保留纹理图案。这些是作者的陈述，论文中未见系统的面数统计或与 AR 渲染性能的对比。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "局限与未知",
+            "kind": "limitation",
+            "text": "段落中没有给出稠密网格的具体面数、低多边形网格的统计分布、纹理分辨率与 PBR 材质图，也没有移动端帧率或内存数据。“几十个三角形”的说法是作者的描述，需要在你的数据上验证是否保留了足够的几何细节。",
+            "chunk_ids": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "采用前需要的补充证据",
+            "kind": "inference",
+            "text": "如果要在你的研究中依赖这一思路，建议自行测量简化前后的面数、纹理转移误差以及在目标手机设备上的渲染开销，并考虑是否需要额外生成 metallic/roughness 等材质图。这些是基于论文缺口的推断，而非论文结论。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p017-c02",
+            "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+          },
+          {
+            "chunk_id": "2e0d0789-p017-c02",
+            "quote": "Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "生成网格面数、低多边形化与实时 AR 渲染适用性",
+        "follow_up_suggestions": [
+          "低多边形化模块的纹理转移具体如何实现？",
+          "如果需要 PBR 材质，Hunyuan3D-Paint 之外还有哪些可行的补充方法？",
+          "在手机端 AR 中，面数之外还需要关注哪些性能指标？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+        }
+      },
+      "assistant_message": {
+        "id": "a-7b8b134244",
+        "role": "assistant",
+        "mode": "critical_review",
+        "created_at": "2026-11-09T09:26:05+00:00",
+        "short_answer": "就目前检索到的段落看，Hunyuan3D 2.0 的低多边形化模块（Low-polygon Stylization）对你的 AR 资产管线有一定参考价值：它明确把稠密网格转为低面数网格，并通过 KD-tree 保留纹理。但论文没有给出面数、PBR 材质或移动端实时渲染的数据，因此暂时不能直接用于手机端 AR，需要补充实测证据。",
+        "short_answer_refs": [
+          "2e0d0789-p017-c02"
+        ],
+        "sections": [
+          {
+            "title": "低多边形化对你研究的可借鉴之处",
+            "kind": "research_use",
+            "text": "你的目标是从公开照片生成可用于 AR 的 3D 资产，论文中的低多边形化模块提供了一个“先生成稠密网格、再简化并转移纹理”的思路。这可以作为你管线中后处理环节的参考，例如在生成后加入面数控制与纹理迁移步骤。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "论文提供的证据",
+            "kind": "paper",
+            "text": "论文称低多边形模块使用传统的顶点合并方法来降低面数，并称每个模型经几何编辑后“can be represented by only dozens of triangles”。同时作者构建 KD-tree 来保留纹理图案。这些是作者的陈述，论文中未见系统的面数统计或与 AR 渲染性能的对比。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "局限与未知",
+            "kind": "limitation",
+            "text": "段落中没有给出稠密网格的具体面数、低多边形网格的统计分布、纹理分辨率与 PBR 材质图，也没有移动端帧率或内存数据。“几十个三角形”的说法是作者的描述，需要在你的数据上验证是否保留了足够的几何细节。",
+            "refs": [
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "采用前需要的补充证据",
+            "kind": "inference",
+            "text": "如果要在你的研究中依赖这一思路，建议自行测量简化前后的面数、纹理转移误差以及在目标手机设备上的渲染开销，并考虑是否需要额外生成 metallic/roughness 等材质图。这些是基于论文缺口的推断，而非论文结论。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+              "Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "低多边形化模块的纹理转移具体如何实现？",
+          "如果需要 PBR 材质，Hunyuan3D-Paint 之外还有哪些可行的补充方法？",
+          "在手机端 AR 中，面数之外还需要关注哪些性能指标？"
+        ],
+        "system_suggestion": {
+          "verdict": "Use with adaptations",
+          "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+        },
+        "retrieval_query": "Hunyuan3D 2.0 dense mesh face count low-poly conversion real-time rendering limitations",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "ok": true,
+          "text": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "quote": "Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+          "ok": true,
+          "text": "Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "生成网格面数、低多边形化与实时 AR 渲染适用性",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 2220,
+        "retrieve": 724,
+        "generate_answer": 6508
+      },
+      "latency_ms": 9465,
+      "error": null
+    },
+    {
+      "event": "judgment_recorded",
+      "event_id": "74d45daf2ad2",
+      "timestamp": "2026-11-09T09:26:09+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "judgment": {
+        "verdict": "Need more evidence",
+        "rationale": "论文目前只给出 texture map 和 low-polygon 的定性描述，没有 dense mesh 的面数、PBR 材质通道（metallic、roughness）或移动端 AR 渲染的实测数据，这些正是我判断能否用在 AR 管线里的关键。另外论文的输入假设是 image 生成的 mesh，而我的场景是 unconstrained 的网络照片（遮挡、光照、低分辨率），这一点论文里没有验证，所以我需要更多证据后再决定是否采用。",
+        "submitted_at": "2026-11-09T09:26:09+00:00",
+        "system_suggestion_at_time": {
+          "verdict": "Use with adaptations",
+          "reason": "低多边形化的思路可以参考，但论文没有面数、PBR 材质或移动端性能的证据，需要在你的数据和目标设备上补充验证后再依赖。"
+        }
+      }
+    },
+    {
+      "event": "turn",
+      "event_id": "57fe41444c3d",
+      "timestamp": "2026-11-09T09:26:17+00:00",
+      "session_id": "s-ba381aeb1a9e",
+      "paper_id": "2e0d07894105eb23",
+      "pipeline_version": "v1",
+      "prompt_version": "p6",
+      "chat_model": "anthropic/claude-haiku-5.5",
+      "embedding_model": "openai/text-embedding-3-small",
+      "config": {
+        "base_url": "https://openrouter.ai/api/v1",
+        "chat_model": "anthropic/claude-haiku-5.5",
+        "chat_temperature": 0.2,
+        "embedding_model": "openai/text-embedding-3-small",
+        "pipeline_version": "v1",
+        "top_k": 6,
+        "chunk_size": 1200,
+        "chunk_overlap": 200,
+        "data_dir": "D:\\NUS CS\\Y3 S1\\CS3249\\assignments\\as1\\A1_A0311136W_Prototype\\PaperLens-frontend\\backend\\data",
+        "prompt_version": "p6"
+      },
+      "mode": "judgment_feedback",
+      "user_message": "My verdict: Need more evidence\nMy rationale: 论文目前只给出 texture map 和 low-polygon 的定性描述，没有 dense mesh 的面数、PBR 材质通道（metallic、roughness）或移动端 AR 渲染的实测数据，这些正是我判断能否用在 AR 管线里的关键。另外论文的输入假设是 image 生成的 mesh，而我的场景是 unconstrained 的网络照片（遮挡、光照、低分辨率），这一点论文里没有验证，所以我需要更多证据后再决定是否采用。",
+      "retrieval_query": "Hunyuan3D 2.0 limitations generalization to in-the-wild unconstrained images occlusion lighting low resolution input mesh face count PBR material",
+      "scope": "local",
+      "retrieved": [
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6415,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+        },
+        {
+          "chunk_id": "2e0d0789-p001-c01",
+          "kind": "paper",
+          "page": 1,
+          "page_label": "1",
+          "similarity": 0.6233,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "It allows both professional and amateur users to manipulate or even animate their meshes efficiently. We systematically evaluate our models, showing that Hunyuan3D 2.0 outperforms previous state-of-the-art models, including the open-source models and closed-source models in geometry details, condition alignment, texture quality, andetc. Hunyuan3D 2.0 is publicly released in order to fill the gaps in the open-source 3D community for large-scale foundation generative models. The code and pre-trained weights of our models are available at: https://github.com/Tencent/Hunyuan3D-2. ∗Hunyuan3D team contributors are listed in the end of report. arXiv:2501.12202v5 [cs.CV] 14 May 2026"
+        },
+        {
+          "chunk_id": "2e0d0789-p015-c00",
+          "kind": "paper",
+          "page": 15,
+          "page_label": "15",
+          "similarity": 0.6109,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Figure 9: Visual results. We generate different texture maps for two meshes, and the results validate the performance of Hunyuan3D-Paint on texture reskinning. (Better viewed by zooming in.) CMMD(↓) FID CLIP (↓) FID Incept(↓) CLIP-score(↑) Trellis [101] 3.591 54.639 289.287 0.787 Model 1 3.600 55.866 305.922 0.779 Model 2 3.368 49.744 294.628 0.806 Model 3 3.218 51.574 295.691 0.799 Hunyuan3D 2.0 (Ours)3.193 49.165 282.429 0.809 Table 4: Numerical comparison. According to the results, Hunyuan3D-Paint produces the most condition-following texture maps. User Study.In addition, we conducted a user study by randomly inviting 50 volunteers to evaluate 300 unselected results generated by Hunyuan3D 2.0 subjectively. The evaluation criteria included 1) overall visual quality, 2) adherence to image conditions, and 3) overall satisfaction (dissatisfaction in either 1 or 2 results in overall dissatisfaction). The user study results in Fig. 10 indicate that Hunyuan3D 2.0 outperforms comparative methods, particularly in its ability to adhere to image conditions."
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "kind": "paper",
+          "page": 3,
+          "page_label": "3",
+          "similarity": 0.6036,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings."
+        },
+        {
+          "chunk_id": "2e0d0789-p020-c00",
+          "kind": "paper",
+          "page": 20,
+          "page_label": "20",
+          "similarity": 0.6004,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "8 Conclusion In this report, we introduce an open-source 3D creation system—Hunyuan3D 2.0 —for generating textured meshes from images. We present Hunyuan3D-ShapeV AE, which is trained using a novel importance sampling method. This approach compresses each 3D object into a few latent tokens while minimizing reconstruction losses. Building on our V AE, we developed Hunyuan3D-DiT, an advanced diffusion transformer capable of generating visually appealing shapes that align precisely with input images. Besides, we introduce Hunyuan3D-Paint, another diffusion model designed to create textures for both our generated meshes and user-crafted meshes. With several innovative designs, our texture generation model, in conjunction with our shape generation model, can produce high-resolution, high-fidelity textured 3D assets from a single image. As we continue to make progress, we hope that Hunyuan3D 2.0 will serve as a robust baseline for large-scale 3D foundation models within the open-source community and facilitate future research endeavors."
+        },
+        {
+          "chunk_id": "2e0d0789-p004-c00",
+          "kind": "paper",
+          "page": 4,
+          "page_label": "4",
+          "similarity": 0.5932,
+          "carried_over": false,
+          "named_by_learner": false,
+          "text": "Shape Generation Texture Synthesis Hunyuan3D-DiT Hunyuan3D-PaintHunyuan3D-ShapeVAE Image Delighting Reference Branch Generation Branch Multi-Task Attention Normal Position Cross Attention Self Attention Importance Uniform Cross Attention Self Attention x 8 Decoded Mesh FPS x 16 Q ··· ··· KV Latent Tokens ··· Marching Cube ··· ··· Grid Queries InputImage Delighted Image Single Image Super-Resolution Image Denoising Transformer Latent Tokens ··· Steps x N Baking Figure 2: An overall of Hunyuan3D 2.0 architecture for 3D generation. It consists of two main components: Hunyuan3D-DiT for generating bare mesh from a given input image and Hunyuan3D- Paint for generating a textured map for the generated bare mesh. Hunyuan3D-Paint takes geometry conditions – normal maps and position maps of generated mesh as inputs and generates multi-view images for texture baking. 3 Generative 3D Shape Generation Hunyuan3D 2.0 employs the architecture of the latent diffusion model [74, 112, 119, 114] for shape generation. This design is driven by the successful applications of latent diffusion models in image and video generation."
+        },
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "kind": "paper",
+          "page": 17,
+          "page_label": "17",
+          "similarity": null,
+          "carried_over": true,
+          "named_by_learner": false,
+          "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh."
+        }
+      ],
+      "overview_ids": [],
+      "raw_model_output": {
+        "short_answer": "你的裁定是「Need more evidence」，你的理由与检索到的段落基本一致：论文目前只描述了 texture map 与 low-polygon 的做法，没有给出面数、PBR 材质通道或移动端 AR 的数据，也没有验证网络照片这类非受控输入。因此我同意现有证据不足以支持直接采用，这一判断由你作出。",
+        "short_answer_chunk_ids": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p017-c02",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "论文支持你理由的部分",
+            "kind": "paper",
+            "text": "论文描述的输出是用于 baking 高分辨率 texture map 的多视角图像，且 low-polygon 模块把稠密网格转为低面数网格，每个模型可由“dozens of triangles”表示。这些是定性描述，与你提到的 texture map 与 low-polygon 的说明一致，但没有给出数量化的面数或移动端性能。",
+            "chunk_ids": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "关于输入假设的一点说明",
+            "kind": "paper",
+            "text": "检索到的段落显示 Hunyuan3D 2.0 的输入是单张图像（given an input image），并以 image 条件对齐评估生成结果。但这些段落没有讨论遮挡、光照变化或低分辨率的网络照片，因此你关于“论文未验证 unconstrained 输入”的说法在检索到的材料中成立，只能说未找到，不能说论文完全未涉及。",
+            "chunk_ids": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p003-c03"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "论文对 texture 的描述包括 lighting-invariant 等说法，但这与 AR 中需要的光照一致性并不等同；PBR 通道的缺失也意味着即使纹理质量好，也可能需要额外的材质估计步骤。这些在你的理由中尚未提及，可作为补充考虑的方面。",
+            "chunk_ids": []
+          },
+          {
+            "title": "可以加强决定的一个检查",
+            "kind": "inference",
+            "text": "一个具体的检查是：用若干张真实网络照片（含遮挡与低分辨率）作为输入，统计生成网格的面数与贴图导出结果，并在目标 AR 渲染器中测试加载与帧率。这可以直接回答你关心的两个未知数。",
+            "chunk_ids": []
+          }
+        ],
+        "evidence_quotes": [
+          {
+            "chunk_id": "2e0d0789-p003-c03",
+            "quote": "This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps."
+          },
+          {
+            "chunk_id": "2e0d0789-p017-c02",
+            "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+          },
+          {
+            "chunk_id": "2e0d0789-p003-c04",
+            "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+          }
+        ],
+        "evidence_status": "partial",
+        "clarifying_question": "",
+        "current_concept": "Hunyuan3D 2.0 输入假设与真实网络照片泛化、面数与AR适用性证据缺口",
+        "follow_up_suggestions": [
+          "论文中 low-polygon 模块的 KD-tree 纹理保留具体如何工作？",
+          "论文是否报告了任何与渲染或运行时间相关的数据？",
+          "论文的评估是否包含遮挡或低分辨率输入的案例？"
+        ],
+        "system_suggestion": null
+      },
+      "assistant_message": {
+        "id": "a-278cc2bd6c",
+        "role": "assistant",
+        "mode": "judgment_feedback",
+        "created_at": "2026-11-09T09:26:17+00:00",
+        "short_answer": "你的裁定是「Need more evidence」，你的理由与检索到的段落基本一致：论文目前只描述了 texture map 与 low-polygon 的做法，没有给出面数、PBR 材质通道或移动端 AR 的数据，也没有验证网络照片这类非受控输入。因此我同意现有证据不足以支持直接采用，这一判断由你作出。",
+        "short_answer_refs": [
+          "2e0d0789-p003-c03",
+          "2e0d0789-p017-c02",
+          "2e0d0789-p003-c04"
+        ],
+        "sections": [
+          {
+            "title": "论文支持你理由的部分",
+            "kind": "paper",
+            "text": "论文描述的输出是用于 baking 高分辨率 texture map 的多视角图像，且 low-polygon 模块把稠密网格转为低面数网格，每个模型可由“dozens of triangles”表示。这些是定性描述，与你提到的 texture map 与 low-polygon 的说明一致，但没有给出数量化的面数或移动端性能。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p017-c02"
+            ]
+          },
+          {
+            "title": "关于输入假设的一点说明",
+            "kind": "paper",
+            "text": "检索到的段落显示 Hunyuan3D 2.0 的输入是单张图像（given an input image），并以 image 条件对齐评估生成结果。但这些段落没有讨论遮挡、光照变化或低分辨率的网络照片，因此你关于“论文未验证 unconstrained 输入”的说法在检索到的材料中成立，只能说未找到，不能说论文完全未涉及。",
+            "refs": [
+              "2e0d0789-p003-c04",
+              "2e0d0789-p003-c03"
+            ]
+          },
+          {
+            "title": "你的理由尚未覆盖的问题",
+            "kind": "limitation",
+            "text": "论文对 texture 的描述包括 lighting-invariant 等说法，但这与 AR 中需要的光照一致性并不等同；PBR 通道的缺失也意味着即使纹理质量好，也可能需要额外的材质估计步骤。这些在你的理由中尚未提及，可作为补充考虑的方面。",
+            "refs": []
+          },
+          {
+            "title": "可以加强决定的一个检查",
+            "kind": "inference",
+            "text": "一个具体的检查是：用若干张真实网络照片（含遮挡与低分辨率）作为输入，统计生成网格的面数与贴图导出结果，并在目标 AR 渲染器中测试加载与帧率。这可以直接回答你关心的两个未知数。",
+            "refs": []
+          }
+        ],
+        "sources": [
+          {
+            "ref_id": "2e0d0789-p003-c03",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "Then, we build up a dual-single stream transformer [ 45] on the latent space of our V AE with the flow-matching [53, 24] objective. Our texture generation model – Hunyuan3D-Paint is made of a novel mesh-conditioned multi-view generation pipeline and a number of sophisticated techniques for preprocessing and baking multi-view images into high-resolution texture maps. We performed an in-depth comparison ofHunyuan3D 2.0 in relation to leading 3D generation models worldwide, including three commercial closed-source end-to-end products, an end-to-end opensourced model Trellis [101], and several separate models [9, 37, 99, 111, 55, 59] for shape and texture generation. We report visual and quantitative evaluation results across three dimensions: generated textured mesh, bare mesh, and texture map. We also provided user study results on 300 test cases involving 50 participants. The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings.",
+            "verified": true
+          },
+          {
+            "ref_id": "2e0d0789-p017-c02",
+            "kind": "paper",
+            "page": 17,
+            "page_label": "17",
+            "text": "Low-polygon stylization can significantly reduce computational costs, making it an essential process in 3D asset management. To address this, we have established a low-polygon stylization module that efficiently converts the dense meshes generated by Hunyuan3D 2.0 into low-polygon meshes. This module operates in two steps: geometric editing and texture preserving. For geometric editing, we employ a faster and more robust traditional method [ 28, 35], despite the recent auto-regressive transformer-based polygon-generation approaches [97, 104, 86, 12]. By setting an optimization criterion, we merge the vertices of the mesh to transform the dense mesh into a low-polygon mesh. As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing. The change in the face count of the mesh causes significant deviations in the vertices and faces of the low-polygon mesh compared to the dense mesh. Therefore, to preserve the texture patterns of the textured 3D assets, we construct a KD-tree for the input dense mesh.",
+            "verified": true,
+            "quotes": [
+              "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing."
+            ]
+          },
+          {
+            "ref_id": "2e0d0789-p003-c04",
+            "kind": "paper",
+            "page": 3,
+            "page_label": "3",
+            "text": "The comparison shows the superiority of Hunyuan3D 2.0 in alignment between conditional images and generated meshes, generation of fine-grained details, and human preference ratings. 2 Hunyuan3D 2.0 Architecture In this section, we elaborate on the model architecture of Hunyuan3D 2.0, focusing on two main components: the shape generation model and the texture generation model. Fig. 2 illustrates the pipeline of Hunyuan3D 2.0 for creating a high-resolution textured 3D asset. Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model. This model comprises a Hunyuan3D-ShapeV AE and a Hunyuan3D-DiT, which will be discussed in Sec. 3. Subsequently, by leveraging strong geometric priors and the input image, we introduce Hunyuan3D- Paint as our texture generation model in Sec. 4. This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+            "verified": true,
+            "quotes": [
+              "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model."
+            ]
+          }
+        ],
+        "evidence_status": "partial",
+        "has_verified_paper_source": true,
+        "clarifying_question": "",
+        "follow_up_suggestions": [
+          "论文中 low-polygon 模块的 KD-tree 纹理保留具体如何工作？",
+          "论文是否报告了任何与渲染或运行时间相关的数据？",
+          "论文的评估是否包含遮挡或低分辨率输入的案例？"
+        ],
+        "system_suggestion": null,
+        "retrieval_query": "Hunyuan3D 2.0 limitations generalization to in-the-wild unconstrained images occlusion lighting low resolution input mesh face count PBR material",
+        "pipeline_version": "v1"
+      },
+      "invalid_citations": [],
+      "quote_checks": [
+        {
+          "chunk_id": "2e0d0789-p003-c03",
+          "quote": "This model produces self-consistent multi-view outputs, which are used for baking high-definition texture maps.",
+          "ok": false,
+          "text": null,
+          "score": 0.464,
+          "reason": "not_found"
+        },
+        {
+          "chunk_id": "2e0d0789-p017-c02",
+          "quote": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "ok": true,
+          "text": "As shown at the top-right of Fig. 1, each 3D model can be represented by only dozens of triangles after geometric editing.",
+          "score": 1.0,
+          "reason": null
+        },
+        {
+          "chunk_id": "2e0d0789-p003-c04",
+          "quote": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "ok": true,
+          "text": "Given an input image, Hunyuan3D-DiT initially generates a high-fidelity bare mesh via the shape generation model.",
+          "score": 1.0,
+          "reason": null
+        }
+      ],
+      "current_concept": "Hunyuan3D 2.0 输入假设与真实网络照片泛化、面数与AR适用性证据缺口",
+      "answer_language": "中文（简体）",
+      "language_override": "",
+      "language_setting_changed_to": null,
+      "timings_ms": {
+        "rewrite_query": 1498,
+        "retrieve": 612,
+        "generate_answer": 6081
+      },
+      "latency_ms": 8205,
+      "error": null
+    }
+  ],
+  "scenario": {
+    "name": "sam-04",
+    "situation": "Texture model, correction of PaperLens, figure",
+    "persona": "sam",
+    "paper_pdf": "../../test_papers/hunyuan3d-2.pdf",
+    "reading_goal": "Explore potential use in my research",
+    "research_context": "我是 computer vision 方向的 PhD，研究如何从网络上公开的照片生成可以用于 AR 的 3D assets。",
+    "language": "中文（简体）",
+    "pipeline_version": "v1",
+    "moves": [
+      "Ask how the texture model (Hunyuan3D-Paint) produces textures.",
+      "Correct PaperLens: say you meant whether it outputs material maps usable in an AR renderer (e.g. PBR), not texture resolution, and ask again.",
+      "Ask what Figure 1 shows, with a short question.",
+      "Ask whether the generated meshes would be light enough for real-time AR on a phone.",
+      {
+        "type": "critical_review"
+      },
+      {
+        "type": "judgment",
+        "instruction": "Choose the verdict you find most reasonable, with your own reason."
+      }
+    ]
+  },
+  "persona_text": "# Persona: Sam\n\n**Who.** Sam is a non-native-English-speaking PhD student in computer vision. He reads academic English but\nprefers concise Chinese explanations that keep the English terminology (e.g. \"diffusion model\", \"VAE\",\n\"multi-view\").\n\n**What he wants.** To decide whether ideas or methods from a paper can inform his own research:\ngenerating AR-ready 3D assets from photos that are publicly available on the web. Reading goal:\n*Explore potential use in my research*.\n\n**How he behaves.**\n- Writes in Simplified Chinese mixed with English technical terms. Interface language: 中文（简体）.\n- Sets a specific goal, begins with an overview, then asks focused questions about how the paper's key\n  components connect, and about its logic, novelty, assumptions and limitations.\n- Uses short references to earlier answers (\"那第二个阶段呢\", \"this part\", \"你刚才说的那个\").\n- Challenges answers that sound vague or too confident (\"论文里真的这么说吗？还是你推测的？\").\n- Checks the source selectively, mainly for numbers and claims that matter to his study.\n- Relates the paper to his own setting: unconstrained web photos (varying lighting, occlusion, background,\n  low resolution) and AR constraints (mesh size, PBR textures, real-time rendering).\n- Expects a critical reading partner, not a summariser, examiner or unquestioning assistant.\n\n**Paper.** Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation\n(arXiv 2501.12202).\n",
+  "simulator": {
+    "model": "anthropic/claude-haiku-5.5",
+    "prompt": "You are role-playing a learner who is reading an academic paper with PaperLens, a conversational reading\ntool. Stay in character as the persona below for the whole conversation.\n\n<persona>\n{persona}\n</persona>\n\nSituation\n- Paper: {paper_title}\n- Reading goal chosen in PaperLens: {reading_goal}\n- Research context the learner typed into PaperLens: {research_context}\n\nYour task each turn\n- Write ONLY the learner's next chat message, as the persona would type it into a chat box.\n- Carry out the move given for this turn, adapted naturally to what PaperLens has just said. The move says\n  WHAT the learner does; you decide the exact wording in the persona's voice.\n- If the move asks you to state a misunderstanding, state it confidently as your own understanding; do not\n  hint that it is wrong.\n- If the move asks you to refer back to something, use a short reference (\"that\", \"the second one\",\n  \"你刚才说的那个\") instead of repeating the full term, exactly as a real learner would.\n- Use the persona's language and writing style. Keep the message short (usually 1-3 sentences).\n- Base what you say about the paper only on what PaperLens has told you so far; you have not read the paper\n  yourself beyond that.\n- Never mention that you are simulated, never describe the move, and never evaluate PaperLens.\n",
+    "log": [
+      {
+        "move": 1,
+        "type": "chat",
+        "instruction": "Ask how the texture model (Hunyuan3D-Paint) produces textures.",
+        "learner_message": "好，那我先大概了解一下整体。现在想问纹理部分：Hunyuan3D-Paint 到底是怎么生成纹理的？它是直接在 3D 上生成颜色，还是从多视角图像推出来的？可以用中文简单解释一下，关键术语保留英文就行。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 2,
+        "type": "chat",
+        "instruction": "Correct PaperLens: say you meant whether it outputs material maps usable in an AR renderer (e.g. PBR), not texture resolution, and ask again.",
+        "learner_message": "不好意思我刚才问得不清楚。我想问的是 Hunyuan3D-Paint 输出的东西能不能直接用在 AR renderer 里，比如有没有 PBR 相关的 material maps（metallic、roughness 之类），而不只是一张 texture map 的分辨率。论文里有没有提到这一点？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 3,
+        "type": "chat",
+        "instruction": "Ask what Figure 1 shows, with a short question.",
+        "learner_message": "好，那我看一下 Figure 1。你能简单说一下 Figure 1 展示的是什么吗？是 texture 的结果，还是整个流程？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 4,
+        "type": "chat",
+        "instruction": "Ask whether the generated meshes would be light enough for real-time AR on a phone.",
+        "learner_message": "好，Figure 1 大概清楚了。那我更关心几何和纹理加起来的规模：论文里有没有说生成的 mesh 面数大概多少？手机上做实时 AR 渲染会不会太重？你是看到了具体数字，还是你推测的？",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      },
+      {
+        "move": 5,
+        "type": "critical_review"
+      },
+      {
+        "move": 6,
+        "type": "judgment",
+        "instruction": "Choose the verdict you find most reasonable, with your own reason.",
+        "verdict": "Need more evidence",
+        "rationale": "论文目前只给出 texture map 和 low-polygon 的定性描述，没有 dense mesh 的面数、PBR 材质通道（metallic、roughness）或移动端 AR 渲染的实测数据，这些正是我判断能否用在 AR 管线里的关键。另外论文的输入假设是 image 生成的 mesh，而我的场景是 unconstrained 的网络照片（遮挡、光照、低分辨率），这一点论文里没有验证，所以我需要更多证据后再决定是否采用。",
+        "sim_model": "anthropic/claude-haiku-5.5"
+      }
+    ]
+  },
+  "run": 1,
+  "stopped_early": false,
+  "error": null
+}
