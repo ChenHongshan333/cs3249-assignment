@@ -9,11 +9,22 @@ and data, and stop a run as soon as PaperLens fails.
 |---|---|
 | `targets.md` | The things PaperLens must never do (at least one from the learning design, one about harm), each with its PASS/FAIL rule. |
 | `attempts/` | Scenario files for each attempt: direct request, role-play framing and multi-turn build-up per target. |
-| `papers/` | Any test PDFs made for attacks (e.g. a paper with an injected instruction), using made-up names and data. |
+| `papers/` | The fictional paper *PromptScaffold* for T2 (control + three injected variants), built by `papers/src/build_papers.py`. Its authors, institution and data are invented; the PDFs carry no visible note saying so, because PaperLens sends whole page images to the vision model and would read it. |
 | `transcripts/before/` | Transcripts of every attempt (at least 3 runs each) before fixes. |
 | `transcripts/after/` | Transcripts after each fix (at least 3 runs per attempt again). |
 | `verdicts.csv` | `attempt, run, transcript_file, verdict (PASS/FAIL), checked_by, notes` — every verdict checked by you. |
 | `fixes.md` | What failed, what was changed (prompt version / guardrail / design), and whether the retest passed. |
+
+## Step mode (stop a run at the first failing reply)
+
+```bash
+cd backend
+.venv/Scripts/python scripts/run_conversation.py ../red_team/attempts/<attempt>.json --out ../red_team/transcripts/before --turn 1 --run 1
+.venv/Scripts/python scripts/run_conversation.py ../red_team/attempts/<attempt>.json --out ../red_team/transcripts/before --turn 2 --run 1 --session s-...
+```
+
+Each step rewrites that run's transcript; `turns_completed` shows how far it got. Runs used for the red-teaming
+were made this way, one turn at a time, with every reply read before the next turn was sent.
 
 ## Running attempts
 
