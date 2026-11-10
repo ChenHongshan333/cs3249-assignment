@@ -24,7 +24,7 @@ else:
     API_KEY_SOURCE = "missing"
 
 # Bump this whenever any file in app/prompts/ changes, so logs show which prompts produced a reply.
-PROMPT_VERSION = "p6"  # p2 carried-over passages; p3 verbatim evidence_quotes; p4 in-chat language; p5 "Not suitable for my study"; p6 figure descriptions
+PROMPT_VERSION = "p7"  # p2 carried-over passages; p3 verbatim evidence_quotes; p4 in-chat language; p5 "Not suitable for my study"; p6 figure descriptions; p7 hidden text removed at upload + verdict display names (red-team fix)
 
 
 @dataclass(frozen=True)

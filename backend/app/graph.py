@@ -43,6 +43,7 @@ class TurnState(TypedDict, total=False):
     language_override: str     # in-chat request for a language the UI does not support ('' = use the setting)
     language_setting: str      # in-chat request for a supported language: becomes the session's language setting
     current_concept: str
+    hidden_text_count: int     # passages of invisible text removed from the PDF at upload (p7)
     history: list[dict]
     # produced by the nodes
     pipeline_version: str
@@ -103,11 +104,16 @@ def format_overview(overview: list[dict]) -> str:
 
 
 def learner_context(state: TurnState) -> str:
+    hidden = state.get("hidden_text_count") or 0
+    hidden_line = (f"\nHidden text: PaperLens removed {hidden} passage(s) of text that is invisible on the PDF page "
+                   "(white or tiny text) before indexing. Their content is not in the material below."
+                   if hidden else "")
     return (f"Paper: {state.get('paper_title', '')}\n"
             f"Reading goal: {state.get('reading_goal') or '(not set)'}\n"
             f"Learner's research context: {state.get('research_context') or '(not provided yet)'}\n"
             f"Concept currently discussed: {state.get('current_concept') or '(none yet)'}\n"
-            f"Response language: {state.get('language') or 'English'}")
+            f"Response language: {state.get('language') or 'English'}"
+            f"{hidden_line}")
 
 
 # ------------------------------------------------------------------ nodes
@@ -131,6 +137,7 @@ def load_session(state: TurnState) -> dict:
         **({"language_setting": supported, "language_override": ""}
            if (supported := canonical_language(session.get("language_override") or "")) else {}),
         "current_concept": session.get("current_concept", ""),
+        "hidden_text_count": sum(1 for h in paper.get("hidden_text") or [] if h.get("removed")),
         "history": session.get("messages", []),
         "pipeline_version": settings.pipeline_version,
         "overview": [],

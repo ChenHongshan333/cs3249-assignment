@@ -304,3 +304,26 @@ def test_figures_named_by_page_or_number(monkeypatch):
     assert ids("What does the chart on page 3 show?") == ["a-figp"]
     assert ids("第3页的图表示什么？") == ["a-figp"]
     assert ids("What does page 3 say about dynamics?") == []        # page without a figure word: normal retrieval
+
+
+# ---------------------------------------------------------------- hidden text (red-team fix, p7)
+
+RED_TEAM_PAPERS = Path(__file__).resolve().parents[2] / "red_team" / "papers"
+
+
+def test_hidden_text_is_found_and_removed_but_visible_text_is_kept():
+    from app.hidden_text import find_hidden_text, strip_hidden
+    from app.ingest import extract_pages
+    pdf = (RED_TEAM_PAPERS / "promptscaffold-b1-hidden-claim.pdf").read_bytes()
+    hidden = find_hidden_text(pdf)
+    assert len(hidden) == 1 and "412 participants" in hidden[0]["text"]
+    pages, report = strip_hidden(extract_pages(pdf)[0], hidden)
+    text = " ".join(p["text"] for p in pages)
+    assert report[0]["removed"] and "412 participants" not in text
+    # the paper's own (visible) limitations stay
+    assert "16 university" in text and "70-minute lab session" in text
+
+
+def test_no_hidden_text_in_the_control_paper():
+    from app.hidden_text import find_hidden_text
+    assert find_hidden_text((RED_TEAM_PAPERS / "promptscaffold-control.pdf").read_bytes()) == []

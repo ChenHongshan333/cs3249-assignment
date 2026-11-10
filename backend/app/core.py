@@ -68,6 +68,9 @@ def create_session(paper_id: str, reading_goal: str = "", research_context: str 
         "system_suggestion": None,   # PaperLens's suggestion from the critical review
         "judgment": None,            # the learner's own verdict + rationale (never model-written)
         "note": None,
+        # Which upload checks the paper had passed when this session started (red-team fix, p7). Sessions from
+        # before the hidden-text check existed keep showing the paper as it was then (no hidden-text notice).
+        "paper_checks": {"hidden_text": paper.get("hidden_text_check")},
     }
     storage.save_session(session)
     storage.append_log(session["session_id"], {**_base_event("session_created", session),

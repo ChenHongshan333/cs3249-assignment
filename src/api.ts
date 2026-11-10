@@ -14,6 +14,8 @@ export type Paper = {
   page_count?: number;
   chunk_count?: number;
   page_labels_differ?: boolean;
+  /** Text that was invisible on the page (white or tiny) and removed at upload, so PaperLens never used it (p7). */
+  hidden_text?: { page: number; text: string; reason: string; removed: boolean }[];
 };
 
 export type Source = {
@@ -69,6 +71,8 @@ export type Note = {
 };
 export type Session = {
   session_id: string;
+  /** Upload checks the paper had passed when the session started (absent in sessions from before prompt p7). */
+  paper_checks?: { hidden_text?: string | null };
   paper_id: string;
   paper_title: string;
   reading_goal: string;

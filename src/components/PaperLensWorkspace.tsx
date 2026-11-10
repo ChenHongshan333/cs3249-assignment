@@ -254,7 +254,9 @@ export function PaperLensWorkspace() {
     } as CSSProperties}>
       <section className="paper-pane" aria-label={t.paperViewer}>
         {paper
-          ? <PaperViewer pdfUrl={api.pdfUrl(paper.paper_id)} focus={focus} onCloseFocus={() => setFocus(null)} />
+          ? <PaperViewer pdfUrl={api.pdfUrl(paper.paper_id)} focus={focus} onCloseFocus={() => setFocus(null)} 
+            // only for sessions started after the hidden-text check existed, so older sessions look as they did then
+            hiddenText={!session || session.paper_checks?.hidden_text ? paper.hidden_text : undefined} />
           : <LandingUpload busy={uploadBusy} error={uploadError}
             onFile={(file) => void acceptUpload(() => api.uploadPaper(file))}
             onUrl={(url) => void acceptUpload(() => api.uploadPaperUrl(url))} />}

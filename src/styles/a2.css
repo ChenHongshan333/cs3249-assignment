@@ -163,3 +163,16 @@
 .source-group { display: grid; gap: 6px; }
 .source-group + .source-group { margin-top: 10px; }
 .source-group > small { color: var(--gold-ink); font-size: 11.5px; letter-spacing: .1em; }
+
+/* Hidden-text notice (red-team fix, p7): the PDF had text invisible on the page that PaperLens removed at upload. */
+.paper-viewer { display: flex; flex-direction: column; }
+.paper-viewer > .pdf-viewer { flex: 1 1 auto; min-height: 0; height: auto; }
+.hidden-text-notice {
+  flex: 0 0 auto; max-height: 30%; overflow: auto; padding: 8px 12px; border-bottom: 1px solid #e3d3a8;
+  background: #fbf3dc; color: var(--warn-ink, #6b4e00); font: 13px/1.4 Arial, sans-serif;
+}
+.hidden-text-head { display: flex; align-items: center; gap: 8px; }
+.hidden-text-head svg { width: 16px; height: 16px; flex: 0 0 auto; }
+.hidden-text-head span { flex: 1 1 auto; }
+.hidden-text-notice ul { margin: 6px 0 2px; padding-left: 22px; }
+.hidden-text-notice li { margin: 3px 0; color: var(--text-2, #333); }

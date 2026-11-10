@@ -2,6 +2,10 @@
 
 Status flow stored in data/papers/<paper_id>/paper.json:
     queued -> parsing -> indexing -> summarizing -> ready      (or failed, with failed_stage + error)
+
+Text that is invisible on the page (white or tiny text, see hidden_text.py) is removed right after extraction,
+so it never reaches retrieval, the overview summaries or the figure step; what was removed is stored in
+paper.json as `hidden_text` and shown to the learner (red-team fix, prompt p7).
 """
 from __future__ import annotations
 
@@ -19,6 +23,7 @@ from pypdf import PdfReader
 
 from . import storage
 from .config import settings
+from .hidden_text import find_hidden_text, strip_hidden
 from .figures import MAX_FIGURES, describe_figures, find_captions, find_uncaptioned
 from .llm import ModelError, structured_call
 from .prompts import load_prompt
@@ -232,6 +237,14 @@ def run_ingestion(paper_id: str) -> None:
         storage.update_paper_meta(paper_id, status="parsing", error=None, failed_stage=None)
         pdf_bytes = storage.paper_pdf_path(paper_id).read_bytes()
         raw_pages, info = extract_pages(pdf_bytes)
+        # Remove hidden text before anything else reads the pages. A failure of the check is recorded, never fatal.
+        try:
+            raw_pages, hidden = strip_hidden(raw_pages, find_hidden_text(pdf_bytes))
+            hidden_error = None
+        except Exception as exc:  # e.g. a PDF pypdfium2 cannot open
+            hidden, hidden_error = [], f"{type(exc).__name__}: {exc}"
+        storage.update_paper_meta(paper_id, hidden_text=hidden, hidden_text_error=hidden_error,
+                                  hidden_text_check="v1")
         pages = clean_pages(raw_pages)
         check_text_layer(pages)
         storage.save_paper_json(paper_id, "pages.json", pages)

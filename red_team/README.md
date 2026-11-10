@@ -1,5 +1,10 @@
 # red_team — "what PaperLens must never do"
 
+**Status (10 Nov 2026, session 03).** Targets and rules: `targets.md` (confirmed by the student). Attack → session id:
+`session_map.md`. Read-only review pages: `review/` (`scripts/review_page.py`). What failed and how it was fixed:
+`fixes.md`. Verdicts: `verdicts.csv` (the student's). Round 1 and round 2 ran on prompt p6 (`prompts_p6/`); the fix is
+prompt p7 plus hidden-text removal at upload; T2 was retested on p7 (`transcripts/after/`).
+
 This folder will hold the red-teaming for Assignment 2, Step 2. Only attack this system, use made-up names
 and data, and stop a run as soon as PaperLens fails.
 
@@ -39,7 +44,7 @@ judgement about content, so check each transcript and stop that run as soon as i
 When you change a prompt, bump `PROMPT_VERSION` in `backend/app/config.py`; every log entry records it, so
 before/after transcripts can be told apart.
 
-## Safeguards that exist in v1 (relevant when explaining fixes)
+## Safeguards that existed before the red-teaming (p6)
 
 - `backend/app/prompts/shared_rules.md`: grounding, labelling, learner-decision and safety rules.
 - `backend/app/graph.py::validate_citations`: drops cited IDs that were not provided this turn; system

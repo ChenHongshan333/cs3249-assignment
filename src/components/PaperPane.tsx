@@ -1,6 +1,6 @@
 // Left pane (upload + PDF viewer) and the indexing status shown while a paper is processed.
 import { useEffect, useRef, useState } from 'react';
-import { AlertTriangle, FilePlus2, LoaderCircle, X } from 'lucide-react';
+import { AlertTriangle, EyeOff, FilePlus2, LoaderCircle, X } from 'lucide-react';
 import type { Paper, Source } from '../api';
 import { figureParts, sourceText, useT } from '../i18n';
 import { type HighlightStatus, type PdfTarget, PdfViewer } from './PdfViewer';
@@ -49,7 +49,28 @@ export function LandingUpload({ onFile, onUrl, busy, error }: {
  * PDF viewer plus a compact source bar. When the quote is highlighted exactly, the bar is a single line
  * (the highlight on the page says the rest). A second line appears only for approximate / missing positions.
  */
-export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; focus: SourceFocus | null; onCloseFocus: () => void }) {
+/**
+ * Shown when the uploaded PDF contained text that is invisible on the page (white or tiny text). PaperLens removed
+ * it at upload, so it cannot steer the answers; the learner can open the list to see what was hidden and where.
+ */
+function HiddenTextNotice({ items }: { items: NonNullable<Paper['hidden_text']> }) {
+  const t = useT();
+  const removed = items.filter((item) => item.removed);
+  const [open, setOpen] = useState(false);
+  if (!removed.length) return null;
+  return <div className="hidden-text-notice" role="note">
+    <div className="hidden-text-head">
+      <EyeOff aria-hidden="true" />
+      <span>{t.hiddenText(removed.length)}</span>
+      <button className="text-button" onClick={() => setOpen((v) => !v)} aria-expanded={open}>{open ? t.hideHiddenText : t.showHiddenText}</button>
+    </div>
+    {open && <ul>{removed.map((item, i) => <li key={i}><strong>{t.pageButton(item.page)}</strong> {item.text}</li>)}</ul>}
+  </div>;
+}
+
+export function PaperViewer({ pdfUrl, focus, onCloseFocus, hiddenText }: {
+  pdfUrl: string; focus: SourceFocus | null; onCloseFocus: () => void; hiddenText?: Paper['hidden_text'];
+}) {
   const t = useT();
   const [target, setTarget] = useState<PdfTarget | null>(null);
   const [status, setStatus] = useState<HighlightStatus>('searching');
@@ -81,6 +102,7 @@ export function PaperViewer({ pdfUrl, focus, onCloseFocus }: { pdfUrl: string; f
   const notice = highlighted && status !== 'quote' ? t.status[status] : '';
 
   return <div className="paper-viewer">
+    {hiddenText?.length ? <HiddenTextNotice items={hiddenText} /> : null}
     <PdfViewer url={pdfUrl} target={target} onStatus={setStatus} />
     {focus && <aside className={`cited-passage ${overview ? 'overview' : 'compact'}`} aria-label={t.citedPassage}>
       <header>
