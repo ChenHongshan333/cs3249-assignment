@@ -6,24 +6,28 @@ claim links to verifiable passages (PDF page + original text). If the goal is to
 learner describes their research, runs a critical review, records **their own** verdict and rationale, and
 gets an editable research-use note drafted from the real session.
 
-The Assignment 1 prototype (scripted answers) is preserved on `master` / tag `a1-submission`. This branch
-(`a2`) contains the working system.
+The Assignment 1 prototype (scripted answers) is preserved at tag `a1-submission`. `master` contains the
+Assignment 2 system described here. It runs locally (section 1): it needs its Python backend and an
+OpenRouter key, so the static site that GitHub Pages builds from `master` shows the interface only and cannot
+answer questions on its own.
 
 ---
 
 ## 1. Install and run
 
-Requirements: Node 18+ (tested with 25.9), Python 3.13 (tested with 3.13.15), an OpenRouter API key.
+Requirements: Node 18+ (tested with 25.9), Python 3.13 (tested with 3.13.15), an OpenRouter API key
+(https://openrouter.ai/keys). A full test (indexing one paper and a dozen questions) costs well under US$0.10.
 
 ```bash
 # frontend dependencies
 npm ci
 
-# backend virtual environment (Windows paths; on macOS/Linux use .venv/bin/python)
+# backend virtual environment
 cd backend
-py -3.13 -m venv .venv
-.venv/Scripts/python -m pip install -r requirements.lock.txt
-copy .env.example .env        # then edit .env (see section 2)
+py -3.13 -m venv .venv                                    # macOS/Linux: python3.13 -m venv .venv
+.venv/Scripts/python -m pip install -r requirements.lock.txt   # macOS/Linux: .venv/bin/python -m pip ...
+copy .env.example .env                                    # macOS/Linux: cp .env.example .env
+# then open backend/.env and set OPENROUTER_API_KEY=<your key> (see section 2)
 cd ..
 ```
 
@@ -34,7 +38,10 @@ npm run backend    # FastAPI on http://127.0.0.1:8000  (scripts/backend.mjs -> u
 npm start          # Vite dev server on http://127.0.0.1:5173, proxies /api to the backend
 ```
 
-Open http://127.0.0.1:5173 and drop a PDF into the left pane. API docs: http://127.0.0.1:8000/docs.
+Open http://127.0.0.1:5173 and drop a PDF into the left pane, for example one from `test_papers/` (section 9).
+Indexing takes about a minute; then choose a reading goal and ask questions. To try the research-use flow,
+choose "Explore potential use in my research", describe your research, and use the critical-review and judgment
+buttons. API docs: http://127.0.0.1:8000/docs.
 
 Checks:
 
@@ -264,5 +271,45 @@ keeps the question and shows **Retry**.
 
 ## 8. AI tool use
 
-See `ai_logs/README.md`. Claude Code (VS Code extension) was used for planning and implementation; its
-session transcript is to be exported into `ai_logs/`.
+Claude (Anthropic) was the only AI tool I used for this assignment. Its full records are in `ai_logs/`
+(`ai_logs/README.md` lists them); each session has a verbatim transcript and an English account with every
+message translated:
+
+| Session | Tool | Used for |
+|---|---|---|
+| 01 | Claude Code, VS Code extension | Part 1: planning and building the system, drafting the Part 1 report section |
+| 02 | Claude Code, VS Code extension | Part 2: LLM-as-judge (tools, simulated conversations, judge prompts, agreement) |
+| 03 | Claude Code, VS Code extension | Part 2: red-teaming (attacks, the hidden-text fix, retest) and the red-teaming report section |
+| 04 | Claude app (claude.ai) | Part 3: user test design and its report section |
+
+Within these sessions Claude also used the Google Docs connector (to write report drafts into my document) and
+Claude in Chrome (to test the running interface in session 01). No other AI tools were used: no inline code
+completion (e.g. Copilot), no grammar or writing assistants, and no other chatbots.
+
+The language models that PaperLens and its tests call (Claude Haiku 5.5 and text-embedding-3-small in the system;
+Claude Haiku 5.5 as the simulated learner, Gemini 3 Flash and Claude Sonnet 5.5 as LLM judges) are part of the
+system and the evaluation, not tools used to do the assignment; they are described in sections 2 and 9.
+
+## 9. What is in this repository
+
+| Assignment item | Where |
+|---|---|
+| Source code, prompts, configuration (no keys; `backend/.env.example` is the template) | `src/` (frontend), `backend/app/` (backend), `backend/app/prompts/` (prompts, current version p7), `backend/requirements*.txt`, `package*.json` |
+| README: install and run, models and APIs, main components | this file, sections 1, 2 and 5 |
+| `llm_judge/`: personas, the scripts that produced the conversations, all conversations, every judge prompt version, my labels next to the judge's verdicts | `llm_judge/personas/`, `llm_judge/scenarios/` + `backend/scripts/simulate_conversation.py` + `llm_judge/simulator_prompt.md`, `llm_judge/conversations/`, `llm_judge/judge_prompts/` (v1–v3), `llm_judge/labels.csv` and `llm_judge/results/`; see `llm_judge/README.md` |
+| `red_team/`: attempts, PASS/FAIL rules, all transcripts before and after the fix | `red_team/attempts/`, `red_team/targets.md`, `red_team/transcripts/before/` and `after/`, my verdicts in `red_team/verdicts.csv`, the fix in `red_team/fixes.md`, the p6 prompts in `red_team/prompts_p6/`; see `red_team/README.md` |
+| `ai_logs/`: records of my conversations with AI tools | `ai_logs/` (section 8) |
+| Tests | `backend/tests/` (`npm run test:backend`), `scripts/tests/` and `src/highlight.test.ts` (`npm test`) |
+
+**Test papers** (`test_papers/`, public papers used only for testing, not redistributed for any other purpose):
+
+| File | Paper |
+|---|---|
+| `johnny.pdf` | J.D. Zamfirescu-Pereira, R.Y. Wong, B. Hartmann and Q. Yang. Why Johnny Can't Prompt: How Non-AI Experts Try (and Fail) to Design LLM Prompts. CHI 2023. |
+| `hunyuan3d-2.pdf` | Tencent Hunyuan3D Team. Hunyuan3D 2.0: Scaling Diffusion Models for High Resolution Textured 3D Assets Generation. arXiv:2501.12202, 2025. |
+| `mda.pdf` | R. Hunicke, M. LeBlanc and R. Zubek. MDA: A Formal Approach to Game Design and Game Research. AAAI Workshop on Challenges in Game AI, 2004. |
+| `game-mechanics.pdf` | M. Sicart. Defining Game Mechanics. Game Studies 8(2), 2008. |
+| `phonetics.pdf` | Chapter 2, "Phonetics: Physical Dimensions of Speech Sounds", in C. Genetti (ed.), How Languages Work: An Introduction to Language and Linguistics. Cambridge University Press, 2014. |
+
+The red-team paper *PromptScaffold* (`red_team/papers/`) is fictional: its authors, institution and data were
+invented for testing.
